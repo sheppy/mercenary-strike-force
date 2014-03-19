@@ -4,11 +4,12 @@ module.exports = (grunt) ->
 
     DIR =
         DOCROOT: "docroot"
-        COFFEE: "docroot/assets/coffee/**/*.coffee"
+#        COFFEE: "docroot/assets/coffee/**/*.coffee"
+        COFFEE: "docroot/assets/coffee/core/**/*.coffee"
 
     LIVERELOAD_PORT = 35729
 
-    liveReloadMiddleware = (connect, options) ->
+    liveReloadMiddleware = (connect) ->
         [
             # Inject a livereloading script into static files.
             require("connect-livereload")({ port: LIVERELOAD_PORT }),
@@ -31,15 +32,21 @@ module.exports = (grunt) ->
                     {src: DIR.COFFEE}
                 ]
 
-        coffeeify:
-            options: {
+        browserify:
+            options:
                 debug: true
-            }
+                extension: [".coffee", ".js"]
+                transform: ["coffeeify"]
+                alias: [
+                    "docroot/assets/vendor/underscore/underscore.js:underscore"
+                ]
             all:
-                src: DIR.COFFEE
-                dest: "docroot/assets/js/dungeon.js"
+                files:
+                    "docroot/assets/js/dungeon.js": [
+                        "docroot/assets/coffee/Dungeon.coffee"
+                        DIR.COFFEE
+                    ]
 
-                
         connect:
             options:
                 port: 3000,
@@ -50,11 +57,16 @@ module.exports = (grunt) ->
         watch:
             coffee:
                 files: [DIR.COFFEE]
-                tasks: ["newer:coffeelint", "coffeeify"]
+                tasks: ["newer:coffeelint", "browserify"]
                 options:
                     livereload: LIVERELOAD_PORT
             html:
                 files: [DIR.DOCROOT + "/**/*.html"]
+                tasks: []
+                options:
+                    livereload: LIVERELOAD_PORT
+            css:
+                files: [DIR.DOCROOT + "/**/*.css"]
                 tasks: []
                 options:
                     livereload: LIVERELOAD_PORT

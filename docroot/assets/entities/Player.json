@@ -1,0 +1,13 @@
+{
+    "name": "Player",
+
+    "components": {
+        "Position": {
+            "x": 0,
+            "y": 0
+        },
+        "Renderable": {
+            "colour": "green"
+        }
+    }
+}

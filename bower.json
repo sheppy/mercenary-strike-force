@@ -1,0 +1,11 @@
+{
+  "name": "dungeon",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "postal.js": "~0.8.11",
+    "q": "~1.0.0",
+    "node-uuid": "~1.4.1",
+    "requestAnimationFrame-polyfill": "*"
+  }
+}
