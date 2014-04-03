@@ -1,7 +1,7 @@
 Q = require "../../vendor/q/q.js"
 
 class System
-    constructor: (@channel) ->
+    constructor: (@entitySystem, @channel) ->
     init: ->
     update: (dt) ->
 

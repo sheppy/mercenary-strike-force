@@ -5,9 +5,23 @@ System = require "../System.coffee"
 class GraphicsSystem extends System
     init: ->
         @FPS = 1000 / 60
+
+        @WIDTH = 480
+        @HEIGHT = 480
+
+        @VIEWPORT_X = 3 * 32
+        @VIEWPORT_Y = 0
+
         @canvas = document.getElementById "game"
         @ctx = @canvas.getContext "2d"
+        @bufferCanvas = document.createElement "canvas"
+        @bufferCanvas.width = @WIDTH
+        @bufferCanvas.height = @HEIGHT
+        @bufferCtx = @bufferCanvas.getContext "2d"
+
         @timeToDraw = 0
+
+        @meter = new FPSMeter({ graph: 1})
 
     update: (dt) ->
         @timeToDraw -= dt
@@ -17,18 +31,23 @@ class GraphicsSystem extends System
             @timeToDraw = @FPS
 
     draw: ->
-        @ctx.clearRect 0, 0, 480, 320
+        @meter.tickStart()
 
-        getEntityManager = @sendMessage "system.entity.manager"
-        getEntityManager.then (entityManager) =>
-            entities = entityManager.getAllEntitiesWithComponentOfTypes ["Renderable", "Position"]
+        if @entitySystem
+            entities = @entitySystem.getAllEntitiesWithComponentOfTypes ["Renderable", "Position"]
 
             _.each entities, (entity) =>
-                renderable = entityManager.getComponentOfType entity, "Renderable"
-                position = entityManager.getComponentOfType entity, "Position"
+                renderable = @entitySystem.getComponentOfType entity, "Renderable"
+                position = @entitySystem.getComponentOfType entity, "Position"
 
-                @ctx.fillStyle = renderable.colour
-                @ctx.fillRect position.x, position.y, 20, 20
+                @bufferCtx.fillStyle = renderable.colour
+                @bufferCtx.fillRect position.x, position.y, 20, 20
+
+        @ctx.clearRect 0, 0, @WIDTH, @HEIGHT
+        @ctx.drawImage @bufferCanvas, 0, 0
+        @bufferCtx.clearRect 0, 0, @WIDTH, @HEIGHT
+
+        @meter.tick()
 
 
 module.exports = GraphicsSystem

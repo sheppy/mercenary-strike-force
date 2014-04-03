@@ -20,15 +20,12 @@ class Engine
     start: -> @mainLoop()
 
     mainLoop: ->
-        #requestAnimationFrame () => @mainLoop()
-
-        #if not @lastGameTick then return @lastGameTick = Date.now()
+        requestAnimationFrame () => @mainLoop()
+        if not @lastGameTick then return @lastGameTick = Date.now()
 
         @currentGameTick = Date.now()
         @delta = @currentGameTick - @lastGameTick
         @lastGameTick = @currentGameTick
-
-        @delta = 10
 
         @update @delta
 

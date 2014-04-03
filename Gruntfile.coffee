@@ -42,10 +42,8 @@ module.exports = (grunt) ->
                 ]
             all:
                 files:
-                    "docroot/assets/js/dungeon.js": [
-                        "docroot/assets/coffee/Dungeon.coffee"
-                        DIR.COFFEE
-                    ]
+                    "docroot/assets/js/dungeon.js": [ "docroot/assets/coffee/core/prototype.coffee" ]
+                    "docroot/assets/js/map.js": [ "docroot/assets/coffee/MapTest.coffee" ]
 
         connect:
             options:
@@ -56,7 +54,7 @@ module.exports = (grunt) ->
                     middleware: liveReloadMiddleware
         watch:
             coffee:
-                files: [DIR.COFFEE]
+                files: [DIR.COFFEE, "docroot/assets/coffee/Dungeon.coffee", "docroot/assets/coffee/MapTest.coffee"]
                 tasks: ["newer:coffeelint", "browserify"]
                 options:
                     livereload: LIVERELOAD_PORT

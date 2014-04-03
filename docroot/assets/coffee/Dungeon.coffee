@@ -1,8 +1,9 @@
 Engine = require "./core/Engine.coffee"
+
 LogSystem = require "./core/System/Log.coffee"
 EntitySystem = require "./core/System/Entity.coffee"
 GraphicsSystem = require "./core/System/Graphics.coffee"
-Component = require "./core/Component.coffee"
+InputSystem = require "./core/System/Input.coffee"
 
 
 class Dungeon extends Engine
@@ -21,22 +22,17 @@ class Dungeon extends Engine
         @addSystem graphicsSystem
         graphicsSystem.init()
 
+        inputSystem = new InputSystem @channel
+        @addSystem inputSystem
+        inputSystem.init()
+
     start: ->
         getEntityManager = @sendMessage "system.entity.manager"
         getEntityManager.then (entityManager) =>
-            # Create entity
-            entity = entityManager.createEntity()
-            console.log "Entity created: ", entity
-
-            # Add component to entity
-            c = new Component()
-            entityManager.addComponent entity, c
-            console.log entityManager.hasComponent(entity, c)
-
             entityManager.loadEntity "/assets/entities/Player.json"
+            entityManager.loadEntity "/assets/entities/Map.json"
 
             super()
-
 
 
 module.exports = Dungeon

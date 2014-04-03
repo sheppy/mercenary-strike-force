@@ -8,6 +8,9 @@
         },
         "Renderable": {
             "colour": "green"
+        },
+        "PlayerInput": {
+            "keys": ["UP", "DOWN", "LEFT", "RIGHT"]
         }
     }
 }

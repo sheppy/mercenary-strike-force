@@ -5,24 +5,7 @@ Q = require "../../../vendor/q/q.js"
 System = require "../System.coffee"
 Entity = require "../Entity.coffee"
 Component = require "../Component.coffee"
-
-
-AJAX = (file) ->
-    deferred = Q.defer()
-    req = new XMLHttpRequest()
-
-    req.addEventListener "readystatechange", ->
-        if req.readyState is 4 # ReadyState Compelte
-            successResultCodes = [200, 304]
-            if req.status in successResultCodes
-                deferred.resolve JSON.parse req.responseText
-            else
-                deferred.reject "Error loading " + file
-
-    req.open "GET", file, false
-    req.send()
-
-    deferred.promise
+Util = require "../Util.coffee"
 
 
 class EntitySystem extends System
@@ -46,7 +29,7 @@ class EntitySystem extends System
 
 
     loadEntity: (entityFile) ->
-        res = AJAX entityFile
+        res = Util.AJAX entityFile
 
         res.then (definition) =>
             entity = @createEntity()
@@ -68,10 +51,8 @@ class EntitySystem extends System
 
     getAllEntitiesWithComponentOfTypes: (componentTypes) ->
         _.filter @entities, (e) ->
-            # ckeck if we have all the componentTypes
-            res = _.filter e.components, (component) -> componentTypes.indexOf component > -1
+            res = _.filter e.components, (component) -> componentTypes.indexOf(component.type) > -1
             res.length == componentTypes.length
-            #!!_.find e.components, (c) -> c.type == componentType
 
     addComponent: (entity, component) ->
         entity.components.push component
