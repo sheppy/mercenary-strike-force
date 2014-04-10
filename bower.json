@@ -1,0 +1,14 @@
+{
+  "name": "dungeon",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "postal.js": "~0.8.11",
+    "q": "~1.0.0",
+    "node-uuid": "~1.4.1",
+    "requestAnimationFrame-polyfill": "*",
+    "pixi.js": "~1.5.1",
+    "stats.js": "*",
+    "lodash": "~2.4.1"
+  }
+}
