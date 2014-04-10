@@ -1,23 +1,14 @@
 module.exports = (grunt) ->
-    require("time-grunt")(grunt)
+#    require("time-grunt")(grunt)
     require("load-grunt-tasks")(grunt)
 
-    DIR =
-        DOCROOT: "docroot"
-#        COFFEE: "docroot/assets/coffee/**/*.coffee"
-        COFFEE: "docroot/assets/coffee/core/**/*.coffee"
-
-    LIVERELOAD_PORT = 35729
-
-    liveReloadMiddleware = (connect) ->
-        [
-            # Inject a livereloading script into static files.
-            require("connect-livereload")({ port: LIVERELOAD_PORT }),
-            # Serve static files.
-            connect.static(DIR.DOCROOT),
-            # Make empty directories browsable
-            connect.directory(DIR.DOCROOT)
-        ]
+    FILES =
+        ENGINE:
+            SRC: "docroot/assets/engine/src/**/*.coffee"
+            TEST: "docroot/assets/engine/test/**/*.coffee"
+            DIST: "docroot/assets/engine/dist/engine.js"
+        GAME:
+            LIGHT_TEST: "docroot/assets/coffee/lightTest.coffee"
 
 
     grunt.initConfig
@@ -26,50 +17,57 @@ module.exports = (grunt) ->
         coffeelint:
             options:
                 configFile: "coffeelint.json"
-            all:
-                files: [
-                    {src: "Gruntfile.coffee"}
-                    {src: DIR.COFFEE}
-                ]
+            gruntfile:
+                files: [{src: "Gruntfile.coffee"}]
+            engine:
+                files: [{src: FILES.ENGINE.SRC}, {src: FILES.ENGINE.TEST}]
+            game:
+                files: [{src: FILES.GAME.LIGHT_TEST}]
+
+        mochacov:
+            options:
+                compilers: ["coffee:coffee-script/register"]
+                require: ["./docroot/assets/engine/_specHelper.coffee"]
+            engine:
+                options:
+                    files: [FILES.ENGINE.TEST]
+                    reporter: "dot"
+                    ui: "bdd"
+                    "check-leaks": true
+#            "engine-cov":
+#                options:
+#                    files: FILES.ENGINE.TEST
+#                    reporter: "html-cov"
+#                    output: "./coverage.html"
+#            travis:
+#                options:
+#                    files: FILES.ENGINE.TEST
+#                    reporter: "travis-cov"
+
 
         browserify:
             options:
                 debug: true
                 extension: [".coffee", ".js"]
                 transform: ["coffeeify"]
-                alias: [
-                    "docroot/assets/vendor/underscore/underscore.js:underscore"
-                ]
-            all:
+#                alias: [
+#                    "docroot/assets/vendor/underscore/underscore.js:underscore"
+#                ]
+            engine:
                 files:
-                    "docroot/assets/js/dungeon.js": [ "docroot/assets/coffee/core/prototype.coffee" ]
-                    "docroot/assets/js/map.js": [ "docroot/assets/coffee/MapTest.coffee" ]
+                    "docroot/assets/engine/dist/engine.js": [ FILES.ENGINE.SRC ]
+            game:
+                files:
+                    "docroot/assets/js/lightTest.js": [ FILES.GAME.LIGHT_TEST ]
 
-        connect:
-            options:
-                port: 3000,
-                hostname: "localhost"
-            dev:
-                options:
-                    middleware: liveReloadMiddleware
         watch:
-            coffee:
-                files: [DIR.COFFEE, "docroot/assets/coffee/Dungeon.coffee", "docroot/assets/coffee/MapTest.coffee"]
-                tasks: ["newer:coffeelint", "browserify"]
-                options:
-                    livereload: LIVERELOAD_PORT
-            html:
-                files: [DIR.DOCROOT + "/**/*.html"]
-                tasks: []
-                options:
-                    livereload: LIVERELOAD_PORT
-            css:
-                files: [DIR.DOCROOT + "/**/*.css"]
-                tasks: []
-                options:
-                    livereload: LIVERELOAD_PORT
+            engine:
+                files: [FILES.ENGINE.SRC, FILES.ENGINE.TEST]
+                tasks: ["newer:coffeelint:engine", "mochacov"]
+            game:
+                files: [FILES.ENGINE.SRC, FILES.GAME.LIGHT_TEST]
+                tasks: ["newer:coffeelint:game", "browserify"]
 
 
-    grunt.registerTask "test", ["coffeelint"]
-    grunt.registerTask "server", ["test", "connect", "watch"]
-    grunt.registerTask "default", ["server"]
+    grunt.registerTask "test", ["coffeelint", "mochacov"]
+    grunt.registerTask "default", ["test", "browserify"]
