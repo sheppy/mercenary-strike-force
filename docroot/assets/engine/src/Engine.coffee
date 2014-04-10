@@ -1,29 +1,31 @@
+StateManager = require "./Manager/StateManager.coffee"
+
 class Engine
     constructor: ->
-        @systems = []
         @lastGameTick = Date.now()
 
-    init: ->
-
-    update: (dt) ->
-        for system in @systems
-            system.update dt
-        return dt
-
-    addSystem: (system) ->
-        @systems.push system
-        return system
-
-    start: -> @mainLoop()
+    start: (state) ->
+        StateManager.add "boot", state
+        state.init()
+        StateManager.activate "boot"
+        @mainLoop()
 
     mainLoop: ->
-        requestAnimationFrame @mainLoop.bind(@)
+        requestAnimationFrame @mainLoop.bind @
 
         @currentGameTick = Date.now()
         @delta = @currentGameTick - @lastGameTick
         @lastGameTick = @currentGameTick
 
         @update @delta
+        return null
+
+    update: (dt) ->
+        state = StateManager.current()
+
+        for system in state.systems
+            system.update dt
+        return null
 
 
 module.exports = Engine
