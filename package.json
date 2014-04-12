@@ -1,5 +1,5 @@
 {
-  "name": "dungeon",
+  "name": "mercenary-strike-force",
   "version": "0.0.0",
   "private": true,
   "description": "",
@@ -12,15 +12,15 @@
       "loader": "./node-loaders/coffee-script",
       "data-cover-never": "node_modules",
       "pattern": [
-        "docroot/assets/engine/src"
+        "docroot/assets/game"
       ]
     },
     "travis-cov": {
-      "threshold": 0
+      "threshold": 80
     }
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Chris Sheppard",
+  "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.4",
     "time-grunt": "~0.2.10",
