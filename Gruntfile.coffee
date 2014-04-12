@@ -57,17 +57,17 @@ module.exports = (grunt) ->
                 tasks: ["newer:coffeelint", "browserify"]
 
             html:
-                files: [FILES.DOCROOT + "/**/*.html"]
+                files: [FILES.DOCROOT + "/index.html"]
                 tasks: []
                 options:
                     livereload: LIVERELOAD_PORT
             css:
-                files: [FILES.DOCROOT + "/**/*.css"]
+                files: [FILES.DOCROOT + "/assets/css/**/*.css"]
                 tasks: []
                 options:
                     livereload: LIVERELOAD_PORT
             js:
-                files: [FILES.DOCROOT + "/**/*.js"]
+                files: [FILES.DOCROOT + "/assets/js/**/*.js"]
                 tasks: []
                 options:
                     livereload: LIVERELOAD_PORT
