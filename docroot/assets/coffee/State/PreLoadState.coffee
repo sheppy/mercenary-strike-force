@@ -1,6 +1,6 @@
-State = require "../../engine/src/State.coffee"
-StateManager = require "../../engine/src/Manager/StateManager.coffee"
-AssetManager = require "../../engine/src/Manager/AssetManager.coffee"
+State = require "../../vendor/iki-engine/src/State.coffee"
+StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
+AssetManager = require "../../vendor/iki-engine/src/Manager/AssetManager.coffee"
 
 class PreLoadState extends State
     activate: ->

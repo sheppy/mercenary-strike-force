@@ -1,5 +1,5 @@
-State = require "../../engine/src/State.coffee"
-StateManager = require "../../engine/src/Manager/StateManager.coffee"
+State = require "../../vendor/iki-engine/src/State.coffee"
+StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
 
 PreLoadState = require "./PreLoadState.coffee"
 MenuState = require "./MenuState.coffee"

@@ -1,4 +1,4 @@
-State = require "../../engine/src/State.coffee"
+State = require "../../vendor/iki-engine/src/State.coffee"
 
 class MenuState extends State
     init: ->
