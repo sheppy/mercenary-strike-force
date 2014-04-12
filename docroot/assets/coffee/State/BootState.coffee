@@ -1,5 +1,6 @@
 State = require "../../vendor/iki-engine/src/State.coffee"
 StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
+GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 
 PreLoadState = require "./PreLoadState.coffee"
 MenuState = require "./MenuState.coffee"
@@ -7,11 +8,9 @@ MenuState = require "./MenuState.coffee"
 
 class BootState extends State
     init: ->
-
         # Use GraphicsManager to create main canvas
-        # Each State can then have its own graphics system?
-#        @gfx = @addSystem new GraphicsSystem()
-#        @gfx.init 640, 480, document.body
+        GraphicsManager.renderer = GraphicsManager.createRenderer 640, 480, document.body
+
 
         preloadState = new PreLoadState()
         StateManager.add "preload", preloadState

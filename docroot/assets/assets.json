@@ -1,7 +1,7 @@
 {
     "root": "assets/",
     "groups": {
-        "image": ["tiles/TileA2.png", "tiles/TileA4.png"],
-        "map": ["tiles/TileA5.png"]
+        "images": ["tiles/TileA2.png", "tiles/TileA4.png"],
+        "maps": ["tiles/TileA5.png"]
     }
 }
