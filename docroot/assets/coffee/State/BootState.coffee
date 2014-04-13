@@ -4,6 +4,7 @@ GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.c
 
 PreLoadState = require "./PreLoadState.coffee"
 MenuState = require "./MenuState.coffee"
+TestState = require "./Test/TestState.coffee"
 
 
 class BootState extends State
@@ -19,6 +20,10 @@ class BootState extends State
         menuState = new MenuState()
         StateManager.add "menu", menuState
         menuState.init()
+
+        testState = new TestState()
+        StateManager.add "test", testState
+        testState.init()
 
     activate: ->
         StateManager.activate "preload"
