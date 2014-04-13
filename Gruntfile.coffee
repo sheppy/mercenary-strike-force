@@ -45,7 +45,7 @@ module.exports = (grunt) ->
         connect:
             options:
                 port: 3000,
-                hostname: "localhost"
+                hostname: "*"
             dev:
                 options:
                     middleware: liveReloadMiddleware
