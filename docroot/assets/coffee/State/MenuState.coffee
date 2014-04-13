@@ -1,6 +1,7 @@
 State = require "../../vendor/iki-engine/src/State.coffee"
 StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
 GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
 class MenuState extends State
     init: ->
@@ -33,11 +34,10 @@ class MenuState extends State
         @menus[menu].buttons.push button
 
     activate: ->
-        GraphicsManager.renderer.canvas.addEventListener "click", @clickListener
+        InputManager.onMouseClick = @onMouseClick.bind @
         @renderMenu()
 
-    deactivate: ->
-        GraphicsManager.renderer.canvas.removeEventListener "click", @clickListener
+    deactivate: -> InputManager.onMouseClick = null
 
     switchMenu: (newMenu) ->
         @currentMenu = newMenu
