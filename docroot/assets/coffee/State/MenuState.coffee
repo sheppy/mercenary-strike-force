@@ -35,6 +35,7 @@ class MenuState extends State
 
     activate: ->
         InputManager.onMouseClick = @onMouseClick.bind @
+        @currentMenu = "main"
         @renderMenu()
 
     deactivate: -> InputManager.onMouseClick = null
@@ -84,11 +85,5 @@ class MenuState extends State
         textSize = @ctx.measureText button.text
         @ctx.fillText button.text, button.x + 100 - (textSize.width / 2), button.y + 7
 
-
-
-###
-    add click events for menu
-    add hover events for menu?
-###
 
 module.exports = MenuState
