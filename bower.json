@@ -6,5 +6,8 @@
     "node-uuid": "~1.4.1",
     "requestAnimationFrame-polyfill": "*",
     "iki-engine": "https://github.com/sheppy/iki-engine.git"
+  },
+  "devDependencies": {
+    "dat.gui": "*"
   }
 }
