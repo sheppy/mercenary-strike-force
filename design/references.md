@@ -1,7 +1,6 @@
 
 
 
-
 * <http://www.nolithius.com/game-development/dungeon-generation>
 * <http://pcg.wikidot.com/pcg-algorithm:dungeon-generation>
 * <http://ondras.zarovi.cz/algo/>
