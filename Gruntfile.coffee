@@ -4,6 +4,8 @@ module.exports = (grunt) ->
 
     FILES =
         DOCROOT: "docroot"
+        ENGINE:
+            SRC: "docroot/assets/vendor/iki-engine/src/**/*.coffee"
         GAME:
             SRC: "docroot/assets/coffee/game.coffee"
             ALL: "docroot/assets/coffee/**/*.coffee"
@@ -53,7 +55,7 @@ module.exports = (grunt) ->
 
         watch:
             game:
-                files: [FILES.GAME.ALL]
+                files: [FILES.GAME.ALL, FILES.ENGINE.SRC]
                 tasks: ["newer:coffeelint", "browserify"]
 
             html:

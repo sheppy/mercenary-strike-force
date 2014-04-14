@@ -6,7 +6,6 @@ Next
 * Make some basic tile assets
   * grunt task to make assets in to a sprite
     * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
-* Add engine files to the watcher
 * Load a map from file
   * Render a map tile
   * Render a full map
@@ -50,4 +49,4 @@ Done
 * ~~Basic preload system~~
 * ~~Basic menu system~~
 * ~~Make a rectangle follow cursor demo~~
-
+* ~~Add engine files to the watcher~~
