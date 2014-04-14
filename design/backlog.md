@@ -3,7 +3,6 @@ Backlog
 
 Next
 ----
-* Make a rectangle follow cursor demo
 * Make some basic tile assets
   * grunt task to make assets in to a sprite
     * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
@@ -43,11 +42,12 @@ Ideas
 
 Done
 ----
-* ~~Basic menu system~~
-* ~~Basic preload system~~
-* ~~Basic game states~~
-* ~~Basic input~~
-* ~~Basic graphics~~
-* ~~Basic entity system~~
 * ~~Basic game loop~~
+* ~~Basic entity system~~
+* ~~Basic graphics~~
+* ~~Basic input~~
+* ~~Basic game states~~
+* ~~Basic preload system~~
+* ~~Basic menu system~~
+* ~~Make a rectangle follow cursor demo~~
 
