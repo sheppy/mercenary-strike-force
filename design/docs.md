@@ -31,7 +31,7 @@ Managers are static classes that do not need to be instanciated. They include th
 
 Note that most of the Managers will have hook functions that allow *one* thing at a time to hook in to some extra functionality. These hooks should be initialised when a state is activated and remove once deactivated. For example the InputManager has an onMouseClick function that a state can listen to.
 
-```
+```coffeescript
 class MyState extends State
   activate: -> InputManager.onMouseClick = @onMouseClick.bind @
   deactivate: -> InputManager.onMouseClick = null
