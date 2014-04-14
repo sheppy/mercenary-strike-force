@@ -8,7 +8,7 @@ npm install
 bower install
 ```
 
-For development you may need to link the engine as well
+For development you may need to link the engine as well: https://github.com/sheppy/iki-engine
 ```
 cd /iki-engine
 bower link
