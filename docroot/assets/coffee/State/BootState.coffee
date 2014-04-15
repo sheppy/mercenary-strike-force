@@ -5,8 +5,8 @@ InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
 PreLoadState = require "./PreLoadState.coffee"
 MenuState = require "./MenuState.coffee"
-TestState = require "./Test/TestState.coffee"
 Demo1State = require "./Demo1/Demo1State.coffee"
+Demo2State = require "./Demo2/Demo2State.coffee"
 
 
 class BootState extends State
@@ -27,9 +27,9 @@ class BootState extends State
         StateManager.add "demo1", demo1State
         demo1State.init()
 
-        testState = new TestState()
-        StateManager.add "test", testState
-        testState.init()
+        demo2State = new Demo2State()
+        StateManager.add "demo2", demo2State
+        demo2State.init()
 
         @debugMenu()
 
@@ -42,7 +42,7 @@ class BootState extends State
 
         statesFolder = gui.addFolder "States"
         statesFolder.open()
-        stateControl = statesFolder.add StateManager, "currentState", ["menu", "test", "demo1"]
+        stateControl = statesFolder.add StateManager, "currentState", ["menu", "demo1", "demo2"]
         stateControl.onChange (state) -> StateManager.activate state
         StateManager.onActivate = -> stateControl.updateDisplay()
 

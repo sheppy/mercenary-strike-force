@@ -3,13 +3,9 @@ Backlog
 
 Next
 ----
-* Make some basic tile assets
-  * grunt task to make assets in to a sprite
-    * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
-* Load a map from file
-  * Render a map tile
-  * Render a full map
-  * Render only the viewport area of a map
+* grunt task to make assets in to a sprite
+  * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
+* Render only the viewport area of a map
 * List some renderable types of Components
   * RenderableText
   * RenderableRect
@@ -50,3 +46,7 @@ Done
 * ~~Basic menu system~~
 * ~~Make a rectangle follow cursor demo~~
 * ~~Add engine files to the watcher~~
+* ~~Make some basic tile assets~~
+* ~~Load a map from file~~
+* ~~Render a map tile~~
+* ~~Render a full map~~

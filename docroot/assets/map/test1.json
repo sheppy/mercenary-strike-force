@@ -1,0 +1,54 @@
+{ "height":10,
+ "layers":[
+        {
+         "data":[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 4, 4, 4, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 4, 4, 4, 4, 2, 1, 7, 7, 7, 7, 7, 7, 7, 1, 2, 2, 2, 1, 2, 2, 4, 4, 4, 4, 2, 1, 7, 6, 7, 6, 7, 6, 7, 1, 2, 2, 1, 1, 1, 2, 4, 4, 2, 4, 2, 1, 7, 7, 6, 7, 6, 7, 7, 1, 2, 2, 1, 1, 1, 2, 4, 4, 4, 4, 2, 1, 7, 7, 7, 7, 7, 7, 7, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+         "height":10,
+         "name":"Base Layer",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        }],
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"..\/tiles\/test1.png",
+         "imageheight":64,
+         "imagewidth":64,
+         "margin":0,
+         "name":"test",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":5,
+         "image":"..\/tiles\/test2.png",
+         "imageheight":64,
+         "imagewidth":64,
+         "margin":0,
+         "name":"test2",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }],
+ "tilewidth":32,
+ "version":1,
+ "width":20
+}

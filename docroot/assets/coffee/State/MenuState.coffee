@@ -8,19 +8,19 @@ class MenuState extends State
         @currentMenu = "main"
         @menus = {}
 
-        @addButton "main", "Tests", 20, 20, 200, 30, @clickMainTest.bind @
-        @addButton "test", "Demo 1", 20, 20, 200, 30, @clickDemo1.bind @
-        @addButton "test", "Load map", 20, 60, 200, 30, @clickTestLoadMap.bind @
-        @addButton "test", "Back", 20, 100, 200, 30, @clickTestBack.bind @
+        @addButton "main", "Demos", 20, 20, 200, 30, @clickMainDemos.bind @
+        @addButton "demos", "Demo 1", 20, 20, 200, 30, @clickDemo1.bind @
+        @addButton "demos", "Load map", 20, 60, 200, 30, @clickDemoLoadMap.bind @
+        @addButton "demos", "Back", 20, 100, 200, 30, @clickDemoBack.bind @
 
         @ctx = GraphicsManager.renderer.ctx
         @clickListener = @onMouseClick.bind @
 
-    clickMainTest: -> @switchMenu "test"
+    clickMainDemos: -> @switchMenu "demos"
 
-    clickTestBack: -> @switchMenu "main"
-    clickTestLoadMap: -> StateManager.activate "test"
+    clickDemoBack: -> @switchMenu "main"
     clickDemo1: -> StateManager.activate "demo1"
+    clickDemoLoadMap: -> StateManager.activate "demo2"
 
 
     addButton: (menu, text, x, y, width, height, onClick) ->
