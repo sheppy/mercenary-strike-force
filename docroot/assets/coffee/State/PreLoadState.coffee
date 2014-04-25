@@ -15,6 +15,7 @@ class PreLoadState extends State
 
         @ctx = GraphicsManager.renderer.ctx
 
+
     activate: ->
         @ctx.fillStyle = "#000"
         @ctx.fillRect 0, 0, 640, 480
@@ -22,14 +23,17 @@ class PreLoadState extends State
         @renderLoadingBar 0
         @renderLoadingText "Loading..."
 
-        AssetManager.onProgress = (asset, group, loaded, total) =>
-            @ctx.fillStyle = "#000"
-            @ctx.fillRect 0, 0, 640, 480
-            @renderLoadingText "Loading #{group}..."
-            @renderLoadingBar loaded / total
+        AssetManager.onProgress = @onProgress.bind @
 
         loadAsset = AssetManager.load "assets/assets.json"
         loadAsset.then -> StateManager.activate "menu"
+
+
+    onProgress: (asset, group, loaded, total) ->
+        @ctx.fillStyle = "#000"
+        @ctx.fillRect 0, 0, 640, 480
+        @renderLoadingText "Loading #{group}..."
+        @renderLoadingBar loaded / total
 
 
     renderLoadingText: (text) ->
