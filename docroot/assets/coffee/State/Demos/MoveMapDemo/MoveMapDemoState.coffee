@@ -26,6 +26,7 @@ class MoveMapDemoState extends State
 
             @map.drawMap GraphicsManager.renderer.ctx
 
+    deactivate: -> InputManager.onKeyUp = null
 
     onKeyUp: (e) ->
         moveDistance = 16

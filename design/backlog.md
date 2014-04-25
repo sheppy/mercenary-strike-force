@@ -3,6 +3,8 @@ Backlog
 
 Next
 ----
+* use prototyping for entity methods instead of manager?
+* removing / detaching entities from entity manager
 * grunt task to make assets in to a sprite
   * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
 * List some renderable types of Components

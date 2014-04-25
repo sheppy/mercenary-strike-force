@@ -10,6 +10,7 @@ MenuState = require "./MenuState.coffee"
 Demo1State = require "./Demos/Demo1/Demo1State.coffee"
 LoadMapDemoState = require "./Demos/LoadMapDemo/LoadMapDemoState.coffee"
 MoveMapDemoState = require "./Demos/MoveMapDemo/MoveMapDemoState.coffee"
+MoveMapSmoothDemoState = require "./Demos/MoveMapSmoothDemo/MoveMapSmoothDemoState.coffee"
 
 
 class BootState extends State
@@ -38,6 +39,10 @@ class BootState extends State
         StateManager.add "MoveMapDemo", moveMapDemoState
         moveMapDemoState.init()
 
+        moveMapSmoothDemoState = new MoveMapSmoothDemoState()
+        StateManager.add "MoveMapSmoothDemo", moveMapSmoothDemoState
+        moveMapSmoothDemoState.init()
+
         @debugMenu()
 
 
@@ -49,7 +54,9 @@ class BootState extends State
 
         statesFolder = gui.addFolder "States"
         statesFolder.open()
-        stateControl = statesFolder.add StateManager, "currentState", ["menu", "demo1", "LoadMapDemo", "MoveMapDemo"]
+        stateControl = statesFolder.add StateManager, "currentState", [
+            "menu", "demo1", "LoadMapDemo", "MoveMapDemo", "MoveMapSmoothDemo"
+        ]
         stateControl.onChange (state) -> StateManager.activate state
         StateManager.onActivate = -> stateControl.updateDisplay()
 
