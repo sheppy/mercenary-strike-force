@@ -5,7 +5,6 @@ Next
 ----
 * grunt task to make assets in to a sprite
   * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
-* Render only the viewport area of a map
 * List some renderable types of Components
   * RenderableText
   * RenderableRect
@@ -34,6 +33,7 @@ Ideas
 * ObjectPool?
 * Net communications
 * Audio
+* States have own pre-loaders?
 
 Done
 ----
@@ -50,3 +50,4 @@ Done
 * ~~Load a map from file~~
 * ~~Render a map tile~~
 * ~~Render a full map~~
+* ~~Render only the viewport area of a map~~

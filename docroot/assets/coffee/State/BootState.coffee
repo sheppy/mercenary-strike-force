@@ -5,8 +5,11 @@ InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
 PreLoadState = require "./PreLoadState.coffee"
 MenuState = require "./MenuState.coffee"
+
+# Demos
 Demo1State = require "./Demos/Demo1/Demo1State.coffee"
 LoadMapDemoState = require "./Demos/LoadMapDemo/LoadMapDemoState.coffee"
+MoveMapDemoState = require "./Demos/MoveMapDemo/MoveMapDemoState.coffee"
 
 
 class BootState extends State
@@ -31,6 +34,10 @@ class BootState extends State
         StateManager.add "LoadMapDemo", loadMapDemoState
         loadMapDemoState.init()
 
+        moveMapDemoState = new MoveMapDemoState()
+        StateManager.add "MoveMapDemo", moveMapDemoState
+        moveMapDemoState.init()
+
         @debugMenu()
 
 
@@ -42,7 +49,7 @@ class BootState extends State
 
         statesFolder = gui.addFolder "States"
         statesFolder.open()
-        stateControl = statesFolder.add StateManager, "currentState", ["menu", "demo1", "LoadMapDemo"]
+        stateControl = statesFolder.add StateManager, "currentState", ["menu", "demo1", "LoadMapDemo", "MoveMapDemo"]
         stateControl.onChange (state) -> StateManager.activate state
         StateManager.onActivate = -> stateControl.updateDisplay()
 
