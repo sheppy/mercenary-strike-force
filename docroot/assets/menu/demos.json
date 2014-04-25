@@ -10,17 +10,17 @@
             "width": 200,
             "height": 30,
             "actionType": "switchState",
-            "action": "mai"
+            "action": "demo1"
         },
         {
             "type": "button",
-            "text": "Demo 2",
+            "text": "Load Map Demo",
             "x": 20,
             "y": 60,
             "width": 200,
             "height": 30,
             "actionType": "switchState",
-            "action": "main"
+            "action": "LoadMapDemo"
         },
         {
             "type": "button",

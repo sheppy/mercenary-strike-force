@@ -1,6 +1,6 @@
-EntityManager = require "../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+EntityManager = require "../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
 
-State = require "../../../vendor/iki-engine/src/State.coffee"
+State = require "../../../../vendor/iki-engine/src/State.coffee"
 Demo1System = require "./Demo1System.coffee"
 
 class Demo1State extends State
