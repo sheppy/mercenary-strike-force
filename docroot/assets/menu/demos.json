@@ -1,0 +1,36 @@
+{
+    "id": "demos",
+    "background": "#030",
+    "elements": [
+        {
+            "type": "button",
+            "text": "Demo 1",
+            "x": 20,
+            "y": 20,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchState",
+            "action": "mai"
+        },
+        {
+            "type": "button",
+            "text": "Demo 2",
+            "x": 20,
+            "y": 60,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchState",
+            "action": "main"
+        },
+        {
+            "type": "button",
+            "text": "Back",
+            "x": 20,
+            "y": 100,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchMenu",
+            "action": "main"
+        }
+    ]
+}

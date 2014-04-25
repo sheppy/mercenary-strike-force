@@ -1,29 +1,50 @@
 State = require "../../vendor/iki-engine/src/State.coffee"
+Util = require "../../vendor/iki-engine/src/Util.coffee"
 StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
 GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
 class MenuState extends State
     init: ->
-        @currentMenu = "main"
         @menus = {}
-
-        @addButton "main", "Demos", 20, 20, 200, 30, @clickMainDemos.bind @
-        @addButton "demos", "Demo 1", 20, 20, 200, 30, @clickDemo1.bind @
-        @addButton "demos", "Load map", 20, 60, 200, 30, @clickDemoLoadMap.bind @
-        @addButton "demos", "Back", 20, 100, 200, 30, @clickDemoBack.bind @
-
         @ctx = GraphicsManager.renderer.ctx
         @clickListener = @onMouseClick.bind @
 
-    clickMainDemos: -> @switchMenu "demos"
+        # Set the current menu
+        @currentMenu = "main"
 
-    clickDemoBack: -> @switchMenu "main"
-    clickDemo1: -> StateManager.activate "demo1"
-    clickDemoLoadMap: -> StateManager.activate "demo2"
+        # Load the menus
+        @loadMenu "/assets/menu/main.json"
+        @loadMenu "/assets/menu/demos.json"
 
 
-    addButton: (menu, text, x, y, width, height, onClick) ->
+    loadMenu: (menuFile) ->
+        map = Util.loadJSON menuFile
+        map.then (menuData) =>
+            @menus[menuData.id] = {
+                id: menuData.id
+                background: menuData.background
+                elements: []
+                buttons: []
+            }
+
+            for element in menuData.elements
+
+                if element.type == "button"
+                    @addButton menuData.id,
+                        element.text,
+                        element.x,
+                        element.y,
+                        element.width,
+                        element.height,
+                        element.actionType,
+                        element.action
+
+
+    addButton: (menu, text, x, y, width, height, actionType, action) ->
+        if actionType == "switchMenu" then onClick = @switchMenu.bind @, action
+        if actionType == "switchState" then onClick = @switchState.bind @, action
+
         button =
             text: text
             x: x
@@ -31,6 +52,7 @@ class MenuState extends State
             width: width
             height: height
             click: onClick
+
         if not @menus[menu] then @menus[menu] = {}
         if not @menus[menu].buttons then @menus[menu].buttons = []
         @menus[menu].buttons.push button
@@ -46,21 +68,24 @@ class MenuState extends State
         @currentMenu = newMenu
         @renderMenu()
 
+    switchState: (state) -> StateManager.activate state
+
     onMouseClick: (e) ->
         button = @getButtonFromPoint e.x, e.y
-        if button
-            button.click()
+        if button then button.click()
 
     getButtonFromPoint: (x, y) ->
         menu = @menus[@currentMenu]
-        for name, button of menu.buttons
-            if x >= button.x && x <= button.y + button.width && y >= button.y && y <= button.y + button.height
+        for button in menu.buttons
+            if @isPointInRect x, y, button.x, button.y, button.width, button.height
                 return button
+
+    isPointInRect: (x, y, rx, ry, rw, rh) -> return x >= rx && x <= ry + rw && y >= ry && y <= ry + rh
 
     renderMenu: ->
         @renderBackground()
         menu = @menus[@currentMenu]
-        for name, button of menu.buttons
+        for button in menu.buttons
             @renderButton button
 
     renderBackground: ->

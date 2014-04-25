@@ -1,6 +1,7 @@
 {
     "root": "assets/",
     "groups": {
+        "menus": ["menu/main.json", "menu/demos.json"],
         "images": ["tiles/test1.png", "tiles/test2.png"],
         "maps": ["map/test1.json"]
     }

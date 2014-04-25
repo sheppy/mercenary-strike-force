@@ -1,0 +1,16 @@
+{
+    "id": "main",
+    "background": "#003",
+    "elements": [
+        {
+            "type": "button",
+            "text": "Demos",
+            "x": 20,
+            "y": 20,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchMenu",
+            "action": "demos"
+        }
+    ]
+}
