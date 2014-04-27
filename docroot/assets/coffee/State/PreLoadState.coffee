@@ -6,8 +6,8 @@ AssetManager = require "../../vendor/iki-engine/src/Manager/AssetManager.coffee"
 class PreLoadState extends State
     init: ->
         @bar =
-            x: (640 / 2) - 100
-            y: (480 / 2) - 20
+            x: (GraphicsManager.renderer.canvas.width / 2) - 100
+            y: (GraphicsManager.renderer.canvas.height / 2) - 20
             width: 200
             height: 20
 
@@ -18,7 +18,7 @@ class PreLoadState extends State
 
     activate: ->
         @ctx.fillStyle = "#000"
-        @ctx.fillRect 0, 0, 640, 480
+        @ctx.fillRect 0, 0, GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
 
         @renderLoadingBar 0
         @renderLoadingText "Loading..."
@@ -31,7 +31,7 @@ class PreLoadState extends State
 
     onProgress: (asset, group, loaded, total) ->
         @ctx.fillStyle = "#000"
-        @ctx.fillRect 0, 0, 640, 480
+        @ctx.fillRect 0, 0, GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
         @renderLoadingText "Loading #{group}..."
         @renderLoadingBar loaded / total
 
