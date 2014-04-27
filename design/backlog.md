@@ -3,8 +3,8 @@ Backlog
 
 Next
 ----
+* switch promises to use Q
 * use prototyping for entity methods instead of manager?
-* removing / detaching entities from entity manager
 * grunt task to make assets in to a sprite
   * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
 * List some renderable types of Components
@@ -23,7 +23,6 @@ Todo
 Ideas
 -----
 * Sprite / Images
-* Add full sized canvas rendering / stretch etc
 * Move the player around the map, turn based?
 * Limit player movement, collisions etc
 * Add game UI system
@@ -34,7 +33,6 @@ Ideas
 * Analytics
 * ObjectPool?
 * Net communications
-* Audio
 * States have own pre-loaders?
 
 Done
@@ -53,3 +51,6 @@ Done
 * ~~Render a map tile~~
 * ~~Render a full map~~
 * ~~Render only the viewport area of a map~~
+* ~~removing / detaching entities from entity manager~~
+* ~~Add full sized canvas rendering / stretch etc~~
+* ~~Audio~~

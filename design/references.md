@@ -1,4 +1,22 @@
 
+Graphics
+========
+* http://www.roguebasin.com/index.php?title=Finding_graphical_tiles
+* http://opengameart.org/content/sci-fi-platform-tiles
+* http://opengameart.org/content/32x32-tile-pixel-art-tilesheet
+* http://opengameart.org/content/tiled-terrains
+* http://opengameart.org/content/basic-32x32-sci-fi-tiles-for-roguelike
+* <http://opengameart.org/content/explosions-0>
+* http://opengameart.org/content/lasers-and-beams
+* http://opengameart.org/content/sci-fi-space-simple-bullets
+* <http://opengameart.org/content/non-isometric-spritesheets>
+* <http://opengameart.org/content/simple-light-graysacle-cursors-16x16>
+* http://opengameart.org/content/progress-health-mana-bar-svg
+* <http://opengameart.org/content/space-backgrounds-1>
+
+Sounds
+======
+* <http://opengameart.org/content/ui-sound-effects-pack>
 
 
 * <http://www.nolithius.com/game-development/dungeon-generation>
@@ -42,9 +60,6 @@ Map:
 - http://www.futuredatalab.com/proceduraldungeon/
 - http://inkwellideas.com/advice/random-dungeon-generators-reviewed/
 - http://donjon.bin.sh/fantasy/dungeon/about/
-
-Graphics
-- http://www.roguebasin.com/index.php?title=Finding_graphical_tiles
 
 
 
