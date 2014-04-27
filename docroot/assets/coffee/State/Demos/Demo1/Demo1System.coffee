@@ -19,12 +19,11 @@ class Demo1System extends System
             position.y = InputManager.mouse.y
 
         # Draw renderables
-        renderableEntities = EntityManager.getAllEntitiesWithComponentOfTypes ["RenderableRect", "Position"]
+        renderableEntities = EntityManager.getAllEntitiesWithComponentOfTypes ["RenderableImage", "Position"]
         for entity in renderableEntities
-            renderable = EntityManager.getComponentOfType entity, "RenderableRect"
+            renderable = EntityManager.getComponentOfType entity, "RenderableImage"
             position = EntityManager.getComponentOfType entity, "Position"
-            GraphicsManager.renderer.ctx.fillStyle = renderable.colour
-            GraphicsManager.renderer.ctx.fillRect position.x, position.y, renderable.width, renderable.height
+            GraphicsManager.renderer.ctx.drawImage renderable.img, position.x, position.y
 
         return null
 

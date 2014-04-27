@@ -1,4 +1,5 @@
 EntityManager = require "../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+GraphicsManager = require "../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 
 State = require "../../../../vendor/iki-engine/src/State.coffee"
 Demo1System = require "./Demo1System.coffee"
@@ -7,12 +8,14 @@ class Demo1State extends State
     init: -> @addSystem new Demo1System()
 
     activate: ->
+        GraphicsManager.renderer.canvas.style.cursor = "none"
+
         @cursor = EntityManager.createEntity "cursor"
+        cursorImage = new Image()
+        cursorImage.src = "/assets/img/cursor/slick_arrow-delta.png";
         EntityManager.addComponent @cursor, {
-            type: "RenderableRect"
-            width: 6
-            height: 6
-            colour: "red"
+            type: "RenderableImage"
+            img: cursorImage
         }
         EntityManager.addComponent @cursor, {
             type: "Position"
@@ -23,7 +26,9 @@ class Demo1State extends State
             type: "PositionFollowsMouse"
         }
 
-    deactivate: -> EntityManager.removeEntity @cursor
+    deactivate: ->
+        EntityManager.removeEntity @cursor
+        GraphicsManager.renderer.canvas.style.cursor = "default"
 
 
 module.exports = Demo1State
