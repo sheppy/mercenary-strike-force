@@ -8,6 +8,10 @@
             "tiles/test1.png",
             "tiles/test2.png"
         ],
-        "maps": ["map/test1.json", "map/test2.json"]
+        "maps": ["map/test1.json", "map/test2.json"],
+        "audio": [
+            "sound/UI pack 1/MENU B_Select.wav",
+            "sound/UI pack 1/MENU B_Back.wav"
+        ]
     }
 }

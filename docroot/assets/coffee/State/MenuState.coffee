@@ -3,6 +3,7 @@ Util = require "../../vendor/iki-engine/src/Util.coffee"
 StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
 GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
+AudioManager = require "../../vendor/iki-engine/src/Manager/AudioManager.coffee"
 
 class MenuState extends State
     init: ->
@@ -15,6 +16,9 @@ class MenuState extends State
 
         # Set the current menu
         @currentMenu = "main"
+
+        AudioManager.load "menu-select", "/assets/sound/UI pack 1/MENU B_Select.wav"
+        AudioManager.load "menu-back", "/assets/sound/UI pack 1/MENU B_Back.wav"
 
         # Load the menus
         @loadMenu "/assets/menu/main.json"
@@ -68,10 +72,17 @@ class MenuState extends State
     deactivate: -> InputManager.onMouseClick = null
 
     switchMenu: (newMenu) ->
+        if newMenu == "main"
+            AudioManager.play "menu-back"
+        else
+            AudioManager.play "menu-select"
+
         @currentMenu = newMenu
         @renderMenu()
 
-    switchState: (state) -> StateManager.activate state
+    switchState: (state) ->
+        AudioManager.play "menu-select"
+        StateManager.activate state
 
     onMouseClick: (e) ->
         button = @getButtonFromPoint e.x, e.y
