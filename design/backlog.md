@@ -3,6 +3,9 @@ Backlog
 
 Next
 ----
+* fix menu blanking when resizing (event or constant repaint?)
+* Investigate possible eventing library?
+* fix bounds errors on Smooth Map Demo
 * switch promises to use Q
 * use prototyping for entity methods instead of manager?
 * grunt task to make assets in to a sprite
