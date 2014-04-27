@@ -52,13 +52,17 @@ class BootState extends State
     debugMenu: ->
         gui = new dat.GUI()
 
+        StateManager.debugState = StateManager.currentState
+
         statesFolder = gui.addFolder "States"
         statesFolder.open()
-        stateControl = statesFolder.add StateManager, "currentState", [
+        stateControl = statesFolder.add StateManager, "debugState", [
             "menu", "demo1", "LoadMapDemo", "MoveMapDemo", "MoveMapSmoothDemo"
         ]
-        stateControl.onChange (state) -> StateManager.activate state
-        StateManager.onActivate = -> stateControl.updateDisplay()
+        stateControl.onFinishChange (state) -> StateManager.activate state
+        StateManager.onActivate = ->
+            StateManager.debugState = StateManager.currentState
+            stateControl.updateDisplay()
 
 
 module.exports = BootState
