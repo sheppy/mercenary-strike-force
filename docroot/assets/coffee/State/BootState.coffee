@@ -17,6 +17,9 @@ class BootState extends State
     init: ->
         # Use GraphicsManager to create main canvas
         GraphicsManager.renderer = GraphicsManager.createRenderer 640, 480, document.body
+        GraphicsManager.renderer.canvas.width = window.innerWidth
+        GraphicsManager.renderer.canvas.height = window.innerHeight
+
         InputManager.init()
 
         preloadState = new PreLoadState()
@@ -44,6 +47,10 @@ class BootState extends State
         moveMapSmoothDemoState.init()
 
         @debugMenu()
+
+        window.addEventListener "resize", ->
+            GraphicsManager.renderer.canvas.width = window.innerWidth
+            GraphicsManager.renderer.canvas.height = window.innerHeight
 
 
     activate: ->
