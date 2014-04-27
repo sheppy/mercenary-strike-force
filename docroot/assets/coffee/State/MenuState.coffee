@@ -10,6 +10,9 @@ class MenuState extends State
         @ctx = GraphicsManager.renderer.ctx
         @clickListener = @onMouseClick.bind @
 
+        @background = new Image();
+        @background.src = "/assets/img/background/image6_0.jpg"
+
         # Set the current menu
         @currentMenu = "main"
 
@@ -89,8 +92,9 @@ class MenuState extends State
             @renderButton button
 
     renderBackground: ->
-        @ctx.fillStyle = "#003"
-        @ctx.fillRect 0, 0, 640, 480
+        GraphicsManager.fillImage @ctx, @background,
+            @background.width, @background.height,
+            GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
 
     renderButton: (button, hover = false) ->
         @ctx.fillStyle = "#fff"
