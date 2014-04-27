@@ -24,18 +24,20 @@ class MoveMapSmoothDemoState extends State
             y: 0
         }
 
-        @viewportEntity = EntityManager.createEntity "viewport"
+        @viewportEntity = EntityManager.createEntity "viewport", false
         EntityManager.addComponent @viewportEntity, @viewport
 
 
     activate: ->
+        EntityManager.addEntity @viewportEntity
+
         # Load the map
         @map = new Map()
         loading = @map.loadMap "/assets/map/test2.json"
         loading.then () => @mapLoaded = true
 
 
-    deactivate: -> EntityManager.removeEntity @viewport
+    deactivate: -> EntityManager.removeEntity @viewportEntity
 
 
     drawMap: (ctx) ->
