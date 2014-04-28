@@ -17,6 +17,9 @@ Graphics
 Sounds
 ======
 * <http://opengameart.org/content/ui-sound-effects-pack>
+* http://opengameart.org/content/space-battle-game-sounds-astromenace
+* http://opengameart.org/content/evolutius-music
+* http://opengameart.org/content/dark-ambience-soundscapes
 
 
 * <http://www.nolithius.com/game-development/dungeon-generation>
