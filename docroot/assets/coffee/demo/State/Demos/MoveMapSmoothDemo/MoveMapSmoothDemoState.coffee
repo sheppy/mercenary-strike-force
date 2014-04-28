@@ -1,10 +1,10 @@
-AssetManager = require "../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
-GraphicsManager = require "../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
-EntityManager = require "../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+AssetManager = require "../../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
+GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+EntityManager = require "../../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
 
-State = require "../../../../vendor/iki-engine/src/State.coffee"
-Map = require "../../../../vendor/iki-engine/src/Map.coffee"
-GraphicsSystem = require "../../../../vendor/iki-engine/src/System/GraphicsSystem.coffee"
+State = require "../../../../../vendor/iki-engine/src/State.coffee"
+Map = require "../../../../../vendor/iki-engine/src/Map.coffee"
+GraphicsSystem = require "../../../../../vendor/iki-engine/src/System/GraphicsSystem.coffee"
 MapMoveInputSyste = require "./MapMoveInputSystem.coffee"
 
 class MoveMapSmoothDemoState extends State

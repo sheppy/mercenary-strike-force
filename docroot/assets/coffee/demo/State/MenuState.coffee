@@ -1,9 +1,9 @@
-State = require "../../vendor/iki-engine/src/State.coffee"
-Util = require "../../vendor/iki-engine/src/Util.coffee"
-StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
-GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
-InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
-AudioManager = require "../../vendor/iki-engine/src/Manager/AudioManager.coffee"
+State = require "../../../vendor/iki-engine/src/State.coffee"
+Util = require "../../../vendor/iki-engine/src/Util.coffee"
+StateManager = require "../../../vendor/iki-engine/src/Manager/StateManager.coffee"
+GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+InputManager = require "../../../vendor/iki-engine/src/Manager/InputManager.coffee"
+AudioManager = require "../../../vendor/iki-engine/src/Manager/AudioManager.coffee"
 
 class MenuState extends State
     init: ->

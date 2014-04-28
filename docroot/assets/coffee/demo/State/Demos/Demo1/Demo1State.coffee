@@ -1,7 +1,7 @@
-EntityManager = require "../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
-GraphicsManager = require "../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+EntityManager = require "../../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 
-State = require "../../../../vendor/iki-engine/src/State.coffee"
+State = require "../../../../../vendor/iki-engine/src/State.coffee"
 Demo1System = require "./Demo1System.coffee"
 
 class Demo1State extends State

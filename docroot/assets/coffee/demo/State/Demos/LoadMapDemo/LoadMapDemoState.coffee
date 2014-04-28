@@ -1,8 +1,8 @@
-AssetManager = require "../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
-GraphicsManager = require "../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+AssetManager = require "../../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
+GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 
-State = require "../../../../vendor/iki-engine/src/State.coffee"
-Map = require "../../../../vendor/iki-engine/src/Map.coffee"
+State = require "../../../../../vendor/iki-engine/src/State.coffee"
+Map = require "../../../../../vendor/iki-engine/src/Map.coffee"
 
 class LoadMapDemoState extends State
     activate: ->

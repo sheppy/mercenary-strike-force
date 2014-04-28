@@ -1,6 +1,6 @@
-System = require "../../../../vendor/iki-engine/src/System.coffee"
-InputManager = require "../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
-EntityManager = require "../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+System = require "../../../../../vendor/iki-engine/src/System.coffee"
+InputManager = require "../../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
+EntityManager = require "../../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
 
 class MapMoveInputSystem extends System
 

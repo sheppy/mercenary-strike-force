@@ -1,7 +1,7 @@
-State = require "../../vendor/iki-engine/src/State.coffee"
-StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
-GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
-AssetManager = require "../../vendor/iki-engine/src/Manager/AssetManager.coffee"
+State = require "../../../vendor/iki-engine/src/State.coffee"
+StateManager = require "../../../vendor/iki-engine/src/Manager/StateManager.coffee"
+GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+AssetManager = require "../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
 
 class PreLoadState extends State
     init: ->
@@ -25,7 +25,7 @@ class PreLoadState extends State
 
         AssetManager.onProgress = @onProgress.bind @
 
-        loadAsset = AssetManager.load "assets/assets.json"
+        loadAsset = AssetManager.load "assets/demo-assets.json"
         loadAsset.then -> StateManager.activate "menu"
 
 

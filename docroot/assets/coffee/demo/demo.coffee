@@ -1,4 +1,4 @@
-Engine = require "../vendor/iki-engine/src/Engine.coffee"
+Engine = require "../../vendor/iki-engine/src/Engine.coffee"
 
 BootState = require "./State/BootState.coffee"
 

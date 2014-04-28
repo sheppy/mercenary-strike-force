@@ -7,8 +7,11 @@ module.exports = (grunt) ->
         ENGINE:
             SRC: "docroot/assets/vendor/iki-engine/src/**/*.coffee"
         GAME:
-            SRC: "docroot/assets/coffee/game.coffee"
-            ALL: "docroot/assets/coffee/**/*.coffee"
+            SRC: "docroot/assets/coffee/game/mercenary-strike-force.coffee"
+            ALL: "docroot/assets/coffee/game/**/*.coffee"
+        DEMO:
+            SRC: "docroot/assets/coffee/demo/demo.coffee"
+            ALL: "docroot/assets/coffee/demo/**/*.coffee"
 
 
     LIVERELOAD_PORT = 35729
@@ -31,7 +34,10 @@ module.exports = (grunt) ->
             gruntfile:
                 files: [{src: "Gruntfile.coffee"}]
             game:
-                files: [{src: FILES.GAME.SRC}]
+                files: [
+                    {src: FILES.GAME.SRC}
+                    {src: FILES.DEMO.SRC}
+                ]
 
 
         browserify:
@@ -41,7 +47,10 @@ module.exports = (grunt) ->
                 transform: ["coffeeify"]
             game:
                 files:
-                    "docroot/assets/js/game.js": [ FILES.GAME.SRC ]
+                    "docroot/assets/js/mercenary-strike-force.js": [ FILES.GAME.SRC ]
+            demo:
+                files:
+                    "docroot/assets/js/demo.js": [ FILES.DEMO.SRC ]
 
 
         connect:
@@ -55,11 +64,14 @@ module.exports = (grunt) ->
 
         watch:
             game:
-                files: [FILES.GAME.ALL, FILES.ENGINE.SRC]
-                tasks: ["newer:coffeelint", "browserify"]
+                files: [FILES.ENGINE.SRC, FILES.GAME.ALL]
+                tasks: ["newer:coffeelint:game", "browserify:game"]
+            demo:
+                files: [FILES.ENGINE.SRC, FILES.DEMO.ALL]
+                tasks: ["newer:coffeelint:demo", "browserify:demo"]
 
             html:
-                files: [FILES.DOCROOT + "/index.html"]
+                files: [FILES.DOCROOT + "/index.html", FILES.DOCROOT + "/demo.html"]
                 tasks: []
                 options:
                     livereload: LIVERELOAD_PORT

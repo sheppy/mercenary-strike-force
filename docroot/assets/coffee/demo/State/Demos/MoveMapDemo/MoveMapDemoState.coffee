@@ -1,9 +1,9 @@
-AssetManager = require "../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
-GraphicsManager = require "../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
-InputManager = require "../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
+AssetManager = require "../../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
+GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+InputManager = require "../../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
-State = require "../../../../vendor/iki-engine/src/State.coffee"
-Map = require "../../../../vendor/iki-engine/src/Map.coffee"
+State = require "../../../../../vendor/iki-engine/src/State.coffee"
+Map = require "../../../../../vendor/iki-engine/src/Map.coffee"
 
 class MoveMapDemoState extends State
     init: ->

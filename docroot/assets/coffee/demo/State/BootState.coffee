@@ -1,7 +1,7 @@
-State = require "../../vendor/iki-engine/src/State.coffee"
-StateManager = require "../../vendor/iki-engine/src/Manager/StateManager.coffee"
-GraphicsManager = require "../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
-InputManager = require "../../vendor/iki-engine/src/Manager/InputManager.coffee"
+State = require "../../../vendor/iki-engine/src/State.coffee"
+StateManager = require "../../../vendor/iki-engine/src/Manager/StateManager.coffee"
+GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+InputManager = require "../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
 PreLoadState = require "./PreLoadState.coffee"
 MenuState = require "./MenuState.coffee"

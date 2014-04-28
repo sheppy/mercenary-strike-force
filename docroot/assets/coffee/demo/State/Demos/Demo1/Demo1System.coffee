@@ -1,7 +1,7 @@
-System = require "../../../../vendor/iki-engine/src/System.coffee"
-EntityManager = require "../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
-GraphicsManager = require "../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
-InputManager = require "../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
+System = require "../../../../../vendor/iki-engine/src/System.coffee"
+EntityManager = require "../../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
+InputManager = require "../../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
 class Demo1System extends System
     THROTTLE_VALUE: 16  # 62.5 FPS
