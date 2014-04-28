@@ -1,10 +1,10 @@
 AssetManager = require "../../../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
 GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 
-State = require "../../../../../vendor/iki-engine/src/State.coffee"
+Scene = require "../../../../../vendor/iki-engine/src/Scene.coffee"
 Map = require "../../../../../vendor/iki-engine/src/Map.coffee"
 
-class LoadMapDemoState extends State
+class LoadMapDemoScene extends Scene
     activate: ->
 
         GraphicsManager.renderer.ctx.fillStyle = "#666"
@@ -21,5 +21,4 @@ class LoadMapDemoState extends State
             map.drawMap GraphicsManager.renderer.ctx
 
 
-
-module.exports = LoadMapDemoState
+module.exports = LoadMapDemoScene

@@ -1,11 +1,11 @@
-State = require "../../../vendor/iki-engine/src/State.coffee"
+Scene = require "../../../vendor/iki-engine/src/Scene.coffee"
 Util = require "../../../vendor/iki-engine/src/Util.coffee"
-StateManager = require "../../../vendor/iki-engine/src/Manager/StateManager.coffee"
+SceneManager = require "../../../vendor/iki-engine/src/Manager/SceneManager.coffee"
 GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 InputManager = require "../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 AudioManager = require "../../../vendor/iki-engine/src/Manager/AudioManager.coffee"
 
-class MenuState extends State
+class MenuScene extends Scene
     init: ->
         @menus = {}
         @ctx = GraphicsManager.renderer.ctx
@@ -50,7 +50,7 @@ class MenuState extends State
 
     addButton: (menu, text, x, y, width, height, actionType, action) ->
         if actionType == "switchMenu" then onClick = @switchMenu.bind @, action
-        if actionType == "switchState" then onClick = @switchState.bind @, action
+        if actionType == "switchScene" then onClick = @switchScene.bind @, action
 
         button =
             text: text
@@ -80,9 +80,9 @@ class MenuState extends State
         @currentMenu = newMenu
         @renderMenu()
 
-    switchState: (state) ->
+    switchScene: (scene) ->
         AudioManager.play "menu-select"
-        StateManager.activate state
+        SceneManager.activate scene
 
     onMouseClick: (e) ->
         button = @getButtonFromPoint e.x, e.y
@@ -128,4 +128,4 @@ class MenuState extends State
         @ctx.fillText button.text, button.x + 100 - (textSize.width / 2), button.y + 7
 
 
-module.exports = MenuState
+module.exports = MenuScene

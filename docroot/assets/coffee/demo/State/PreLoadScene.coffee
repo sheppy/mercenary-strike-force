@@ -1,9 +1,9 @@
-State = require "../../../vendor/iki-engine/src/State.coffee"
-StateManager = require "../../../vendor/iki-engine/src/Manager/StateManager.coffee"
+Scene = require "../../../vendor/iki-engine/src/Scene.coffee"
+SceneManager = require "../../../vendor/iki-engine/src/Manager/SceneManager.coffee"
 GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 AssetManager = require "../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
 
-class PreLoadState extends State
+class PreLoadScene extends Scene
     init: ->
         @bar =
             x: (GraphicsManager.renderer.canvas.width / 2) - 100
@@ -26,7 +26,7 @@ class PreLoadState extends State
         AssetManager.onProgress = @onProgress.bind @
 
         loadAsset = AssetManager.load "assets/demo-assets.json"
-        loadAsset.then -> StateManager.activate "menu"
+        loadAsset.then -> SceneManager.activate "menu"
 
 
     onProgress: (asset, group, loaded, total) ->
@@ -51,4 +51,4 @@ class PreLoadState extends State
         @ctx.fillRect @bar.x + 3, @bar.y + 3, (@bar.width - 6) * percent, @bar.height - 6
 
 
-module.exports = PreLoadState
+module.exports = PreLoadScene

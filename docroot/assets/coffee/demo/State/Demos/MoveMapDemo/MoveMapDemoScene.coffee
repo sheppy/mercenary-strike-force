@@ -2,10 +2,10 @@ AssetManager = require "../../../../../vendor/iki-engine/src/Manager/AssetManage
 GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 InputManager = require "../../../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 
-State = require "../../../../../vendor/iki-engine/src/State.coffee"
+Scene = require "../../../../../vendor/iki-engine/src/Scene.coffee"
 Map = require "../../../../../vendor/iki-engine/src/Map.coffee"
 
-class MoveMapDemoState extends State
+class MoveMapDemoScene extends Scene
     init: ->
         @viewPortX = 0
         @viewPortY = 0
@@ -45,4 +45,4 @@ class MoveMapDemoState extends State
                 @viewPortX, @viewPortY,
                 GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
 
-module.exports = MoveMapDemoState
+module.exports = MoveMapDemoScene

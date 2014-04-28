@@ -1,7 +1,7 @@
 Engine = require "../../vendor/iki-engine/src/Engine.coffee"
 
-BootState = require "./State/BootState.coffee"
+BootScene = require "./State/BootScene.coffee"
 
 
 game = new Engine
-game.start new BootState
+game.start new BootScene

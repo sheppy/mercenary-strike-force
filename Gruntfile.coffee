@@ -36,6 +36,9 @@ module.exports = (grunt) ->
             game:
                 files: [
                     {src: FILES.GAME.SRC}
+                ]
+            demo:
+                files: [
                     {src: FILES.DEMO.SRC}
                 ]
 

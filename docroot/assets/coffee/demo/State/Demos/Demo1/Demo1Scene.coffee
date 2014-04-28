@@ -1,10 +1,10 @@
 EntityManager = require "../../../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
 GraphicsManager = require "../../../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 
-State = require "../../../../../vendor/iki-engine/src/State.coffee"
+Scene = require "../../../../../vendor/iki-engine/src/Scene.coffee"
 Demo1System = require "./Demo1System.coffee"
 
-class Demo1State extends State
+class Demo1Scene extends Scene
     init: -> @addSystem new Demo1System()
 
     activate: ->
@@ -31,4 +31,4 @@ class Demo1State extends State
         GraphicsManager.renderer.canvas.style.cursor = "default"
 
 
-module.exports = Demo1State
+module.exports = Demo1Scene
