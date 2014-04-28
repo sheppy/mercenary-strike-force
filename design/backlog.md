@@ -3,32 +3,31 @@ Backlog
 
 Next
 ----
-* fix menu blanking when resizing (event or constant repaint?)
-* Investigate possible eventing library?
-* fix bounds errors on Smooth Map Demo
-* switch promises to use Q
-* use prototyping for entity methods instead of manager?
-* grunt task to make assets in to a sprite
-  * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
-* List some renderable types of Components
-  * RenderableText
-  * RenderableRect
-  * RenderableImage
-  * RenderableSprite
-* Work out how maps fit in to the rendering system
+* #1 [ENHANCEMENT] Rename "State" to Scene and "StateManager" to "SceneManager"
+* #2 [FEATURE] AssetLoader - Nested groups (scene > type)
+* #3 [FEATURE] AssetLoader - Load based on asset type
+* [FEATURE] AssetLoader - Load individual groups
+* [FEATURE] Sprite / Images
+* [QUESTION] Investigate possible eventing library?
+* [QUESTION] worth switching promises to use Q?
+* [QUESTION] use prototyping for entity methods instead of manager?
+* [QUESTION] Work out how maps fit in to the rendering system
+* [BUG] fix menu blanking when resizing (event or constant repaint?)
+* [BUG] fix bounds errors on Smooth Map Demo
 
 Todo
 ----
-* Get unit tests to coverage > 80%
-* Refactor menu into re-usable engine code
-* Refactor pre-loader into re-usable engine code
+* [FEATURE] Add game UI system
+* [FEATURE] Add credits page
+* [ENHANCEMENT] States have own pre-loaders?
+* [ENHANCEMENT] Get unit tests to coverage > 80%
+* [ENHANCEMENT] Refactor menu into re-usable engine code
+* [ENHANCEMENT] Refactor pre-loader into re-usable engine code
 
 Ideas
 -----
-* Sprite / Images
 * Move the player around the map, turn based?
 * Limit player movement, collisions etc
-* Add game UI system
 * Procedural maps
 * Add vision distance
 * Add lighting
@@ -36,7 +35,13 @@ Ideas
 * Analytics
 * ObjectPool?
 * Net communications
-* States have own pre-loaders?
+* grunt task to make assets in to a sprite
+  * Use https://github.com/Ensighten/grunt-spritesmith to make the tilemap
+* List some renderable types of Components
+  * RenderableText
+  * RenderableRect
+  * RenderableImage
+  * RenderableSprite
 
 Done
 ----
