@@ -4,15 +4,13 @@ SceneManager = require "../../../vendor/iki-engine/src/Manager/SceneManager.coff
 GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManager.coffee"
 InputManager = require "../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 AudioManager = require "../../../vendor/iki-engine/src/Manager/AudioManager.coffee"
+AssetManager = require "../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
 
 class MenuScene extends Scene
     init: ->
         @menus = {}
         @ctx = GraphicsManager.renderer.ctx
         @clickListener = @onMouseClick.bind @
-
-        @background = new Image();
-        @background.src = "/assets/img/background/image6_0.jpg"
 
         # Set the current menu
         @currentMenu = "main"
@@ -27,25 +25,28 @@ class MenuScene extends Scene
 
     loadMenu: (menuFile) ->
         map = Util.loadJSON menuFile
-        map.then (menuData) =>
-            @menus[menuData.id] = {
-                id: menuData.id
-                background: menuData.background
-                elements: []
-                buttons: []
-            }
+        map.then @parseMenu.bind @
 
-            for element in menuData.elements
 
-                if element.type == "button"
-                    @addButton menuData.id,
-                        element.text,
-                        element.x,
-                        element.y,
-                        element.width,
-                        element.height,
-                        element.actionType,
-                        element.action
+    parseMenu: (menuData) ->
+        @menus[menuData.id] = {
+            id: menuData.id
+            background: menuData.background
+            elements: []
+            buttons: []
+        }
+
+        for element in menuData.elements
+
+            if element.type == "button"
+                @addButton menuData.id,
+                    element.text,
+                    element.x,
+                    element.y,
+                    element.width,
+                    element.height,
+                    element.actionType,
+                    element.action
 
 
     addButton: (menu, text, x, y, width, height, actionType, action) ->
@@ -65,6 +66,7 @@ class MenuScene extends Scene
         @menus[menu].buttons.push button
 
     activate: ->
+        @background = AssetManager.get "img/background/image6_0.jpg"
         InputManager.onMouseClick = @onMouseClick.bind @
         @currentMenu = "main"
         @renderMenu()
