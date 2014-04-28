@@ -1,0 +1,8 @@
+{
+    "root": "assets/",
+    "assets": {
+        "images": [
+            {"type": "image", "file": "img/cursor/slick_arrow-delta.png"}
+        ]
+    }
+}

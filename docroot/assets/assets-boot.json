@@ -1,0 +1,9 @@
+{
+    "root": "assets/",
+    "assets": {
+        "images": [
+            {"type": "image", "file": "img/ui/loading-bar-bg.png"},
+            {"type": "image", "file": "img/ui/loading-bar-fill.png"}
+        ]
+    }
+}
