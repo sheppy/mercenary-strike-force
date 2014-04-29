@@ -7,6 +7,7 @@ AssetManager = require "../../../vendor/iki-engine/src/Manager/AssetManager.coff
 
 # Scenes
 PreLoadScene = require "./PreLoad.coffee"
+MainMenuScene = require "./MainMenu.coffee"
 
 
 class BootScene extends Scene
@@ -22,9 +23,14 @@ class BootScene extends Scene
             GraphicsManager.renderer.canvas.width = window.innerWidth
             GraphicsManager.renderer.canvas.height = window.innerHeight
 
+        # Set up the scenes
         preLoadScene = new PreLoadScene()
         SceneManager.add "preload", preLoadScene
         preLoadScene.init()
+
+        mainMenuScene = new MainMenuScene()
+        SceneManager.add "main-menu", mainMenuScene
+        mainMenuScene.init()
 
 
     activate: ->

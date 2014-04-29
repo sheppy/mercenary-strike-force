@@ -2,7 +2,12 @@
     "root": "assets/",
     "assets": {
         "images": [
-            {"type": "image", "file": "img/cursor/slick_arrow-delta.png"}
+            {"type": "image", "file": "img/cursor/slick_arrow-delta.png"},
+            {"type": "image", "file": "img/background/image6_0.jpg"}
+        ],
+        "audio": [
+            {"file": "sound/UI pack 1/MENU B_Select.wav"},
+            {"file": "sound/UI pack 1/MENU B_Back.wav"}
         ]
     }
 }

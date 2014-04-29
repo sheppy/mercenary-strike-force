@@ -1,0 +1,34 @@
+{
+    "id": "main-menu",
+    "elements": [
+        {
+            "type": "button",
+            "text": "New Game",
+            "x": 20,
+            "y": 20,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchMenu",
+            "action": "new-game-menu"
+        },
+        {
+            "type": "button",
+            "text": "Options",
+            "x": 20,
+            "y": 60,
+            "width": 200,
+            "height": 30,
+            "disabled": true
+        },
+        {
+            "type": "button",
+            "text": "Credits",
+            "x": 20,
+            "y": 100,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchScene",
+            "action": "credits"
+        }
+    ]
+}

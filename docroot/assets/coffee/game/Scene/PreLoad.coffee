@@ -31,7 +31,7 @@ class PreLoadScene extends Scene
         AssetManager.onError = @onError.bind @
 
         loadAsset = AssetManager.load "assets/assets-game.json"
-#        loadAsset.then -> SceneManager.activate "menu"
+        loadAsset.then -> SceneManager.activate "main-menu"
 
 
     onError: (asset) ->
