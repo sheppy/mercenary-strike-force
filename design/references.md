@@ -13,6 +13,7 @@ Graphics
 * <http://opengameart.org/content/simple-light-graysacle-cursors-16x16>
 * http://opengameart.org/content/progress-health-mana-bar-svg
 * <http://opengameart.org/content/space-backgrounds-1>
+* <http://opengameart.org/content/lpc-farming-tilesets-magic-animations-and-ui-elements>
 
 Sounds
 ======

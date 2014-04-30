@@ -3,8 +3,6 @@ Backlog
 
 Next
 ----
-* #2 [FEATURE] AssetLoader - Nested groups (scene > type)
-* #3 [FEATURE] AssetLoader - Load based on asset type
 * [FEATURE] AssetLoader - Load individual groups
 * [FEATURE] Sprite / Images
 * [QUESTION] Investigate possible eventing library?
@@ -63,3 +61,4 @@ Done
 * ~~Audio~~
 * ~~#4 Project re-organise, separate demos from full game~~
 * ~~#1 Rename "State" to Scene and "StateManager" to "SceneManager"~~
+* ~~[FEATURE] AssetLoader - Load based on asset type~~
