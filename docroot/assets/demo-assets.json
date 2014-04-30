@@ -14,11 +14,17 @@
             {"file": "tiles/daneeklu/grass.png"},
             {"file": "tiles/daneeklu/watergrass.png"},
             {"file": "tiles/daneeklu/dirt.png"},
-            {"file": "tiles/daneeklu/wheat.png"}
+            {"file": "tiles/daneeklu/wheat.png"},
+
+            {"file": "tiles/IceDragon/Z18-TileA2.png"},
+            {"file": "tiles/IceDragon/Z18-TileA4.png"},
+            {"file": "tiles/IceDragon/Z18-TileA5.png"},
+            {"file": "tiles/IceDragon/Z18-TileB.png"}
         ],
         "maps": [
             {"file": "map/test1.json"},
-            {"file": "map/test2.json"}
+            {"file": "map/test2.json"},
+            {"file": "map/ice.json"}
         ],
         "audio": [
             {"file": "sound/UI pack 1/MENU B_Select.wav"},

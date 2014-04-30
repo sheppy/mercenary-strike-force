@@ -6,15 +6,10 @@ Map = require "../../../../../vendor/iki-engine/src/Map.coffee"
 
 class LoadMapDemoScene extends Scene
     activate: ->
-
-        GraphicsManager.renderer.ctx.fillStyle = "#666"
-        GraphicsManager.renderer.ctx.fillRect 0, 0,
-            GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
-
         map = new Map()
-        loading = map.loadMap "assets/map/test1.json"
+        loading = map.loadMap "assets/map/ice.json"
         loading.then () ->
-            GraphicsManager.renderer.ctx.fillStyle = "#696"
+            GraphicsManager.renderer.ctx.fillStyle = "#000"
             GraphicsManager.renderer.ctx.fillRect 0, 0,
                 GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
 

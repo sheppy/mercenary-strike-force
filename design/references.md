@@ -14,6 +14,7 @@ Graphics
 * http://opengameart.org/content/progress-health-mana-bar-svg
 * <http://opengameart.org/content/space-backgrounds-1>
 * <http://opengameart.org/content/lpc-farming-tilesets-magic-animations-and-ui-elements>
+* <http://www.rpgmakervx.net/index.php?showtopic=44067&st=0>
 
 Sounds
 ======
