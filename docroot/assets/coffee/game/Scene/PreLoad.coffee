@@ -13,15 +13,15 @@ class PreLoadScene extends Scene
         @bar =
             background: AssetManager.get "img/ui/loading-bar-bg.png"
             fill: AssetManager.get "img/ui/loading-bar-fill.png"
-            x: (GraphicsManager.renderer.canvas.width / 2) - 94
-            y: (GraphicsManager.renderer.canvas.height / 2) - 22
+            x: (GraphicsManager.renderer.width / 2) - 94
+            y: (GraphicsManager.renderer.height / 2) - 22
             width: 188
             height: 22
 
         @bar.middle = @bar.x + (@bar.width / 2)
 
         @renderer.ctx.fillStyle = "#000"
-        @renderer.ctx.fillRect 0, 0, @renderer.canvas.width, @renderer.canvas.height
+        @renderer.ctx.fillRect 0, 0, @renderer.width, @renderer.height
 
         @renderLoadingBar 0
         @renderLoadingText "Loading..."
@@ -37,7 +37,7 @@ class PreLoadScene extends Scene
     onError: (asset) ->
         text = "Error loading #{asset.file}"
         @renderer.ctx.fillStyle = "#000"
-        @renderer.ctx.fillRect 0, 0, @renderer.canvas.width, @renderer.canvas.height
+        @renderer.ctx.fillRect 0, 0, @renderer.width, @renderer.height
         @renderer.ctx.fillStyle = "#ff4444"
         @renderer.ctx.font = "14px Arial, sans-serif"
         @renderer.ctx.textBaseline = "top"
@@ -47,7 +47,7 @@ class PreLoadScene extends Scene
 
     onProgress: (asset, group, loaded, total) ->
         @renderer.ctx.fillStyle = "#000"
-        @renderer.ctx.fillRect 0, 0, @renderer.canvas.width, @renderer.canvas.height
+        @renderer.ctx.fillRect 0, 0, @renderer.width, @renderer.height
         @renderLoadingText "Loading #{group}"
         @renderLoadingBar loaded / total
 
