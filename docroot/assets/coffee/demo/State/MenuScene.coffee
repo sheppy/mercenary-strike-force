@@ -15,12 +15,12 @@ class MenuScene extends Scene
         # Set the current menu
         @currentMenu = "main"
 
-        AudioManager.load "menu-select", "/assets/sound/UI pack 1/MENU B_Select.wav"
-        AudioManager.load "menu-back", "/assets/sound/UI pack 1/MENU B_Back.wav"
+        AudioManager.load "menu-select", "assets/sound/UI pack 1/MENU B_Select.wav"
+        AudioManager.load "menu-back", "assets/sound/UI pack 1/MENU B_Back.wav"
 
         # Load the menus
-        @loadMenu "/assets/menu/main.json"
-        @loadMenu "/assets/menu/demos.json"
+        @loadMenu "assets/menu/main.json"
+        @loadMenu "assets/menu/demos.json"
 
 
     loadMenu: (menuFile) ->
