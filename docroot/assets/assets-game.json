@@ -1,6 +1,10 @@
 {
     "root": "assets/",
     "assets": {
+        "menus": [
+            {"file": "menu/main-menu.json"},
+            {"file": "menu/new-game-menu.json"}
+        ],
         "images": [
             {"type": "image", "file": "img/cursor/slick_arrow-delta.png"},
             {"type": "image", "file": "img/background/image6_0.jpg"}

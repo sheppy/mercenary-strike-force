@@ -16,8 +16,8 @@ class MainMenuScene extends Scene
     init: ->
         @renderer = GraphicsManager.renderer
 
-        AudioManager.load "menu-select", "/assets/sound/UI pack 1/MENU B_Select.wav"
-        AudioManager.load "menu-back", "/assets/sound/UI pack 1/MENU B_Back.wav"
+        AudioManager.load "menu-select", "assets/sound/UI pack 1/MENU B_Select.wav"
+        AudioManager.load "menu-back", "assets/sound/UI pack 1/MENU B_Back.wav"
 
 
     activate: ->
@@ -28,7 +28,7 @@ class MainMenuScene extends Scene
         gfx.init @renderer
 
         @currentMenu = "main-menu"
-        @loadMenu "/assets/menu/#{@currentMenu}.json"
+        @loadMenu "assets/menu/#{@currentMenu}.json"
 
 
     deactivate: ->
@@ -122,7 +122,7 @@ class MainMenuScene extends Scene
         tween = @tweenForButtons direction
         tween.onComplete =>
             EntityManager.deleteAllEntities()
-            @loadMenu "/assets/menu/#{@currentMenu}.json"
+            @loadMenu "assets/menu/#{@currentMenu}.json"
         tween.start()
 
 
