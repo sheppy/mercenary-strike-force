@@ -5,7 +5,8 @@
   "dependencies": {
     "node-uuid": "~1.4.1",
     "requestAnimationFrame-polyfill": "*",
-    "iki-engine": "https://github.com/sheppy/iki-engine.git"
+    "iki-engine": "https://github.com/sheppy/iki-engine.git",
+    "tweenjs": "*"
   },
   "devDependencies": {
     "dat.gui": "*"
