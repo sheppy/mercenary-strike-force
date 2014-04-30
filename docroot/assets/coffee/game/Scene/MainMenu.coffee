@@ -5,22 +5,35 @@ GraphicsManager = require "../../../vendor/iki-engine/src/Manager/GraphicsManage
 InputManager = require "../../../vendor/iki-engine/src/Manager/InputManager.coffee"
 AudioManager = require "../../../vendor/iki-engine/src/Manager/AudioManager.coffee"
 AssetManager = require "../../../vendor/iki-engine/src/Manager/AssetManager.coffee"
+EntityManager = require "../../../vendor/iki-engine/src/Manager/EntityManager.coffee"
+
+# Systems
+MainMenuInputSystem = require "../System/MainMenuInput.coffee"
+MainMenuRendererSystem = require "../System/MainMenuRenderer.coffee"
+
 
 class MainMenuScene extends Scene
     init: ->
-        @menus = {}
         @renderer = GraphicsManager.renderer
-        @clickListener = @onMouseClick.bind @
-
-        # Set the current menu
-        @currentMenu = "main-menu"
 
         AudioManager.load "menu-select", "/assets/sound/UI pack 1/MENU B_Select.wav"
         AudioManager.load "menu-back", "/assets/sound/UI pack 1/MENU B_Back.wav"
 
-        # Load the menus
-        @loadMenu "/assets/menu/main-menu.json"
-        @loadMenu "/assets/menu/new-game-menu.json"
+
+    activate: ->
+        input = @addSystem new MainMenuInputSystem
+        input.init()
+
+        gfx = @addSystem new MainMenuRendererSystem
+        gfx.init @renderer
+
+        @currentMenu = "main-menu"
+        @loadMenu "/assets/menu/#{@currentMenu}.json"
+
+
+    deactivate: ->
+        InputManager.onMouseClick = null
+        EntityManager.deleteAllEntities()
 
 
     loadMenu: (menuFile) ->
@@ -29,102 +42,120 @@ class MainMenuScene extends Scene
 
 
     parseMenu: (menuData) ->
-        @menus[menuData.id] = {
-            id: menuData.id
-            background: menuData.background
-            elements: []
-            buttons: []
+        for element in menuData.elements
+            if element.type == "background" then @addBackground menuData.id, element
+            if element.type == "button" then @addButton menuData.id, element
+            if element.type == "text" then @addText menuData.id, element
+
+
+    addBackground: (menu, bg) ->
+        background = EntityManager.createEntity()
+
+        EntityManager.addComponent background, {
+            type: "UIBackground"
+            img: AssetManager.get bg.src
         }
 
-        for element in menuData.elements
 
-            if element.type == "button"
-                @addButton menuData.id, element
+    addText: (menu, txt) ->
+        text = EntityManager.createEntity()
+
+        EntityManager.addComponent text, {
+            type: "UIText"
+            text: txt.text
+            font: txt.font
+        }
+
+        EntityManager.addComponent text, {
+            type: "ScreenPosition"
+            x: (@renderer.width / 2)
+            y: txt.y
+        }
 
 
     addButton: (menu, btn) ->
-        onClick = null
+        button = EntityManager.createEntity()
 
-        if btn.actionType == "switchMenu" then onClick = @switchMenu.bind @, btn.action, btn.isBack
-        if btn.actionType == "switchScene" then onClick = @switchScene.bind @, btn.action, btn.isBack
-
-        button =
-            text: btn.text
-            x: btn.x
-            y: btn.y
+        EntityManager.addComponent button, {
+            type: "UIButton"
             width: btn.width
             height: btn.height
+            colour: "rgba(255,255,255,0.5)"
+            colourHover: "#fb3"
+            colourPressed: "#33b5e5"
+            colourDisabled: "rgba(255,255,255,0.1)"
+            text: btn.text
+        }
+        EntityManager.addComponent button, {
+            type: "ScreenPosition"
+            x: -350
+            y: btn.y
+        }
+        EntityManager.addComponent button, {
+            type: "UIState"
+            hover: false
             disabled: btn.disabled
-            click: onClick
+            pressed: false
+        }
 
-        if not @menus[menu] then @menus[menu] = {}
-        if not @menus[menu].buttons then @menus[menu].buttons = []
-        @menus[menu].buttons.push button
+        if btn.actionType == "switchMenu"
+            EntityManager.addComponent button, {
+                type: "UIClickEvent"
+                onClick: @switchMenu.bind @, btn.action, btn.isBack
+            }
+        else if btn.actionType == "switchScene"
+            EntityManager.addComponent button, {
+                type: "UIClickEvent"
+                onClick: @switchScene.bind @, btn.action, btn.isBack
+            }
 
+        tween = @tweenForButtons "in"
+        tween.start()
 
-    activate: ->
-        @background = AssetManager.get "img/background/image6_0.jpg"
-        InputManager.onMouseClick = @onMouseClick.bind @
-        @currentMenu = "main-menu"
-        @renderMenu()
-
-    deactivate: -> InputManager.onMouseClick = null
 
     switchMenu: (newMenu, isBack = false) ->
-        if isBack
-            AudioManager.play "menu-back"
-        else
-            AudioManager.play "menu-select"
-
+        sound = if isBack then "menu-back" else "menu-select"
+        AudioManager.play sound
         @currentMenu = newMenu
-        @renderMenu()
+
+        direction = if isBack then "out-left" else "out-right"
+        tween = @tweenForButtons direction
+        tween.onComplete =>
+            EntityManager.deleteAllEntities()
+            @loadMenu "/assets/menu/#{@currentMenu}.json"
+        tween.start()
+
+
+    tweenForButtons: (direction) ->
+        center = (@renderer.width / 2) - 150
+        rightScreen = @renderer.width + 50
+
+        if direction == "out-left"
+            from = {x: center}
+            to = {x: -350}
+        else if direction == "out-right"
+            from = {x: center}
+            to = {x: rightScreen}
+        else
+            from = {x: -350}
+            to = {x: center}
+
+        buttons = EntityManager.getAllEntitiesWithComponentOfTypes ["UIButton", "ScreenPosition"]
+
+        positions = for button in buttons
+            EntityManager.getComponentOfType button, "ScreenPosition"
+
+        tween = new TWEEN.Tween from
+        tween.to to, 500
+        tween.easing TWEEN.Easing.Cubic.Out
+        tween.onUpdate -> position.x = @x for position in positions
+
+        return tween
+
 
     switchScene: (scene) ->
         AudioManager.play "menu-select"
         SceneManager.activate scene
-
-    onMouseClick: (e) ->
-        button = @getButtonFromPoint e.x, e.y
-        if button then button.click?()
-
-    getButtonFromPoint: (x, y) ->
-        menu = @menus[@currentMenu]
-        for button in menu.buttons
-            if @isPointInRect x, y, button.x, button.y, button.width, button.height
-                return button
-
-    isPointInRect: (x, y, rx, ry, rw, rh) -> return x >= rx && x <= ry + rw && y >= ry && y <= ry + rh
-
-    renderMenu: ->
-        @renderBackground()
-        menu = @menus[@currentMenu]
-        for button in menu.buttons
-            @renderButton button
-
-    renderBackground: ->
-        GraphicsManager.fillImage @renderer.ctx, @background,
-            @background.width, @background.height,
-            @renderer.canvas.width, @renderer.canvas.height
-
-    renderButton: (button, hover = false) ->
-        @renderer.ctx.fillStyle = unless button.disabled then "rgba(255,255,255,0.9)" else "rgba(255,255,255,0.4)"
-        @renderer.ctx.strokeStyle = "#000"
-
-        if hover
-            @renderer.ctx.shadowBlur = 20
-            @renderer.ctx.shadowColor = "yellow"
-
-        @renderer.ctx.fillRect button.x, button.y, button.width, button.height
-
-        @renderer.ctx.shadowBlur = 0 if hover
-
-        @renderer.ctx.strokeRect button.x, button.y, button.width, button.height
-
-        @renderer.ctx.fillStyle = "#000"
-        @renderer.ctx.font = "12px Arial, sans-serif"
-        @renderer.ctx.textBaseline = "top"
-        textSize = @renderer.ctx.measureText button.text
-        @renderer.ctx.fillText button.text, button.x + 100 - (textSize.width / 2), button.y + 7
 
 
 module.exports = MainMenuScene
