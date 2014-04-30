@@ -33,7 +33,7 @@ class MoveMapSmoothDemoScene extends Scene
 
         # Load the map
         @map = new Map()
-        loading = @map.loadMap "/assets/map/test2.json"
+        loading = @map.loadMap "assets/map/test3.json"
         loading.then () => @mapLoaded = true
 
 

@@ -12,7 +12,7 @@ class LoadMapDemoScene extends Scene
             GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
 
         map = new Map()
-        loading = map.loadMap "/assets/map/test1.json"
+        loading = map.loadMap "assets/map/test1.json"
         loading.then () ->
             GraphicsManager.renderer.ctx.fillStyle = "#696"
             GraphicsManager.renderer.ctx.fillRect 0, 0,

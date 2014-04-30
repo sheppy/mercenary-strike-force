@@ -9,7 +9,12 @@
             {"type": "image", "file": "img/cursor/slick_arrow-delta.png"},
             {"type": "image", "file": "img/background/image6_0.jpg"},
             {"file": "tiles/test1.png"},
-            {"file": "tiles/test2.png"}
+            {"file": "tiles/test2.png"},
+
+            {"file": "tiles/daneeklu/grass.png"},
+            {"file": "tiles/daneeklu/watergrass.png"},
+            {"file": "tiles/daneeklu/dirt.png"},
+            {"file": "tiles/daneeklu/wheat.png"}
         ],
         "maps": [
             {"file": "map/test1.json"},

@@ -4,7 +4,7 @@
     "elements": [
         {
             "type": "button",
-            "text": "Demo 1",
+            "text": "Cursor Demo",
             "x": 20,
             "y": 20,
             "width": 200,
