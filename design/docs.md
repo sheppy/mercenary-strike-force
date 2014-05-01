@@ -27,12 +27,12 @@ A system performs some tasks in regards to entities. This could be updating all 
 
 Managers
 --------
-Managers are static classes that do not need to be instanciated. They include things like the GraphicsManager that can create canvas elements with contexts. The InputManager which will keep track of the mouse co-ordinates and the keyboard states. The StateManager which tracks and manages the current application state. The EntityManager which lists all the entities in the game and allows the manipulation of them.
+Managers are static classes that do not need to be instanciated. They include things like the GraphicsManager that can create canvas elements with contexts. The InputManager which will keep track of the mouse co-ordinates and the keyboard states. The SceneManager which tracks and manages the current application Scene. The EntityManager which lists all the entities in the game and allows the manipulation of them.
 
-Note that most of the Managers will have hook functions that allow *one* thing at a time to hook in to some extra functionality. These hooks should be initialised when a state is activated and remove once deactivated. For example the InputManager has an onMouseClick function that a state can listen to.
+Note that most of the Managers will have hook functions that allow *one* thing at a time to hook in to some extra functionality. These hooks should be initialised when a Scene is activated and remove once deactivated. For example the InputManager has an onMouseClick function that a scene can listen to.
 
 ```coffeescript
-class MyState extends State
+class MyScene extends Scene
   activate: -> InputManager.onMouseClick = @onMouseClick.bind @
   deactivate: -> InputManager.onMouseClick = null
   onMouseClick: (e) -> console.log "Mouse clicked! #{e.x},#{e.y}"
@@ -40,9 +40,9 @@ class MyState extends State
 ```
 
 
-States
+Scenes
 ------
-States are the main areas of the application, such as the menu, game etc.
+Scenes are the main areas of the application, such as the menu, game etc.
 
 
 
