@@ -9,8 +9,6 @@ Next
 * [QUESTION] worth switching promises to use Q?
 * [QUESTION] use prototyping for entity methods instead of manager?
 * [QUESTION] Work out how maps fit in to the rendering system
-* [BUG] fix menu blanking when resizing (event or constant repaint?)
-* [BUG] fix bounds errors on Smooth Map Demo
 
 Todo
 ----
@@ -23,6 +21,8 @@ Todo
 
 Ideas
 -----
+* [BUG] fix menu blanking when resizing (event or constant repaint?)
+* [BUG] fix bounds errors on Smooth Map Demo
 * Move the player around the map, turn based?
 * Limit player movement, collisions etc
 * Procedural maps
