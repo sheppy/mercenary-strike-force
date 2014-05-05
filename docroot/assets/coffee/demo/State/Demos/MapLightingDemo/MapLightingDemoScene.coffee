@@ -30,6 +30,8 @@ class MapLightingScene extends Scene
             mouseLight: true
             colouredLights: true
             lightSize: 300
+            ambient: 0.3
+            ambientColour: [0, 0, 11]
 
         # For rendering lighting
         @rendererShadows = GraphicsManager.cloneRenderer GraphicsManager.renderer
@@ -37,21 +39,30 @@ class MapLightingScene extends Scene
         @rendererAmbient = GraphicsManager.cloneRenderer GraphicsManager.renderer
 
         @lightCircle = GraphicsManager.createRenderer 250, 250
-        @lightCircle2 = GraphicsManager.createRenderer 250, 250
+        @lightCircleRed = GraphicsManager.createRenderer 250, 250
+        @lightCircleGreen = GraphicsManager.createRenderer 250, 250
 
         # Create gradient
         grd = @lightCircle.ctx.createRadialGradient 125, 125, 0, 125, 125, 125
-        grd.addColorStop 0, 'rgba(255, 255, 215, 0.5)'
-        grd.addColorStop 1, 'rgba(255, 255, 215, 0)'
+        grd.addColorStop 0, "rgba(255,255,255,0.6)"
+        grd.addColorStop 0.4, "rgba(255,255,255,0.5)"
+        grd.addColorStop 1, "rgba(255,255,150,0)"
         @lightCircle.ctx.fillStyle = grd
         @lightCircle.ctx.fillRect 0, 0, @lightCircle.canvas.width, @lightCircle.canvas.height
 
-        grd2 = @lightCircle2.ctx.createRadialGradient 125, 125, 0, 125, 125, 125
-        grd2.addColorStop 0, 'rgba(255, 0, 0, 0.6)'
-        grd2.addColorStop 0.4, 'rgba(255, 0, 0, 0.5)'
-        grd2.addColorStop 1, 'rgba(255, 0, 0, 0)'
-        @lightCircle2.ctx.fillStyle = grd2
-        @lightCircle2.ctx.fillRect 0, 0, @lightCircle2.canvas.width, @lightCircle2.canvas.height
+        grd2 = @lightCircleRed.ctx.createRadialGradient 125, 125, 0, 125, 125, 125
+        grd2.addColorStop 0, "rgba(255,0,0,0.6)"
+        grd2.addColorStop 0.4, "rgba(255,0,0,0.5)"
+        grd2.addColorStop 1, "rgba(255,0,0,0)"
+        @lightCircleRed.ctx.fillStyle = grd2
+        @lightCircleRed.ctx.fillRect 0, 0, @lightCircleRed.canvas.width, @lightCircleRed.canvas.height
+
+        grd3 = @lightCircleGreen.ctx.createRadialGradient 125, 125, 0, 125, 125, 125
+        grd3.addColorStop 0, "rgba(0,255,0,0.6)"
+        grd3.addColorStop 0.4, "rgba(0,255,0,0.5)"
+        grd3.addColorStop 1, "rgba(0,255,0,0)"
+        @lightCircleGreen.ctx.fillStyle = grd3
+        @lightCircleGreen.ctx.fillRect 0, 0, @lightCircleGreen.canvas.width, @lightCircleGreen.canvas.height
 
         @lights = []
 
@@ -64,7 +75,7 @@ class MapLightingScene extends Scene
         @lights.push {
             x: 650
             y: 440
-            canvas: @lightCircle2.canvas
+            canvas: @lightCircleRed.canvas
         }
 
         @viewport = {
@@ -113,6 +124,11 @@ class MapLightingScene extends Scene
 
         @debug.lightFolder.add @debug, "lightSize", 50, 1000
 
+        @debug.lightFolder.add(@debug, "ambient", 0, 1).step(0.05)
+        @debug.lightFolder.addColor @debug, "ambientColour"
+
+#        gui.addColor colorObject, "color"
+
 
     deactivate: ->
         EntityManager.removeEntity @viewportEntity
@@ -134,7 +150,14 @@ class MapLightingScene extends Scene
             @drawLighting ctx
 
     drawLighting: (ctx) ->
-        @rendererAmbient.ctx.fillStyle = "rgba(0,0,11,0.7)"
+
+
+
+        r = parseInt @debug.ambientColour[0], 10
+        g = parseInt @debug.ambientColour[1], 10
+        b = parseInt @debug.ambientColour[2], 10
+
+        @rendererAmbient.ctx.fillStyle = "rgba(#{r},#{g},#{b},#{1-@debug.ambient})"
         @rendererAmbient.ctx.clearRect 0, 0, @rendererLights.canvas.width, @rendererLights.canvas.height
         @rendererAmbient.ctx.fillRect 0, 0, @rendererLights.canvas.width, @rendererLights.canvas.height
 
@@ -154,7 +177,7 @@ class MapLightingScene extends Scene
             @lightTest {
                 x: InputManager.mouse.x + @viewport.x
                 y: InputManager.mouse.y + @viewport.y
-                canvas: @lightCircle2.canvas
+                canvas: @lightCircleGreen.canvas
             }, ctx
 
         ctx.drawImage @rendererAmbient.canvas, 0 - @viewport.x, 0 - @viewport.y
@@ -176,12 +199,17 @@ class MapLightingScene extends Scene
         @rendererLights.ctx.globalCompositeOperation = "source-over"
 
         # Cut the light out of ambient
-        @rendererAmbient.ctx.globalCompositeOperation = if @debug.colouredLights then "xor" else "destination-out"
+        @rendererAmbient.ctx.globalCompositeOperation = "destination-out"
         @rendererAmbient.ctx.drawImage @rendererLights.canvas, 0, 0
         @rendererAmbient.ctx.globalCompositeOperation = "source-over"
 
         # Add the light colour?
-#        @rendererAmbient.ctx.drawImage @rendererLights.canvas, 0, 0
+        if @debug.colouredLights
+#            @rendererAmbient.ctx.globalCompositeOperation = "darken"
+            @rendererAmbient.ctx.globalAlpha = "0.4"
+            @rendererAmbient.ctx.drawImage @rendererLights.canvas, 0, 0
+            @rendererAmbient.ctx.globalAlpha = "1"
+#            @rendererAmbient.ctx.globalCompositeOperation = "source-over"
 
     renderLight: (light, ctx) ->
         halfLightSize = (@debug.lightSize / 2)
@@ -210,7 +238,8 @@ class MapLightingScene extends Scene
         intersections = []
 
         for corner in @corners
-            angle = 0.1
+#            @renderCorner corner
+            angle = 0.02
             @rayTraceByAngle vX, vY, corner.x, corner.y, 0 - angle, @map, intersections
             @rayTrace vX, vY, corner.x, corner.y, @map, intersections
             @rayTraceByAngle vX, vY, corner.x, corner.y, angle, @map, intersections
@@ -326,7 +355,7 @@ class MapLightingScene extends Scene
         x = x0
         y = y0
 #        n = 1 + dx + dy;
-        n = @debug.lightSize     # max draw distance
+        n = 1200 # @debug.lightSize     # max draw distance
         xInc = if x1 > x0 then 1 else -1
         yInc = if y1 > y0 then 1 else -1
         error = dx - dy
@@ -343,11 +372,7 @@ class MapLightingScene extends Scene
             mX = Math.floor(x / map.tileWidth)
             mY = Math.floor(y / map.tileHeight)
 
-            if layer[mY] && layer[mY][mX]
-                intersections.push
-                    x: x
-                    y: y
-                break
+            if layer[mY] && layer[mY][mX] then break
 
             if error > 0
                 x += xInc
