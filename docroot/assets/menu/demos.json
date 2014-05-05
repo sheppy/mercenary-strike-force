@@ -44,9 +44,19 @@
         },
         {
             "type": "button",
-            "text": "Back",
+            "text": "Map Lighting Demo",
             "x": 20,
             "y": 180,
+            "width": 200,
+            "height": 30,
+            "actionType": "switchScene",
+            "action": "MapLightingDemo"
+        },
+        {
+            "type": "button",
+            "text": "Back",
+            "x": 20,
+            "y": 220,
             "width": 200,
             "height": 30,
             "actionType": "switchMenu",

@@ -19,7 +19,8 @@
             "width": 300,
             "height": 40,
             "actionType": "switchScene",
-            "action": "mission-create"
+            "action": "mission-create",
+            "data": "tutorial"
         },
         {
             "type": "button",

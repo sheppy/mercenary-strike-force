@@ -16,7 +16,7 @@ class PreLoadScene extends Scene
         @ctx = GraphicsManager.renderer.ctx
 
 
-    activate: ->
+    activate: (scene = "menu") ->
         @ctx.fillStyle = "#000"
         @ctx.fillRect 0, 0, GraphicsManager.renderer.canvas.width, GraphicsManager.renderer.canvas.height
 
@@ -26,7 +26,7 @@ class PreLoadScene extends Scene
         AssetManager.onProgress = @onProgress.bind @
 
         loadAsset = AssetManager.load "assets/demo-assets.json"
-        loadAsset.then -> SceneManager.activate "menu"
+        loadAsset.then -> SceneManager.activate scene
 
 
     onProgress: (asset, group, loaded, total) ->

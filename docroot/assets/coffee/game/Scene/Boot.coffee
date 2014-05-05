@@ -10,6 +10,7 @@ PreLoadScene = require "./PreLoad.coffee"
 MainMenuScene = require "./MainMenu.coffee"
 CreditsScene = require "./Credits.coffee"
 MissionCreateScene = require "./MissionCreate.coffee"
+MissionBriefScene = require "./MissionBrief.coffee"
 
 
 class BootScene extends Scene
@@ -40,6 +41,10 @@ class BootScene extends Scene
         missionCreateScene = new MissionCreateScene()
         SceneManager.add "mission-create", missionCreateScene
         missionCreateScene.init()
+
+        missionBriefScene = new MissionBriefScene()
+        SceneManager.add "mission-brief", missionBriefScene
+        missionBriefScene.init()
 
 
     activate: ->

@@ -5,6 +5,7 @@
   "dependencies": {
     "iki-engine": "https://github.com/sheppy/iki-engine.git",
     "tweenjs": "*",
-    "dat.gui": "*"
+    "dat.gui": "*",
+    "fpsmeter": "~0.3.1"
   }
 }

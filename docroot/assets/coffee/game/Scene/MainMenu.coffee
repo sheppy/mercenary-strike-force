@@ -106,7 +106,7 @@ class MainMenuScene extends Scene
         else if btn.actionType == "switchScene"
             EntityManager.addComponent button, {
                 type: "UIClickEvent"
-                onClick: @switchScene.bind @, btn.action, btn.isBack
+                onClick: @switchScene.bind @, btn.action, btn.data
             }
 
         tween = @tweenForButtons "in"
@@ -124,6 +124,11 @@ class MainMenuScene extends Scene
             EntityManager.deleteAllEntities()
             @loadMenu "assets/menu/#{@currentMenu}.json"
         tween.start()
+
+
+    switchScene: (scene, data) ->
+        AudioManager.play "menu-select"
+        SceneManager.activate scene, data
 
 
     tweenForButtons: (direction) ->
@@ -151,11 +156,6 @@ class MainMenuScene extends Scene
         tween.onUpdate -> position.x = @x for position in positions
 
         return tween
-
-
-    switchScene: (scene) ->
-        AudioManager.play "menu-select"
-        SceneManager.activate scene
 
 
 module.exports = MainMenuScene
