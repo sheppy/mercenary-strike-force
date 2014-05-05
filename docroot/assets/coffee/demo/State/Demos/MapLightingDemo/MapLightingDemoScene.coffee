@@ -34,8 +34,11 @@ class MapLightingScene extends Scene
             ambient: 0.3
             ambientColour: [0, 0, 11]
             softShadows: false
-            softShadowCount: 10
+            softShadowCount: 2
             lightIntensity: 0.5
+
+        @calculateSoftShadowPositions()
+
 
         # For rendering lighting
         @rendererShadows = GraphicsManager.cloneRenderer GraphicsManager.renderer
@@ -91,6 +94,17 @@ class MapLightingScene extends Scene
         @viewportEntity = EntityManager.createEntity "viewport", false
         EntityManager.addComponent @viewportEntity, @viewport
 
+    calculateSoftShadowPositions: ->
+        @shadowChanges = []
+
+        samples = @debug.softShadowCount
+        radius = 16
+        for s in [0..samples - 1]
+            a = s * @GOLDEN_ANGLE
+            r = Math.sqrt(s/samples) * radius
+            @shadowChanges.push
+                x: (Math.cos(a) * r)
+                y: (Math.sin(a) * r)
 
     activate: ->
         EntityManager.addEntity @viewportEntity
@@ -129,14 +143,14 @@ class MapLightingScene extends Scene
 
         @debug.lightFolder.add @debug, "lightSize", 50, 1000
 
+        @debug.lightFolder.add @debug, "softShadows"
+        softShadowCountSelector = @debug.lightFolder.add(@debug, "softShadowCount", 1, 50).step(1)
+        @debug.lightFolder.add(@debug, "lightIntensity", 0, 1).step(0.05)
+
         @debug.lightFolder.add(@debug, "ambient", 0, 1).step(0.05)
         @debug.lightFolder.addColor @debug, "ambientColour"
 
-        @debug.lightFolder.add @debug, "softShadows"
-        @debug.lightFolder.add @debug, "softShadowCount", 1, 50
-        @debug.lightFolder.add(@debug, "lightIntensity", 0, 1).step(0.05)
-
-
+        softShadowCountSelector.onFinishChange => @calculateSoftShadowPositions()
 
     deactivate: ->
         EntityManager.removeEntity @viewportEntity
@@ -194,15 +208,20 @@ class MapLightingScene extends Scene
         @rendererLights.ctx.clearRect 0, 0, @rendererLights.canvas.width, @rendererLights.canvas.height
 
         # Shadow cast
+
+        intensity = @debug.lightIntensity
+        if @debug.softShadows then intensity = @debug.lightIntensity / @debug.softShadowCount
+
+        @rendererShadows.ctx.globalCompositeOperation = "destination-out"
+        @rendererShadows.ctx.fillStyle = "rgba(255,255,255,#{intensity})"
+
         if @debug.softShadows
-            samples = @debug.softShadowCount
-            radius = 16
-            for s in [0..samples - 1]
-                a = s * @GOLDEN_ANGLE
-                r = Math.sqrt(s/samples) * radius
-                @renderRay light.x + (Math.cos(a) * r), light.y + (Math.sin(a) * r), @rendererShadows.ctx
+            for change in @shadowChanges
+                @renderRay light.x + change.x, light.y + change.y, @rendererShadows.ctx
         else
             @renderRay light.x, light.y, @rendererShadows.ctx
+
+        @rendererShadows.ctx.globalCompositeOperation = "source-over"
 
         # Light Rendering
         @renderLight light, @rendererLights.ctx
@@ -275,15 +294,8 @@ class MapLightingScene extends Scene
         intersections.sort (a, b) -> a.angle - b.angle
 
         # Draw triangles
-        intensity = @debug.lightIntensity
-        if @debug.softShadows then intensity = @debug.lightIntensity / @debug.softShadowCount
-
-        ctx.globalCompositeOperation = "destination-out"
-        ctx.fillStyle = "rgba(255,255,255,#{intensity})"
-#        ctx.fillStyle = "#fff"
         ctx.beginPath()
         ctx.moveTo intersections[0].x, intersections[0].y
-
         m = intersections.length
         for intersection, i in intersections
             if i == 0
@@ -291,7 +303,6 @@ class MapLightingScene extends Scene
             else
                 ctx.lineTo intersections[i - 1].x, intersections[i - 1].y
         ctx.fill()
-        ctx.globalCompositeOperation = "source-over"
 
 
     findCorners: (map) ->
