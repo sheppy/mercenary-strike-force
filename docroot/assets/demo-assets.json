@@ -24,6 +24,8 @@
         "maps": [
             {"file": "map/test1.json"},
             {"file": "map/test2.json"},
+            {"file": "map/test3.json"},
+            {"file": "map/test4.json"},
             {"file": "map/ice.json"}
         ],
         "audio": [

@@ -68,11 +68,19 @@ class BootScene extends Scene
         SceneManager.activate "preload", defaultScene
 
     debugMenu: ->
-        gui = new dat.GUI()
+        dat.GUI.prototype.removeFolder = (name) ->
+            folder = @__folders[name]
+            if !folder then return
+            folder.close()
+            @__ul.removeChild folder.domElement.parentNode
+            delete @__folders[name]
+            @onResize()
+
+        window.gui = new dat.GUI()
 
         SceneManager.debugScene = SceneManager.currentScene
 
-        scenesFolder = gui.addFolder "Scenes"
+        scenesFolder = window.gui.addFolder "Scenes"
         scenesFolder.open()
         sceneSelector = scenesFolder.add SceneManager, "debugScene", [
             "menu", "demo1", "LoadMapDemo", "MoveMapDemo", "MoveMapSmoothDemo", "MapLightingDemo"
