@@ -11,6 +11,7 @@ MapLightingInputSystem = require "./MapLightingInputSystem.coffee"
 
 class MapLightingScene extends Scene
     init: ->
+        @GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5))
         @meter = new FPSMeter graph: 1
         @mapLoaded = false
 
@@ -32,6 +33,9 @@ class MapLightingScene extends Scene
             lightSize: 300
             ambient: 0.3
             ambientColour: [0, 0, 11]
+            softShadows: false
+            softShadowCount: 10
+            lightIntensity: 0.5
 
         # For rendering lighting
         @rendererShadows = GraphicsManager.cloneRenderer GraphicsManager.renderer
@@ -120,6 +124,7 @@ class MapLightingScene extends Scene
 
         @debug.lightFolder.add @debug, "light1"
         @debug.lightFolder.add @debug, "light2"
+        @debug.lightFolder.add @debug, "mouseLight"
         @debug.lightFolder.add @debug, "colouredLights"
 
         @debug.lightFolder.add @debug, "lightSize", 50, 1000
@@ -127,7 +132,10 @@ class MapLightingScene extends Scene
         @debug.lightFolder.add(@debug, "ambient", 0, 1).step(0.05)
         @debug.lightFolder.addColor @debug, "ambientColour"
 
-#        gui.addColor colorObject, "color"
+        @debug.lightFolder.add @debug, "softShadows"
+        @debug.lightFolder.add @debug, "softShadowCount", 1, 50
+        @debug.lightFolder.add(@debug, "lightIntensity", 0, 1).step(0.05)
+
 
 
     deactivate: ->
@@ -149,10 +157,8 @@ class MapLightingScene extends Scene
 
             @drawLighting ctx
 
+
     drawLighting: (ctx) ->
-
-
-
         r = parseInt @debug.ambientColour[0], 10
         g = parseInt @debug.ambientColour[1], 10
         b = parseInt @debug.ambientColour[2], 10
@@ -188,7 +194,15 @@ class MapLightingScene extends Scene
         @rendererLights.ctx.clearRect 0, 0, @rendererLights.canvas.width, @rendererLights.canvas.height
 
         # Shadow cast
-        @renderRay light.x, light.y, @rendererShadows.ctx
+        if @debug.softShadows
+            samples = @debug.softShadowCount
+            radius = 16
+            for s in [0..samples - 1]
+                a = s * @GOLDEN_ANGLE
+                r = Math.sqrt(s/samples) * radius
+                @renderRay light.x + (Math.cos(a) * r), light.y + (Math.sin(a) * r), @rendererShadows.ctx
+        else
+            @renderRay light.x, light.y, @rendererShadows.ctx
 
         # Light Rendering
         @renderLight light, @rendererLights.ctx
@@ -261,8 +275,12 @@ class MapLightingScene extends Scene
         intersections.sort (a, b) -> a.angle - b.angle
 
         # Draw triangles
+        intensity = @debug.lightIntensity
+        if @debug.softShadows then intensity = @debug.lightIntensity / @debug.softShadowCount
+
         ctx.globalCompositeOperation = "destination-out"
-        ctx.fillStyle = "#fff"
+        ctx.fillStyle = "rgba(255,255,255,#{intensity})"
+#        ctx.fillStyle = "#fff"
         ctx.beginPath()
         ctx.moveTo intersections[0].x, intersections[0].y
 
