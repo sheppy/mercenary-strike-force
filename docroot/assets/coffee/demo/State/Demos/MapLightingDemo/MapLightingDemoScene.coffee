@@ -99,12 +99,13 @@ class MapLightingScene extends Scene
 
         samples = @debug.softShadowCount
         radius = 16
-        for s in [0..samples - 1]
-            a = s * @GOLDEN_ANGLE
-            r = Math.sqrt(s/samples) * radius
+        for s in [0..samples - 1] by 1
+            s *= @GOLDEN_ANGLE
+            r = Math.sqrt(s / samples) * radius
             @shadowChanges.push
-                x: (Math.cos(a) * r)
-                y: (Math.sin(a) * r)
+                x: Math.cos(a) * r
+                y: Math.sin(a) * r
+        return null
 
     activate: ->
         EntityManager.addEntity @viewportEntity
@@ -210,7 +211,7 @@ class MapLightingScene extends Scene
         # Shadow cast
 
         intensity = @debug.lightIntensity
-        if @debug.softShadows then intensity = @debug.lightIntensity / @debug.softShadowCount
+        if @debug.softShadows then intensity = intensity / @debug.softShadowCount
 
         @rendererShadows.ctx.globalCompositeOperation = "destination-out"
         @rendererShadows.ctx.fillStyle = "rgba(255,255,255,#{intensity})"
@@ -297,7 +298,7 @@ class MapLightingScene extends Scene
         ctx.beginPath()
         ctx.moveTo intersections[0].x, intersections[0].y
         m = intersections.length
-        for intersection, i in intersections
+        for i in [0..intersections.length-1] by 1
             if i == 0
                 ctx.lineTo intersections[m - 1].x, intersections[m - 1].y
             else
