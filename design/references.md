@@ -1,3 +1,7 @@
+Libraries
+=========
+* https://github.com/prettymuchbryce/easystarjs
+* https://github.com/bgrins/javascript-astar
 
 Graphics
 ========
