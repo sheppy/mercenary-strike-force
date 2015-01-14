@@ -5,7 +5,7 @@ import Scene from "../../engine/Scene";
  * @class
  * @extends Scene
  */
-class MenuScene extends Scene {
+class MainMenuScene extends Scene {
     /**
      * @constructor
      */
@@ -20,4 +20,4 @@ class MenuScene extends Scene {
     }
 }
 
-export default MenuScene;
+export default MainMenuScene;
