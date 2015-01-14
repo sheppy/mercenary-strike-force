@@ -59,8 +59,12 @@ gulp.task("js", ["lint"], function () {
 gulp.task("browser-sync", function () {
     browserSync({
         server: {
-            baseDir: ".",
-            directory: true,
+            baseDir: "./public",
+            routes: {
+                "/lib": "./lib",
+                "/bower_components": "./bower_components"
+            },
+            directory: false,
             index: "index.html"
         },
         startPath: "/index.html",
