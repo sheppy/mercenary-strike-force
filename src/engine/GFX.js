@@ -31,6 +31,15 @@ class GFX {
         this.renderer = new PIXI.WebGLRenderer(width, height);
         document.body.appendChild(this.renderer.view);
     }
+
+    /**
+     * @param {Scene} scene
+     */
+    renderScene(scene) {
+        if (scene) {
+            this.renderer.render(scene);
+        }
+    }
 }
 
 export default new GFX();

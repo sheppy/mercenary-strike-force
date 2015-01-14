@@ -1,4 +1,5 @@
-import SceneManager from "../engine/SceneManager";
+import GFX from "./GFX";
+import SceneManager from "./SceneManager";
 
 
 /**
@@ -27,12 +28,7 @@ class Game {
     }
 
     render() {
-        // Get current scene & render
-        var scene = SceneManager.currentScene;
-
-        if (scene) {
-            scene.render();
-        }
+        GFX.renderScene(SceneManager.currentScene);
     }
 
     run() {

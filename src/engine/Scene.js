@@ -10,34 +10,22 @@ class Scene extends PIXI.Stage {
     constructor(background) {
         super(background);
 
-        /**
-         * @name Scene#updateCB
-         * @type {function}
-         */
-        this.updateCB = null;
-
-        /**
-         * @name Scene#paused
-         * @type {boolean}
-         */
+        /** @private */
         this.paused = true;
+
+        this.initScene();
     }
 
     /**
-     * @param {function} updateCB
+     * @abstract
      */
-    onUpdate(updateCB) {
-        this.updateCB = updateCB;
-    }
+    init() {}
 
     /**
+     * @abstract
      * @param {number} dt
      */
-    update(dt) {
-        if (typeof this.updateCB === "function") {
-            this.updateCB(dt);
-        }
-    }
+    update(dt) {}
 
     pause() {
         this.paused = true;
