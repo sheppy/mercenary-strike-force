@@ -1,4 +1,3 @@
-export default
 class Game {
     constructor() {
         this.skipTicks = 1000 / 120;
@@ -31,3 +30,5 @@ class Game {
         }
     }
 }
+
+export default Game;

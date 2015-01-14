@@ -1,4 +1,3 @@
-export default
 class Scene extends PIXI.Stage {
     constructor(background) {
         super(background);
@@ -29,3 +28,5 @@ class Scene extends PIXI.Stage {
         return this.paused;
     }
 }
+
+export default Scene;
