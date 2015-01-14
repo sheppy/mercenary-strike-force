@@ -11,7 +11,8 @@
   "author": "Chris Sheppard (http://www.chrissheppard.co.uk/)",
   "license": "GPL-2.0",
   "engines": {
-    "node": ">= 0.10.x"
+    "node": ">= 0.10.x",
+    "npm": ">=1.3"
   },
   "scripts": {
     "start": "node app/msf.js"
