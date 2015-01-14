@@ -1,3 +1,6 @@
+import SceneManager from "../engine/SceneManager";
+
+
 class Game {
     constructor() {
         this.skipTicks = 1000 / 120;
@@ -5,11 +8,21 @@ class Game {
     }
 
     update(dt) {
-        // TODO: Get current scene & update
+        // Get current scene & update
+        var scene = SceneManager.currentScene;
+
+        if (scene) {
+            scene.update(dt);
+        }
     }
 
     render() {
-        // TODO: Get current scene & render
+        // Get current scene & render
+        var scene = SceneManager.currentScene;
+
+        if (scene) {
+            scene.render();
+        }
     }
 
     run() {
