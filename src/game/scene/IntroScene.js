@@ -16,7 +16,6 @@ class IntroScene extends Scene {
     }
 
     init() {
-        // TODO: Use AssetManager
         this.logo = PIXI.Sprite.fromImage("logo_small.png");
         this.addChild(this.logo);
 
