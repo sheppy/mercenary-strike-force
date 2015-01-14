@@ -13,7 +13,7 @@ class Scene extends PIXI.Stage {
         /** @private */
         this.paused = true;
 
-        this.initScene();
+        this.init();
     }
 
     /**

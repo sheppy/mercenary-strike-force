@@ -13,6 +13,7 @@ class Game {
     constructor() {
         this.skipTicks = 1000 / 120;
         this.nextUpdateTick = Date.now();
+        this.lastTime = Date.now();
     }
 
     /**
@@ -34,11 +35,16 @@ class Game {
     run() {
         window.requestAnimationFrame(this.run.bind(this));
 
+        var currentTime, dt;
+
         var loops = 0;
 
-        while(Date.now() > this.nextUpdateTick) {
-            // TODO: Pass dt
-            this.update();
+        while((currentTime = Date.now()) > this.nextUpdateTick) {
+            dt = currentTime - this.lastTime;
+            this.lastTime = currentTime;
+            if (dt) {
+                this.update(dt);
+            }
             this.nextUpdateTick += this.skipTicks;
             loops++;
         }

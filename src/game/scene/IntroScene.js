@@ -1,4 +1,5 @@
 import Scene from "../../engine/Scene";
+import GFX from "../../engine/GFX";
 import SceneManager from "../../engine/SceneManager";
 
 
@@ -27,13 +28,16 @@ class IntroScene extends Scene {
         this.logo.alpha = 0;
 
         // move the sprite to the center of the screen
-        this.logo.position.x = SceneManager.width / 2;
-        this.logo.position.y = SceneManager.height / 2;
+        this.logo.position.x = GFX.width / 2;
+        this.logo.position.y = GFX.height / 2;
     }
 
     update(dt) {
         if (this.logo.alpha < 1) {
-            this.logo.alpha += dt * 0.01;
+            this.logo.alpha += dt * 0.002;
+            if (this.logo.alpha > 1) {
+                this.logo.alpha = 1;
+            }
         } else {
             SceneManager.goToScene("main-menu");
         }
