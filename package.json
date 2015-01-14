@@ -1,44 +1,20 @@
 {
   "name": "mercenary-strike-force",
-  "version": "0.0.0",
+  "description": "Mercenary Strike Force",
+  "version": "0.0.1",
   "private": true,
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "grunt test"
+  "main": "/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sheppy/mercenary-strike-force.git"
   },
-  "config": {
-    "blanket": {
-      "loader": "./node-loaders/coffee-script",
-      "data-cover-never": "node_modules",
-      "pattern": [
-        "docroot/assets/game"
-      ]
-    },
-    "travis-cov": {
-      "threshold": 80
-    }
+  "author": "Chris Sheppard (http://www.chrissheppard.co.uk/)",
+  "license": "GPL-2.0",
+  "engines": {
+    "node": ">= 0.10.x"
   },
-  "author": "Chris Sheppard",
-  "license": "MIT",
+  "scripts": {},
   "devDependencies": {
-    "browserify": "^3.46.0",
-    "chai": "~1.9.1",
-    "coffee-script": "~1.7.1",
-    "coffeeify": "~0.6.0",
-    "connect-livereload": "^0.3.2",
-    "grunt": "~0.4.4",
-    "grunt-browserify": "^2.0.8",
-    "grunt-coffeelint": "0.0.10",
-    "grunt-contrib-connect": "^0.7.1",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-mocha-cov": "^0.2.1",
-    "grunt-newer": "^0.7.0",
-    "load-grunt-tasks": "~0.4.0",
-    "require-subvert": "0.0.3",
-    "sinon": "~1.9.1",
-    "sinon-chai": "~2.5.0",
-    "time-grunt": "^0.3.1",
-    "travis-cov": "~0.2.5"
+    "gulp": "^3.8.10"
   }
 }
