@@ -1,8 +1,23 @@
+/**
+ * @class
+ */
 class GFX {
+    /**
+     * @constructor
+     */
     constructor() {
+        /**
+         * @name GFX#renderer
+         * @type {PIXI.WebGLRenderer}
+         */
         this.renderer = null;
     }
 
+    /**
+     * @param {number} width
+     * @param {number} height
+     * @returns {boolean}
+     */
     createRenderer(width, height) {
         this.width = width;
         this.height = height;

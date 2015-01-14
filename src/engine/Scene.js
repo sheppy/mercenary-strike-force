@@ -1,18 +1,41 @@
+/**
+ * @class
+ * @extends PIXI.Stage
+ */
 class Scene extends PIXI.Stage {
+    /**
+     * @constructor
+     * @param {number} background - The background color to use for the scene.
+     */
     constructor(background) {
         super(background);
 
+        /**
+         * @name Scene#updateCB
+         * @type {function}
+         */
         this.updateCB = null;
-        this.paused = false;
+
+        /**
+         * @name Scene#paused
+         * @type {boolean}
+         */
+        this.paused = true;
     }
 
-    onUpdate(updateCB = null) {
+    /**
+     * @param {function} updateCB
+     */
+    onUpdate(updateCB) {
         this.updateCB = updateCB;
     }
 
-    update() {
+    /**
+     * @param {number} dt
+     */
+    update(dt) {
         if (typeof this.updateCB === "function") {
-            this.updateCB();
+            this.updateCB(dt);
         }
     }
 
@@ -24,6 +47,9 @@ class Scene extends PIXI.Stage {
         this.paused = false;
     }
 
+    /**
+     * @returns {boolean}
+     */
     isPaused() {
         return this.paused;
     }

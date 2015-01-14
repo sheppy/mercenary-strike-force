@@ -1,12 +1,22 @@
 import SceneManager from "../engine/SceneManager";
 
 
+/**
+ * @class
+ * @requires SceneManager
+ */
 class Game {
+    /**
+     * @constructor
+     */
     constructor() {
         this.skipTicks = 1000 / 120;
         this.nextUpdateTick = Date.now();
     }
 
+    /**
+     * @param {number} dt
+     */
     update(dt) {
         // Get current scene & update
         var scene = SceneManager.currentScene;
