@@ -29,7 +29,9 @@ class Game {
     }
 
     render() {
-        GFX.render(SceneManager.stage);
+        if (SceneManager.stage) {
+            GFX.render(SceneManager.stage);
+        }
     }
 
     run() {

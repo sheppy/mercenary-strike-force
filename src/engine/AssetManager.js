@@ -17,22 +17,23 @@ class AssetManager {
         this.assets.push(image);
     }
 
-    load() {
+    load(onComplete, onProgress) {
         //var loader = new PIXI.JsonLoader(url);
         // Load images
         var loader = new PIXI.AssetLoader(this.assets, true);
-        loader.addEventListener("onProgress", this.onProgress);
-        loader.addEventListener("onComplete", this.onComplete);
+
+        if (onProgress) {
+            loader.addEventListener("onProgress", onProgress);
+        }
+
+        if (onComplete) {
+            loader.addEventListener("onComplete", onComplete);
+        }
+
         loader.load();
-    }
 
-    onComplete(e) {
-    }
-
-    onProgress(e) {
-        var itemsRemaining = e.content.content.loadCount;
-        var totalItems = e.content.content.loadCount;
-        var percent = (1 - (itemsRemaining / totalItems)) * 100;
+        // Clear current queue
+        this.assets = [];
     }
 }
 
