@@ -89,5 +89,6 @@ gulp.task("watch", ["browser-sync"], function () {
 });
 
 
-// build scripts
-gulp.task("default", ["watch"]);
+gulp.task("build", ["js"]);
+
+gulp.task("default", ["build"]);
