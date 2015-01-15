@@ -29,12 +29,20 @@ class Scene extends PIXI.DisplayObjectContainer {
 
     activate() {
         this.active = true;
-        this.visible = this.active;
+        this.onActivate();
+    }
+
+    onActivate() {
+        this.visible = true;
     }
 
     deactivate() {
         this.active = false;
-        this.visible = this.active;
+        this.onDeactivate();
+    }
+
+    onDeactivate() {
+        this.visible = false;
     }
 
     /**
