@@ -11,6 +11,12 @@ class SceneManager {
      */
     constructor() {
         /**
+         * @name SceneManager#stage
+         * @type {PIXI.Stage}
+         */
+        this.stage = null;
+
+        /**
          * List of available scenes.
          *
          * @name SceneManager#scenes
@@ -28,6 +34,13 @@ class SceneManager {
     }
 
     /**
+     * @param {number} background - The background color to use for the stage.
+     */
+    init(background = 0x000000) {
+        this.stage = new PIXI.Stage(background);
+    }
+
+    /**
      * Add existing scene.
      *
      * @param {string} id - Scene id.
@@ -40,6 +53,8 @@ class SceneManager {
         }
 
         this.scenes[id] = scene;
+
+        this.stage.addChild(scene);
 
         return scene;
     }
@@ -72,12 +87,12 @@ class SceneManager {
         }
 
         if (this.currentScene) {
-            this.currentScene.pause();
+            this.currentScene.deactivate();
         }
 
         this.currentScene = this.scenes[id];
 
-        this.currentScene.resume();
+        this.currentScene.activate();
         return true;
     }
 }

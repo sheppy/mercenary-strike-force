@@ -18,7 +18,7 @@ class GFX {
      * @param {number} height
      * @returns {boolean}
      */
-    createRenderer(width, height) {
+    init(width, height) {
         this.width = width;
         this.height = height;
 
@@ -32,13 +32,8 @@ class GFX {
         document.body.appendChild(this.renderer.view);
     }
 
-    /**
-     * @param {Scene} scene
-     */
-    renderScene(scene) {
-        if (scene) {
-            this.renderer.render(scene);
-        }
+    render(stage) {
+        this.renderer.render(stage);
     }
 }
 

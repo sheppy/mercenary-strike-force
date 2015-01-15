@@ -8,32 +8,28 @@ import SceneManager from "../../engine/SceneManager";
  * @extends Scene
  */
 class IntroScene extends Scene {
-    /**
-     * @constructor
-     */
-    constructor() {
-        super(0xffffff);
-    }
-
     init() {
-        this.logo = PIXI.Sprite.fromImage("logo_small.png");
-        this.addChild(this.logo);
+        this.logo = new PIXI.Graphics();
 
-        //this.logo.scale.x = ScenesManager.defaultWidth / 250;
-        //this.logo.scale.y = this.logo.scale.x;
+        this.logo.beginFill(0xFFFF00);
+        this.logo.lineStyle(5, 0xFF0000);
+        this.logo.drawRect(0, 0, 20, 20);
 
-        this.logo.anchor.x = 0.5;
-        this.logo.anchor.y = 0.5;
         this.logo.alpha = 0;
 
-        // move the sprite to the center of the screen
-        this.logo.position.x = GFX.width / 2;
-        this.logo.position.y = GFX.height / 2;
+        // Position in the center of the screen
+        //this.logo.position.x = GFX.width / 2;
+        //this.logo.position.y = GFX.height / 2;
+
+        this.addChild(this.logo);
+
+        //this.logo.scale.x = GFX.width / 20;
+        //this.logo.scale.y = this.logo.scale.x;
     }
 
     update(dt) {
         if (this.logo.alpha < 1) {
-            this.logo.alpha += dt * 0.002;
+            this.logo.alpha += dt * 0.001;
             if (this.logo.alpha > 1) {
                 this.logo.alpha = 1;
             }

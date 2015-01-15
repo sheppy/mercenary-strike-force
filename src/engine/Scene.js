@@ -1,17 +1,17 @@
 /**
  * @class
- * @extends PIXI.Stage
+ * @extends PIXI.DisplayObjectContainer
  */
-class Scene extends PIXI.Stage {
+class Scene extends PIXI.DisplayObjectContainer {
     /**
      * @constructor
-     * @param {number} background - The background color to use for the scene.
      */
-    constructor(background) {
-        super(background);
+    constructor() {
+        super();
 
         /** @private */
-        this.paused = true;
+        this.active = false;
+        this.visible = false;
 
         this.init();
     }
@@ -27,19 +27,21 @@ class Scene extends PIXI.Stage {
      */
     update(dt) {}
 
-    pause() {
-        this.paused = true;
+    activate() {
+        this.active = true;
+        this.visible = this.active;
     }
 
-    resume() {
-        this.paused = false;
+    deactivate() {
+        this.active = false;
+        this.visible = this.active;
     }
 
     /**
      * @returns {boolean}
      */
-    isPaused() {
-        return this.paused;
+    isActive() {
+        return this.active;
     }
 }
 

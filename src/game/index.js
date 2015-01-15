@@ -9,10 +9,11 @@ import SceneManager from "../engine/SceneManager";
 import IntroScene from "./scene/IntroScene";
 import MainMenuScene from "./scene/MainMenuScene";
 
-// Create a renderer
-GFX.createRenderer(800, 600);
+// Initialise the graphics
+GFX.init(800, 600);
 
 // Create scenes
+SceneManager.init();
 SceneManager.createScene("intro", IntroScene);
 SceneManager.createScene("main-menu", MainMenuScene);
 SceneManager.goToScene("intro");
