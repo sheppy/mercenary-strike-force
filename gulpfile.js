@@ -46,6 +46,7 @@ gulp.task("js", ["lint"], function () {
         .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
         .require(require.resolve(CONFIG.ENTRY.FULL_PATH), {entry: true})
         .bundle()
+        .on("error", onError)
         .pipe(plugin.plumber({errorHandler: onError}))
         .pipe(source(CONFIG.ENTRY.FILE))
         .pipe(gulp.dest(CONFIG.DEST.PATH))
