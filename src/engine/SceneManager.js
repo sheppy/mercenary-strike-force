@@ -35,9 +35,10 @@ class SceneManager {
 
     /**
      * @param {number} background - The background color to use for the stage.
+     * @param {boolean} interactive
      */
-    init(background = 0x000000) {
-        this.stage = new PIXI.Stage(background);
+    init(background = 0x000000, interactive = true) {
+        this.stage = new PIXI.Stage(background, interactive);
     }
 
     /**
