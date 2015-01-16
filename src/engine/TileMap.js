@@ -43,24 +43,22 @@ class TileMap extends PIXI.DisplayObjectContainer {
          * @type {PIXI.DisplayObjectContainer}
          */
         this.tiles = new PIXI.DisplayObjectContainer();
-        // TODO: Change this so it generates an image
-        // this.renderTilesToSprite()
-        this.addChild(this.tiles);
+
+        /**
+         * @name TileMap#tilesSprite
+         * @type {PIXI.Sprite}
+         */
+        this.tilesSprite = new PIXI.Sprite();
+        this.addChild(this.tilesSprite);
     }
 
-    // The use of this should increase performance on large maps?
+    // The use of this should increase performance on large maps
     renderTilesToSprite() {
         // render the tilemap to a render texture
         var texture = new PIXI.RenderTexture();
         texture.render(this.tiles);
 
-        // TODO: Create the sprite in constructor - only use this method to update it
-        // create a single background sprite with the texture
-        this.tilesSprite = new PIXI.Sprite(texture);
-
-        // add the background to the stage
-        // (notice I didn't add the mapContainer to the scene graph)
-        this.addChild(this.tilesSprite);
+        this.tilesSprite.setTexture(texture);
     }
 
     /**
@@ -81,8 +79,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
             }
         }
 
-        // TODO: Save the map as an image?
-        // this.renderTilesToSprite()
+        this.renderTilesToSprite()
     }
 
     /**
@@ -102,10 +99,12 @@ class TileMap extends PIXI.DisplayObjectContainer {
     }
 
     // Note: This removes the tile instance, it might be better to just change its properties
-    changeTile(x, y, frameId) {
+    changeTile(x, y, frameId, update) {
         this.tiles.removeChild(this.getTile(x, y));
         this.addTile(x, y, frameId);
-        // TODO: Update the rendered texture? - possibly pass a param option for this
+        if (update) {
+            this.renderTilesToSprite()
+        }
     }
 
     getTile(x, y) {
