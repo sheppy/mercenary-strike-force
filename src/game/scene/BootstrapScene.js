@@ -27,7 +27,7 @@ class BootstrapScene extends Scene {
     }
 
     loadAssets() {
-        AssetManager.addImage("logo_small.png");
+        AssetManager.addImage("null.png");
         AssetManager.addImage("tiles.json");
         AssetManager.load(this.onAssetsLoaded.bind(this), function (e) {
             var itemsRemaining = e.content.content.loadCount;

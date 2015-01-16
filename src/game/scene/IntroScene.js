@@ -22,7 +22,7 @@ class IntroScene extends Scene {
             .wait(2000)
             .call(function () {
                 SceneManager.goToScene("main-menu");
-                // TODO: We want to destroy this scene afterwards
+                SceneManager.removeScene("intro");
             });
     }
 
