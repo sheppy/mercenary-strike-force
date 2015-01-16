@@ -5,6 +5,7 @@ import SceneManager from "../../engine/SceneManager";
 
 import IntroScene from "./IntroScene";
 import MainMenuScene from "./MainMenuScene";
+import PrototypeMapScene from "./PrototypeMapScene";
 
 /**
  * @class
@@ -27,12 +28,20 @@ class BootstrapScene extends Scene {
 
     loadAssets() {
         AssetManager.addImage("logo_small.png");
-        AssetManager.load(this.onAssetsLoaded.bind(this));
+        AssetManager.addImage("tiles.json");
+        AssetManager.load(this.onAssetsLoaded.bind(this), function (e) {
+            var itemsRemaining = e.content.content.loadCount;
+            var totalItems = e.content.content.assetURLs.length;
+            var percent = (1 - (itemsRemaining / totalItems)) * 100;
+
+            console.log("Loading assets:", percent, itemsRemaining, totalItems);
+        });
     }
 
     onAssetsLoaded() {
         SceneManager.createScene("intro", IntroScene);
         SceneManager.createScene("main-menu", MainMenuScene);
+        SceneManager.createScene("prototype-map", PrototypeMapScene);
         SceneManager.goToScene("intro");
     }
 

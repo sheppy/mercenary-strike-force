@@ -1,4 +1,5 @@
 import Scene from "../../engine/Scene";
+import SceneManager from "../../engine/SceneManager";
 import UI from "../../engine/UI";
 
 
@@ -27,7 +28,7 @@ class MainMenuScene extends Scene {
                 this.drawRect(30, 30, 20, 20);
             },
             click: function () {
-                console.log("CLICK!");
+                SceneManager.goToScene("prototype-map");
             }
         });
 
