@@ -114,6 +114,22 @@ class SceneManager {
         this.scenes[id].deactivate(data);
         return true;
     }
+
+    removeScene(id) {
+        if (!this.scenes[id]) {
+            return false;
+        }
+
+        if (this.scenes[id].isActive()) {
+            this.scenes[id].deactivate();
+        }
+
+        this.stage.addChild(this.scenes[id]);
+
+        delete this.scenes[id];
+
+        return true;
+    }
 }
 
 export default new SceneManager();

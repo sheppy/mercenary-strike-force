@@ -1,5 +1,4 @@
 # Backlog
-- SceneManager - destroy scene
 
 ## Features
 - Map
