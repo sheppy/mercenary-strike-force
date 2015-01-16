@@ -82,36 +82,36 @@ class SceneManager {
      * @param {string} id - Scene id.
      * @returns {boolean} If the scene was found.
      */
-    goToScene(id) {
+    goToScene(id, data) {
         if (!this.scenes[id]) {
             return false;
         }
 
         if (this.currentScene) {
-            this.currentScene.deactivate();
+            this.currentScene.deactivate(data);
         }
 
         this.currentScene = this.scenes[id];
 
-        this.currentScene.activate();
+        this.currentScene.activate(data);
         return true;
     }
 
-    showScene(id) {
+    showScene(id, data) {
         if (!this.scenes[id]) {
             return false;
         }
 
-        this.scenes[id].activate();
+        this.scenes[id].activate(data);
         return true;
     }
 
-    hideScene(id) {
+    hideScene(id, data) {
         if (!this.scenes[id]) {
             return false;
         }
 
-        this.scenes[id].deactivate();
+        this.scenes[id].deactivate(data);
         return true;
     }
 }
