@@ -96,6 +96,24 @@ class SceneManager {
         this.currentScene.activate();
         return true;
     }
+
+    showScene(id) {
+        if (!this.scenes[id]) {
+            return false;
+        }
+
+        this.scenes[id].activate();
+        return true;
+    }
+
+    hideScene(id) {
+        if (!this.scenes[id]) {
+            return false;
+        }
+
+        this.scenes[id].deactivate();
+        return true;
+    }
 }
 
 export default new SceneManager();
