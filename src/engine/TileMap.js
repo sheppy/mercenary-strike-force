@@ -106,7 +106,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
             }
         }
 
-        this.renderTilesToSprite()
+        this.renderTilesToSprite();
     }
 
     /**
@@ -132,13 +132,13 @@ class TileMap extends PIXI.DisplayObjectContainer {
             intensity: 0.2
         };
 
-        if (x == 5 && y == 5) {
+        if (x === 5 && y === 5) {
             data.intensity = 1;
             data.color = 0xFF0000;
-        } else if ((x == 5 && (y == 4 || y == 6)) || (y == 5 && (x == 4 || x == 6))) {
+        } else if ((x === 5 && (y === 4 || y === 6)) || (y === 5 && (x === 4 || x === 6))) {
             data.intensity = 0.7;
             data.color = 0xFF0000;
-        } else if ((x == 4 && y == 4) || (x == 4 && y == 6) || (x == 6 && y == 4) || (x == 6 && y == 6)) {
+        } else if ((x === 4 && y === 4) || (x === 4 && y === 6) || (x === 6 && y === 4) || (x === 6 && y === 6)) {
             data.intensity = 0.7 * 0.9;
             data.color = 0xFF0000;
         }
@@ -156,7 +156,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
         this.baseTiles.removeChild(this.getTile(x, y));
         this.addTile(x, y, frameId);
         if (update) {
-            this.renderTilesToSprite()
+            this.renderTilesToSprite();
         }
     }
 
