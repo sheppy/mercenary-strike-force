@@ -21,6 +21,7 @@ class BootstrapScene extends Scene {
     }
 
     onActivate() {
+        console.clear();
         super.onActivate();
 
         this.loadAssets();

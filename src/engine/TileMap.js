@@ -1,3 +1,7 @@
+import LightMap from "./LightMap";
+import Color from "./Color";
+
+
 class Tile extends PIXI.Sprite {
     constructor(frameId) {
         // TODO: Get asset by name from AssetManager
@@ -9,18 +13,8 @@ class Tile extends PIXI.Sprite {
         this.data = {};
     }
 
-    setLightData(data) {
-        this.lightData = data;
-
-        var r = data.color >> 16;
-        var g = data.color >> 8 & 0xFF;
-        var b = data.color >> 16;
-
-        r = r * data.intensity;
-        g = g * data.intensity;
-        b = b * data.intensity;
-
-        this.tint = (r << 16) + (g << 8) + b;
+    setLightData(light) {
+        this.tint = Color.applyIntensity(light.color, light.intensity);
     }
 }
 
@@ -65,6 +59,12 @@ class TileMap extends PIXI.DisplayObjectContainer {
          */
         this.baseTileSprite = PIXI.Sprite.fromImage("null.png");
         this.addChild(this.baseTileSprite);
+
+        // Create the light map
+        this.lightMap = new LightMap(this.mapWidth, this.mapHeight, {
+            color: 0x000033,
+            intensity: 0.4
+        });
     }
 
     // The use of this should increase performance on large maps
@@ -73,6 +73,19 @@ class TileMap extends PIXI.DisplayObjectContainer {
         var baseTexture = new PIXI.RenderTexture(this.mapWidth * this.tileSize, this.mapHeight * this.tileSize);
         baseTexture.render(this.baseTiles);
         this.baseTileSprite.setTexture(baseTexture);
+    }
+
+    updateLighting() {
+        this.lightMap.generate();
+
+        for (let x = 0; x < this.mapWidth; x++) {
+            for (let y = 0; y < this.mapHeight; y++) {
+                let tile = this.getTile(x, y);
+                let light = this.lightMap.map[x][y];
+
+                tile.setLightData(light);
+            }
+        }
     }
 
     /**
@@ -89,9 +102,18 @@ class TileMap extends PIXI.DisplayObjectContainer {
     generate() {
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
-                this.addTile(x, y, 5);
+                this.addTile(x, y, 2);
             }
         }
+
+        // Add a light
+        this.lightMap.addLight(5, 5, {
+            color: 0xFFFFFF,
+            intensity: 1
+        });
+
+        // Should this be here?
+        this.updateLighting();
 
         this.renderTilesToSprite();
     }
@@ -112,24 +134,6 @@ class TileMap extends PIXI.DisplayObjectContainer {
         tile.position.x = x * this.tileSize;
         tile.position.y = y * this.tileSize;
         this.baseTiles.addChildAt(tile, index);
-
-        var data = {
-            color: 0x000000,
-            intensity: 0.4
-        };
-
-        if (x === 5 && y === 5) {
-            data.intensity = 1;
-            data.color = 0xFFFFFF;
-        } else if ((x === 5 && (y === 4 || y === 6)) || (y === 5 && (x === 4 || x === 6))) {
-            data.intensity = 0.7;
-            data.color = 0xFFFFFF;
-        } else if ((x === 4 && y === 4) || (x === 4 && y === 6) || (x === 6 && y === 4) || (x === 6 && y === 6)) {
-            data.intensity = 0.7 * 0.9;
-            data.color = 0xFFFFFF;
-        }
-
-        tile.setLightData(data);
     }
 
     // Note: This removes the tile instance, it might be better to just change its properties

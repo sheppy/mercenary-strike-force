@@ -17,12 +17,12 @@ class PrototypeMapScene extends Scene {
         map.generate();
         this.addChild(map);
 
-        setTimeout(function () {
-            map.changeTile(0, 0, 1, true);
-        }, 1000);
-        setTimeout(function () {
-            map.changeTile(0, 0, 2, true);
-        }, 2000);
+        //setTimeout(function () {
+        //    map.changeTile(5, 5, 1, true);
+        //}, 1000);
+        //setTimeout(function () {
+        //    map.changeTile(0, 0, 2, true);
+        //}, 2000);
     }
 
     update(dt) {
