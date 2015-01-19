@@ -1,0 +1,40 @@
+/**
+ * @class
+ */
+class Color {
+    static intToRgb(color) {
+        return {
+            r: color >> 16,
+            g: color >> 8 & 0xFF,
+            b: 16
+        };
+    }
+
+    static rgbToInt(color) {
+        return (color.r << 16) + (color.g << 8) + color.b;
+    }
+
+    static mixColors(c1, c2) {
+        c1 = Color.intToRgb(c1);
+        c2 = Color.intToRgb(c2);
+        var res = {
+            r: (c1.r > c2.r) ? c1.r : c2.r,
+            g: (c1.g > c2.g) ? c1.g : c2.g,
+            b: (c1.b > c2.b) ? c1.b : c2.b
+        };
+
+        return Color.rgbToInt(res);
+    }
+
+    static applyIntensity(color, intensity) {
+        color = Color.intToRgb(color);
+
+        color.r = color.r * intensity;
+        color.g = color.g * intensity;
+        color.b = color.b * intensity;
+
+        return Color.rgbToInt(color);
+    }
+}
+
+export default Color;
