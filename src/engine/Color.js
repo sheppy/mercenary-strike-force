@@ -4,9 +4,9 @@
 class Color {
     static intToRgb(color) {
         return {
-            r: color >> 16,
+            r: color >> 16 & 0xFF,
             g: color >> 8 & 0xFF,
-            b: 16
+            b: color & 0xFF
         };
     }
 
