@@ -14,12 +14,30 @@ class Game {
         this.skipTicks = 1000 / 120;
         this.nextUpdateTick = Date.now();
         this.lastTime = Date.now();
+
+        this.fps = new FPSMeter({
+            heat: 1,
+            graph: 1,
+            top: "auto",
+            bottom: "5px"
+        });
+
+        this.ups = new FPSMeter({
+            heat: 1,
+            graph: 1,
+            top: "auto",
+            bottom: "5px",
+            right: "5px",
+            left: "auto"
+        });
     }
 
     /**
      * @param {number} dt
      */
     update(dt) {
+        this.ups.tick();
+
         // Get current scene & update
         var scene = SceneManager.currentScene;
 
@@ -29,6 +47,8 @@ class Game {
     }
 
     render() {
+        this.fps.tick();
+
         if (SceneManager.stage) {
             GFX.render(SceneManager.stage);
         }

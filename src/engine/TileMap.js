@@ -29,7 +29,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
          * @name TileMap#mapWidth
          * @type {number}
          */
-        this.mapWidth = 10;
+        this.mapWidth = 50;
 
         /**
          * The height of the map in tiles.
@@ -37,7 +37,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
          * @name TileMap#mapHeight
          * @type {number}
          */
-        this.mapHeight = 10;
+        this.mapHeight = 36;
 
         /**
          * The width and height of a tile.
@@ -62,9 +62,29 @@ class TileMap extends PIXI.DisplayObjectContainer {
 
         // Create the light map
         this.lightMap = new LightMap(this.mapWidth, this.mapHeight, {
-            color: 0x000033,
-            intensity: 0.4
+            color: 0xFFFFFF,
+            //color: 0x000033,
+            intensity: 0.15
         });
+
+        this.interactive = true;
+
+        this.mousemove = this.touchmove = function (data) {
+            var position = data.getLocalPosition(this.parent);
+
+            var x = Math.floor(position.x / 16);
+            var y = Math.floor(position.y / 16);
+
+            var light = this.lightMap.lights[0];
+            if (x !== light.x || y !== light.y) {
+                light.x = x;
+                light.y = y;
+                this.updateLighting();
+                this.renderTilesToSprite();
+            }
+
+            //console.log(x, y);
+        };
     }
 
     // The use of this should increase performance on large maps

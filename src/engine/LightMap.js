@@ -27,7 +27,7 @@ class LightMap {
         var light = {
             x: x,
             y: y,
-            radius: settings.radius || 4,
+            radius: settings.radius || 16,
             intensity: settings.intensity || 1,
             color: settings.color || 0xFFFFFF
         };
@@ -67,9 +67,19 @@ class LightMap {
      * @param d - distance between the surface being lit and the center of the light.
      */
     attenuation(r, f, d) {
-        var att = Math.pow(Math.max(0.0, 1.0 - (d / r)), f + 1.0);
-        return att * att;
+        // float atten = 1.0f / (ConstantAtt + LinearAtt * LightDistance);
+        //return 0.4;
+        //return 1 / (0 + 0.01 + d);
+        //return Math.pow(1 - d, 0.5);
+        return Math.pow(Math.max(0.0, 1.0 - (d / r)), f + 1.0);
+        //return att * att;
 
+        //var att = this.clamp(1.0 - d / r, 0.0, 1.0);
+        //return att * att;
+
+        //var att = this.clamp(1.0 - d * d / r * r, 0.0, 1.0);
+        //return att;
+        //return att * att;
         /*
          // var att=1.0/(1.0+0.1*dist+0.01*dist*dist);
          var att = this.clamp(1.0 - dist / radius, 0.0, 1.0);
@@ -81,14 +91,28 @@ class LightMap {
     setLight(tile, color, intensity) {
         // TODO: Use another colour space?
         // TODO: The weight factor of the adding?
+
         //tile.color = Color.addColors(tile.color, light.color);
-        //tile.intensity = (intensity + tile.intensity) / 2;
+        //var i = (intensity * 0.5) + (tile.intensity * 0.5);
+        //if (i > tile.intensity) {
+        //    tile.intensity = i;
+        //}
+        //if (tile.intensity > 1) {
+        //    tile.intensity = 1;
+        //}
+        //tile.intensity += intensity;
         //if (tile.intensity > 1) {
         //    tile.intensity = 1;
         //}
 
         if (intensity > tile.intensity) {
-            tile.color = Color.mixColors(tile.color, color);
+            //tile.color = Color.addColorsByIntensity(tile.color, color, tile.intensity, intensity);
+            //tile.color = Color.mixColorsByIntensity(tile.color, color, tile.intensity, intensity);
+            //tile.color = Color.mixColors(tile.color, color);
+            //tile.color = Color.addColors(tile.color, color);
+
+            //tile.color = 0xFFFFFF;
+
             tile.intensity = intensity;
             return true;
         }
@@ -167,6 +191,12 @@ class LightMap {
 
             // TODO: Maybe break if we hit a wall?
 
+            if (
+                (x === 4 && y === 2)
+            ) {
+                break;
+            }
+
             --n;
         }
 
@@ -177,7 +207,7 @@ class LightMap {
         for (var n = 0; n < line.length; n++) {
             var dist = this.distance(line[0], line[n]);
 
-            var intensity = light.intensity * this.attenuation(light.radius, 0.5, dist);
+            var intensity = light.intensity * this.attenuation(light.radius, 0.8, dist);
 
             var x = line[n].x;
             var y = line[n].y;
