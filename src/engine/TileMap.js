@@ -76,7 +76,8 @@ class TileMap extends PIXI.DisplayObjectContainer {
     }
 
     updateLighting() {
-        this.lightMap.generate();
+        //this.lightMap.fillGenerate();
+        this.lightMap.castGenerate();
 
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
@@ -107,8 +108,18 @@ class TileMap extends PIXI.DisplayObjectContainer {
         }
 
         // Add a light
-        this.lightMap.addLight(5, 5, {
-            color: 0xFFFFFF,
+        this.lightMap.addLight(5, 2, {
+            color: 0xFF0000,
+            intensity: 1
+        });
+
+        this.lightMap.addLight(2, 7, {
+            color: 0x00FF00,
+            intensity: 1
+        });
+
+        this.lightMap.addLight(7, 7, {
+            color: 0x0000FF,
             intensity: 1
         });
 

@@ -26,6 +26,18 @@ class Color {
         return Color.rgbToInt(res);
     }
 
+    static addColors(c1, c2) {
+        c1 = Color.intToRgb(c1);
+        c2 = Color.intToRgb(c2);
+        var res = {
+            r: (0.5 * c1.r) + (0.5 * c2.r),
+            g: (0.5 * c1.g) + (0.5 * c2.g),
+            b: (0.5 * c1.b) + (0.5 * c2.b)
+        };
+
+        return Color.rgbToInt(res);
+    }
+
     static applyIntensity(color, intensity) {
         color = Color.intToRgb(color);
 

@@ -35,11 +35,6 @@ class MainMenuScene extends Scene {
         this.addChild(button);
     }
 
-    onActivate() {
-        // Temp skip menu
-        SceneManager.goToScene("prototype-map");
-    }
-
     update(dt) {
     }
 }

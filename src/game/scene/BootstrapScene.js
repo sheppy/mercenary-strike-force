@@ -43,7 +43,8 @@ class BootstrapScene extends Scene {
         SceneManager.createScene("intro", IntroScene);
         SceneManager.createScene("main-menu", MainMenuScene);
         SceneManager.createScene("prototype-map", PrototypeMapScene);
-        SceneManager.goToScene("intro");
+        //SceneManager.goToScene("intro");
+        SceneManager.goToScene("prototype-map");
     }
 
     update(dt) {
