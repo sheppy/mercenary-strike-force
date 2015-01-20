@@ -1,6 +1,7 @@
 import Scene from "../../engine/Scene";
 import TileMap from "../../engine/TileMap";
 import LightMap from "../../engine/LightMap";
+import DatGui from "../../engine/DatGui";
 
 
 /**
@@ -22,24 +23,22 @@ class PrototypeMapScene extends Scene {
         //    map.changeTile(0, 0, 2, true);
         //}, 2000);
 
-        // this.map.interactive = true;
+        this.map.interactive = true;
 
-        //this.map.mousemove = this.map.touchmove = function (data) {
-        //    var position = data.getLocalPosition(this.parent);
-        //
-        //    var x = Math.floor(position.x / 16);
-        //    var y = Math.floor(position.y / 16);
-        //
-        //    var light = this.lightMap.lights[0];
-        //    if (x !== light.x || y !== light.y) {
-        //        light.x = x;
-        //        light.y = y;
-        //        this.updateLighting();
-        //        this.renderTilesToSprite();
-        //    }
-        //
-        //    //console.log(x, y);
-        //};
+        var scene = this;
+        this.map.mousemove = this.map.touchmove = function (data) {
+            var position = data.getLocalPosition(this.parent);
+
+            var x = Math.floor(position.x / 16);
+            var y = Math.floor(position.y / 16);
+
+            var light = this.lightMap.lights[0];
+            if (x !== light.x || y !== light.y) {
+                light.x = x;
+                light.y = y;
+                scene.renderMap();
+            }
+        };
     }
 
     initLightMap() {
@@ -82,7 +81,6 @@ class PrototypeMapScene extends Scene {
     }
 
     renderMap() {
-        this.map.generate();
         this.updateLighting();
         this.map.renderTilesToSprite();
     }
@@ -91,11 +89,42 @@ class PrototypeMapScene extends Scene {
         super.onActivate();
 
         this.initMap();
+        this.map.generate();
         this.initLightMap();
         this.renderMap();
+
+
+        var ambientLightFolder = DatGui.addFolder("Ambient Lighting");
+        ambientLightFolder.open();
+
+        ambientLightFolder.add(this.lightMap.ambient, "intensity");
+        ambientLightFolder.add(this.lightMap.ambient, "color");
+
+
+        var light0Folder = DatGui.addFolder("Light 0");
+        light0Folder.open();
+
+        light0Folder.add(this.lightMap.lights[0], "radius");
+        light0Folder.add(this.lightMap.lights[0], "intensity", 0, 1);
+        light0Folder.add(this.lightMap.lights[0], "color");
+
+        // TODO: May need to do per control rather than the folder :(
+        light0Folder.onChange(function (value) {
+            // Fires on every change, drag, keypress, etc.
+            console.log("The light0Folder.onChange value is " + value);
+        });
+
+        light0Folder.onFinishChange(function (value) {
+            // Fires when a controller loses focus.
+            console.log("The light0Folder.onFinishChange value is " + value);
+            this.renderMap();
+        });
+
     }
 
-    update(dt) {
+    onDeactivate() {
+        DatGui.removeFolder("Ambient Lighting");
+        DatGui.removeFolder("Light 0");
     }
 }
 

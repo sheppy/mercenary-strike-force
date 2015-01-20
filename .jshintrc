@@ -15,7 +15,7 @@
     "maxdepth": 2,
     "maxerr": 50,
     "maxlen": 100,
-    "maxparams": 3,
+    "maxparams": 4,
     "maxstatements": 8,
     "newcap": true,
     "noarg": true,
@@ -26,14 +26,16 @@
     "notypeof": false,
     "quotmark": "double",
     "shadow": "outer",
-    "singleGroups": true,
+    "singleGroups": false,
     "undef": true,
     "unused": true,
     "browser": true,
+    "devel": true,
     "strict": false,
     "esnext": true,
     "globals": {
         "PIXI": false,
-        "FPSMeter": false
+        "FPSMeter": false,
+        "dat": false
     }
 }
