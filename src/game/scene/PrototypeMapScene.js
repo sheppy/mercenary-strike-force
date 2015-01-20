@@ -63,6 +63,11 @@ class PrototypeMapScene extends Scene {
             color: 0x0000FF,
             intensity: 1
         });
+
+        // Attempt at flickering light
+        this.lightFlickerTween = createjs.Tween.get(this.lightMap.lights[1], {loop: true})
+            .to({intensity: 0.8}, 1000, createjs.Ease.sineInOut)
+            .wait(250);
     }
 
     updateLighting() {
@@ -123,6 +128,11 @@ class PrototypeMapScene extends Scene {
         super._onDeactivate();
         DatGui.removeFolder("Ambient Lighting");
         DatGui.removeFolder("Light 0");
+    }
+
+    update(dt) {
+        this.lightFlickerTween.tick(dt);
+        this.renderMap();
     }
 }
 
