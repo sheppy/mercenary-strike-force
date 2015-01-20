@@ -12,6 +12,10 @@ class LightMap {
             intensity: ambient.intensity || 0
         };
 
+        this._init();
+    }
+
+    _init() {
         for (let x = 0; x < this.width; x++) {
             this.map[x] = [];
             for (let y = 0; y < this.height; y++) {
@@ -29,7 +33,8 @@ class LightMap {
             y: y,
             radius: settings.radius || 16,
             intensity: settings.intensity || 1,
-            color: settings.color || 0xFFFFFF
+            color: settings.color || 0xFFFFFF,
+            dynamic: settings.dynamic || false
         };
 
         this.lights.push(light);
@@ -46,11 +51,11 @@ class LightMap {
         }
     }
 
-    clamp(val, min, max) {
+    _clamp(val, min, max) {
         return Math.min(Math.max(val, min), max);
     }
 
-    distance(point1, point2) {
+    _distance(point1, point2) {
         var xs = point2.x - point1.x;
         xs = xs * xs;
 
@@ -66,7 +71,7 @@ class LightMap {
      * @param f - The rate of falloff.
      * @param d - distance between the surface being lit and the center of the light.
      */
-    attenuation(r, f, d) {
+    _attenuation(r, f, d) {
         // float atten = 1.0f / (ConstantAtt + LinearAtt * LightDistance);
         //return 0.4;
         //return 1 / (0 + 0.01 + d);
@@ -74,21 +79,21 @@ class LightMap {
         return Math.pow(Math.max(0.0, 1.0 - (d / r)), f + 1.0);
         //return att * att;
 
-        //var att = this.clamp(1.0 - d / r, 0.0, 1.0);
+        //var att = this._clamp(1.0 - d / r, 0.0, 1.0);
         //return att * att;
 
-        //var att = this.clamp(1.0 - d * d / r * r, 0.0, 1.0);
+        //var att = this._clamp(1.0 - d * d / r * r, 0.0, 1.0);
         //return att;
         //return att * att;
         /*
          // var att=1.0/(1.0+0.1*dist+0.01*dist*dist);
-         var att = this.clamp(1.0 - dist / radius, 0.0, 1.0);
-         //var att = this.clamp(1.0 - dist*dist/(radius*radius), 0.0, 1.0);
+         var att = this._clamp(1.0 - dist / radius, 0.0, 1.0);
+         //var att = this._clamp(1.0 - dist*dist/(radius*radius), 0.0, 1.0);
          att *= att;
          */
     }
 
-    setLight(tile, color, intensity) {
+    setTileLighting(tile, color, intensity) {
         // TODO: Use another colour space?
         // TODO: The weight factor of the adding?
 
@@ -122,11 +127,11 @@ class LightMap {
 
     //----------------------------------------------------------------------------------------------
     // Generate lighting based on ray casting
-    castGenerate() {
-        this.clear();
-
+    generate() {
         for (let i = 0; i < this.lights.length; i++) {
             let light = this.lights[i];
+
+            // Light source tile
             let tile = this.map[light.x][light.y];
             tile.color = light.color;
             tile.intensity = light.intensity;
@@ -135,21 +140,21 @@ class LightMap {
                 let northBorderPoint = {x: x, y: 0};
                 let southBorderPoint = {x: x, y: this.height - 1};
 
-                this.castLight(this.castGetRayLine(light, northBorderPoint), light);
-                this.castLight(this.castGetRayLine(light, southBorderPoint), light);
+                this._lightLine(this._rayTraceLine(light, northBorderPoint), light);
+                this._lightLine(this._rayTraceLine(light, southBorderPoint), light);
             }
 
             for (let y = 0; y < this.height; y++) {
                 let leftBorderPoint = {x: 0, y: y};
                 let rightBorderPoint = {x: this.width - 1, y: y};
 
-                this.castLight(this.castGetRayLine(light, leftBorderPoint), light);
-                this.castLight(this.castGetRayLine(light, rightBorderPoint), light);
+                this._lightLine(this._rayTraceLine(light, leftBorderPoint), light);
+                this._lightLine(this._rayTraceLine(light, rightBorderPoint), light);
             }
         }
     }
 
-    castGetRayLine(start, target) {
+    _rayTraceLine(start, target) {
         var ret = [];
         var n = 100;    // max draw distance
 
@@ -158,9 +163,6 @@ class LightMap {
 
         var x1 = target.x;
         var y1 = target.y;
-
-        var x = x0;
-        var y = y0;
 
         var dx = Math.abs(x1 - x0);
         var dy = Math.abs(y1 - y0);
@@ -175,24 +177,23 @@ class LightMap {
 
         while (n > 0) {
             // Check we are in map bounds
-            if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
+            if (x0 < 0 || y0 < 0 || x0 >= this.width || y0 >= this.height) {
                 break;
             }
 
-            ret.push({x: x, y: y});
+            ret.push({x: x0, y: y0});
 
             if (error > 0) {
-                x += sx;
+                x0 += sx;
                 error -= dy;
             } else {
-                y += sy;
+                y0 += sy;
                 error += dx;
             }
 
             // TODO: Maybe break if we hit a wall?
-
             if (
-                (x === 4 && y === 2)
+                (x0 === 4 && y0 === 2)
             ) {
                 break;
             }
@@ -203,18 +204,23 @@ class LightMap {
         return ret;
     }
 
-    castLight(line, light) {
+    /**
+     * @param line
+     * @param light
+     * @private
+     */
+    _lightLine(line, light) {
         for (var n = 0; n < line.length; n++) {
-            var dist = this.distance(line[0], line[n]);
+            var dist = this._distance(line[0], line[n]);
 
-            var intensity = light.intensity * this.attenuation(light.radius, 0.8, dist);
+            var intensity = light.intensity * this._attenuation(light.radius, 0.8, dist);
 
             var x = line[n].x;
             var y = line[n].y;
 
             let tile = this.map[x][y];
 
-            this.setLight(tile, light.color, intensity);
+            this.setTileLighting(tile, light.color, intensity);
 
             // Check if view blocked
             //if (!map.isViewBlocked(line[n])) {
@@ -223,71 +229,6 @@ class LightMap {
         }
     }
 
-
-    //----------------------------------------------------------------------------------------------
-    // Generate lighting based on simple fill
-    fillGenerate() {
-        this.clear();
-
-        for (let i = 0; i < this.lights.length; i++) {
-            let light = this.lights[i];
-            let tile = this.map[light.x][light.y];
-
-            tile.color = light.color;
-            tile.intensity = light.intensity;
-        }
-
-        this.fillPropagate();
-    }
-
-    fillPropagate() {
-        var maxLights = this.width * this.height;
-
-        var lighting = this.lights.slice().sort(function (a, b) {
-            return a.intensity - b.intensity;
-        });
-
-        for (let i = 0; i < maxLights; i++) {
-            var light = lighting[i];
-            if (!light) { break; }
-            let lightTile = this.map[light.x][light.y];
-            this.fillCheckNeighbours(lightTile, lighting);
-        }
-    }
-
-    fillCheckNeighbours(tile, lighting) {
-        var x = tile.x;
-        var y = tile.y;
-
-        // TODO:
-        tile.absorb = 0.2;
-
-        var intensity = tile.intensity - tile.absorb;
-        if (intensity < 0) {
-            return;
-        }
-
-        var color = tile.color;
-
-        if (x > 0) { this.fillSetIntensity(this.map[x-1][y], intensity, color, lighting); }
-        if (x < this.width - 1) { this.fillSetIntensity(this.map[x+1][y], intensity, color, lighting); }
-        if (y > 0) { this.fillSetIntensity(this.map[x][y-1], intensity, color, lighting); }
-        if (y < this.height - 1) { this.fillSetIntensity(this.map[x][y+1], intensity, color, lighting); }
-
-        // Diagonal-related tiles should gain lesser light
-        intensity = intensity * 0.9;
-
-        if (x > 0 && y < this.height - 1) { this.fillSetIntensity(this.map[x-1][y+1], intensity, color, lighting); }
-        if (x < this.width - 1 && y > 1) { this.fillSetIntensity(this.map[x+1][y-1], intensity, color, lighting); }
-        if (x > 0 && y > 0) { this.fillSetIntensity(this.map[x-1][y-1], intensity, color, lighting); }
-        if (x < this.width - 1 && y < this.height - 1) { this.fillSetIntensity(this.map[x+1][y+1], intensity, color, lighting); }
-    }
-
-    fillSetIntensity(tile, intensity, color, lighting) {
-        if (this.setLight(tile, color, intensity)) {
-            lighting.push(tile);
-        }
-    }
 }
 
 

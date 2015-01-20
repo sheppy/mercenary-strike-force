@@ -9,7 +9,7 @@ import DatGui from "../../engine/DatGui";
  * @extends Scene
  */
 class PrototypeMapScene extends Scene {
-    init() {
+    _init() {
     }
 
     initMap() {
@@ -66,8 +66,8 @@ class PrototypeMapScene extends Scene {
     }
 
     updateLighting() {
-        //this.lightMap.fillGenerate();
-        this.lightMap.castGenerate();
+        this.lightMap.clear();
+        this.lightMap.generate();
 
         // Apply the generated light data to the tile map
         for (let x = 0; x < this.mapWidth; x++) {
@@ -85,8 +85,8 @@ class PrototypeMapScene extends Scene {
         this.map.renderTilesToSprite();
     }
 
-    onActivate() {
-        super.onActivate();
+    _onActivate() {
+        super._onActivate();
 
         this.initMap();
         this.map.generate();
@@ -110,19 +110,17 @@ class PrototypeMapScene extends Scene {
 
         // TODO: May need to do per control rather than the folder :(
         light0Folder.onChange(function (value) {
-            // Fires on every change, drag, keypress, etc.
             console.log("The light0Folder.onChange value is " + value);
         });
 
         light0Folder.onFinishChange(function (value) {
-            // Fires when a controller loses focus.
             console.log("The light0Folder.onFinishChange value is " + value);
             this.renderMap();
         });
-
     }
 
-    onDeactivate() {
+    _onDeactivate() {
+        super._onDeactivate();
         DatGui.removeFolder("Ambient Lighting");
         DatGui.removeFolder("Light 0");
     }

@@ -36,6 +36,7 @@
     "globals": {
         "PIXI": false,
         "FPSMeter": false,
+        "createjs": false,
         "dat": false
     }
 }

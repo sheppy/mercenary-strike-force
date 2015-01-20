@@ -62,7 +62,9 @@ class TileMap extends PIXI.DisplayObjectContainer {
 
     // Render the tilemap to a render texture
     renderTilesToSprite() {
-        var baseTexture = new PIXI.RenderTexture(this.mapWidth * this.tileSize, this.mapHeight * this.tileSize);
+        var textureWidth = this.mapWidth * this.tileSize;
+        var textureHeight = this.mapHeight * this.tileSize;
+        var baseTexture = new PIXI.RenderTexture(textureWidth, textureHeight);
         baseTexture.render(this.baseTiles);
         this.baseTileSprite.setTexture(baseTexture);
     }
@@ -73,8 +75,9 @@ class TileMap extends PIXI.DisplayObjectContainer {
      * @param {number} x
      * @param {number} y
      * @returns {number}
+     * @private
      */
-    localToIndex(x, y) {
+    _localToIndex(x, y) {
         return x * this.mapHeight + y;
     }
 
@@ -94,7 +97,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
      * @param frameId
      */
     addTile(x, y, frameId) {
-        var index = this.localToIndex(x, y);
+        var index = this._localToIndex(x, y);
 
         var tile = new Tile(frameId);
         tile.tileX = x;
@@ -114,7 +117,7 @@ class TileMap extends PIXI.DisplayObjectContainer {
     }
 
     getTile(x, y) {
-        return this.baseTiles.getChildAt(this.localToIndex(x, y));
+        return this.baseTiles.getChildAt(this._localToIndex(x, y));
     }
 }
 

@@ -8,7 +8,7 @@ import SceneManager from "../../engine/SceneManager";
  * @extends Scene
  */
 class IntroScene extends Scene {
-    init() {
+    _init() {
         this.createFadeTween();
         this.createLogo();
     }
@@ -43,9 +43,14 @@ class IntroScene extends Scene {
         this.addChild(this.logo);
     }
 
-    onActivate() {
-        super.onActivate();
+    _onActivate() {
+        super._onActivate();
         this.fadeTween.setPaused(false);
+    }
+
+    _onDeactivate() {
+        super._onDeactivate();
+        this.fadeTween.setPaused(true);
     }
 
     update(dt) {

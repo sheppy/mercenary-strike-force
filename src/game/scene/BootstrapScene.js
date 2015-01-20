@@ -12,7 +12,7 @@ import PrototypeMapScene from "./PrototypeMapScene";
  * @extends Scene
  */
 class BootstrapScene extends Scene {
-    init() {
+    _init() {
         SceneManager.stage.setBackgroundColor("#000");
 
         // Add loading text...
@@ -20,9 +20,9 @@ class BootstrapScene extends Scene {
         this.addChild(text);
     }
 
-    onActivate() {
+    _onActivate() {
         console.clear();
-        super.onActivate();
+        super._onActivate();
 
         this.loadAssets();
     }
@@ -45,9 +45,6 @@ class BootstrapScene extends Scene {
         SceneManager.createScene("prototype-map", PrototypeMapScene);
         //SceneManager.goToScene("intro");
         SceneManager.goToScene("prototype-map");
-    }
-
-    update(dt) {
     }
 }
 

@@ -13,13 +13,14 @@ class Scene extends PIXI.DisplayObjectContainer {
         this.active = false;
         this.visible = false;
 
-        this.init();
+        this._init();
     }
 
     /**
      * @abstract
+     * @protected
      */
-    init() {}
+    _init() {}
 
     /**
      * @abstract
@@ -29,19 +30,25 @@ class Scene extends PIXI.DisplayObjectContainer {
 
     activate(data) {
         this.active = true;
-        this.onActivate(data);
+        this._onActivate(data);
     }
 
-    onActivate() {
+    /**
+     * @protected
+     */
+    _onActivate() {
         this.visible = true;
     }
 
     deactivate(data) {
         this.active = false;
-        this.onDeactivate(data);
+        this._onDeactivate(data);
     }
 
-    onDeactivate() {
+    /**
+     * @protected
+     */
+    _onDeactivate() {
         this.visible = false;
     }
 

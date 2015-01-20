@@ -34,8 +34,9 @@ class Game {
 
     /**
      * @param {number} dt
+     * @private
      */
-    update(dt) {
+    _update(dt) {
         this.ups.tick();
 
         // Get current scene & update
@@ -46,7 +47,10 @@ class Game {
         }
     }
 
-    render() {
+    /**
+     * @private
+     */
+    _render() {
         this.fps.tick();
 
         if (SceneManager.stage) {
@@ -62,14 +66,14 @@ class Game {
         while((currentTime = Date.now()) > this.nextUpdateTick) {
             dt = currentTime - this.lastTime;
             this.lastTime = currentTime;
-            this.update(dt);
+            this._update(dt);
             this.nextUpdateTick += this.skipTicks;
             loops++;
         }
 
         // If we actually updated anything
         if (loops) {
-            this.render();
+            this._render();
         }
     }
 }

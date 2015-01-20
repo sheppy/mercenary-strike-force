@@ -8,7 +8,7 @@ import UI from "../../engine/UI";
  * @extends Scene
  */
 class MainMenuScene extends Scene {
-    init() {
+    _init() {
         var button = new PIXI.Graphics();
         button.beginFill(0xFF0000);
         button.lineStyle(5, 0x00FFFF);
@@ -33,9 +33,6 @@ class MainMenuScene extends Scene {
         });
 
         this.addChild(button);
-    }
-
-    update(dt) {
     }
 }
 
