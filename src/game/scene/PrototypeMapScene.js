@@ -32,7 +32,7 @@ class PrototypeMapScene extends Scene {
             var x = Math.floor(position.x / 16);
             var y = Math.floor(position.y / 16);
 
-            var light = this.lightMap.lights[0];
+            var light = scene.lightMap.lights[0];
             if (x !== light.x || y !== light.y) {
                 light.x = x;
                 light.y = y;
@@ -63,11 +63,6 @@ class PrototypeMapScene extends Scene {
             color: 0x0000FF,
             intensity: 1
         });
-
-        // Attempt at flickering light
-        this.lightFlickerTween = createjs.Tween.get(this.lightMap.lights[1], {loop: true})
-            .to({intensity: 0.8}, 1000, createjs.Ease.sineInOut)
-            .wait(250);
     }
 
     updateLighting() {
@@ -75,9 +70,9 @@ class PrototypeMapScene extends Scene {
         this.lightMap.generate();
 
         // Apply the generated light data to the tile map
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                let tile = this.getTile(x, y);
+        for (let x = 0; x < this.map.mapWidth; x++) {
+            for (let y = 0; y < this.map.mapHeight; y++) {
+                let tile = this.map.getTile(x, y);
                 let light = this.lightMap.map[x][y];
 
                 tile.setLightData(light);
@@ -102,37 +97,22 @@ class PrototypeMapScene extends Scene {
         var ambientLightFolder = DatGui.addFolder("Ambient Lighting");
         ambientLightFolder.open();
 
-        ambientLightFolder.add(this.lightMap.ambient, "intensity");
-        ambientLightFolder.add(this.lightMap.ambient, "color");
+        ambientLightFolder.add(this.lightMap.ambient, "intensity", 0, 1).onFinishChange(this.renderMap.bind(this));
+        ambientLightFolder.addColor(this.lightMap.ambient, "color");
 
 
         var light0Folder = DatGui.addFolder("Light 0");
         light0Folder.open();
 
-        light0Folder.add(this.lightMap.lights[0], "radius");
-        light0Folder.add(this.lightMap.lights[0], "intensity", 0, 1);
-        light0Folder.add(this.lightMap.lights[0], "color");
-
-        // TODO: May need to do per control rather than the folder :(
-        light0Folder.onChange(function (value) {
-            console.log("The light0Folder.onChange value is " + value);
-        });
-
-        light0Folder.onFinishChange(function (value) {
-            console.log("The light0Folder.onFinishChange value is " + value);
-            this.renderMap();
-        });
+        light0Folder.add(this.lightMap.lights[0], "radius").onFinishChange(this.renderMap.bind(this));
+        light0Folder.add(this.lightMap.lights[0], "intensity", 0, 1).onFinishChange(this.renderMap.bind(this));
+        light0Folder.addColor(this.lightMap.lights[0], "color");
     }
 
     _onDeactivate() {
         super._onDeactivate();
         DatGui.removeFolder("Ambient Lighting");
         DatGui.removeFolder("Light 0");
-    }
-
-    update(dt) {
-        this.lightFlickerTween.tick(dt);
-        this.renderMap();
     }
 }
 

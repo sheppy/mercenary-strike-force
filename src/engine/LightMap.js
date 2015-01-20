@@ -110,6 +110,8 @@ class LightMap {
         //    tile.intensity = 1;
         //}
 
+        //tile.color = Color.addColorsByIntensity(tile.color, color, tile.intensity, intensity);
+        //tile.color = Color.mixColorsByIntensity(tile.color, color, tile.intensity, intensity);
         if (intensity > tile.intensity) {
             //tile.color = Color.addColorsByIntensity(tile.color, color, tile.intensity, intensity);
             //tile.color = Color.mixColorsByIntensity(tile.color, color, tile.intensity, intensity);
