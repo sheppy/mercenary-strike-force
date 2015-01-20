@@ -1,4 +1,3 @@
-import LightMap from "./LightMap";
 import Color from "./Color";
 
 
@@ -59,54 +58,13 @@ class TileMap extends PIXI.DisplayObjectContainer {
          */
         this.baseTileSprite = PIXI.Sprite.fromImage("null.png");
         this.addChild(this.baseTileSprite);
-
-        // Create the light map
-        this.lightMap = new LightMap(this.mapWidth, this.mapHeight, {
-            color: 0xFFFFFF,
-            //color: 0x000033,
-            intensity: 0.15
-        });
-
-        this.interactive = true;
-
-        this.mousemove = this.touchmove = function (data) {
-            var position = data.getLocalPosition(this.parent);
-
-            var x = Math.floor(position.x / 16);
-            var y = Math.floor(position.y / 16);
-
-            var light = this.lightMap.lights[0];
-            if (x !== light.x || y !== light.y) {
-                light.x = x;
-                light.y = y;
-                this.updateLighting();
-                this.renderTilesToSprite();
-            }
-
-            //console.log(x, y);
-        };
     }
 
-    // The use of this should increase performance on large maps
+    // Render the tilemap to a render texture
     renderTilesToSprite() {
-        // render the tilemap to a render texture
         var baseTexture = new PIXI.RenderTexture(this.mapWidth * this.tileSize, this.mapHeight * this.tileSize);
         baseTexture.render(this.baseTiles);
         this.baseTileSprite.setTexture(baseTexture);
-    }
-
-    updateLighting() {
-        //this.lightMap.fillGenerate();
-        this.lightMap.castGenerate();
-
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                let tile = this.getTile(x, y);
-                let light = this.lightMap.map[x][y];
-
-                tile.setLightData(light);
-            }
-        }
     }
 
     /**
@@ -126,27 +84,6 @@ class TileMap extends PIXI.DisplayObjectContainer {
                 this.addTile(x, y, 2);
             }
         }
-
-        // Add a light
-        this.lightMap.addLight(5, 2, {
-            color: 0xFF0000,
-            intensity: 1
-        });
-
-        this.lightMap.addLight(2, 7, {
-            color: 0x00FF00,
-            intensity: 1
-        });
-
-        this.lightMap.addLight(7, 7, {
-            color: 0x0000FF,
-            intensity: 1
-        });
-
-        // Should this be here?
-        this.updateLighting();
-
-        this.renderTilesToSprite();
     }
 
     /**
