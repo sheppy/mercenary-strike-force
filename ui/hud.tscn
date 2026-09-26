@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dua5gbrh76sev"]
+
+[ext_resource type="Script" uid="uid://ceh4wv4tr44bn" path="res://ui/hud.gd" id="1_rbyyf"]
+
+[node name="HUD" type="CanvasLayer" unique_id=978030008]
+script = ExtResource("1_rbyyf")
+
+[node name="Label" type="Label" parent="." unique_id=331882756]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "TU: 60"
+
+[node name="Button" type="Button" parent="." unique_id=2034332088]
+offset_left = 1073.0
+offset_top = 616.0
+offset_right = 1151.0
+offset_bottom = 647.0
+text = "End Turn"
