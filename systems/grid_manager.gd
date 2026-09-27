@@ -9,7 +9,7 @@ func build_graph(grid_map: GridMap) -> void:
 	var mesh_lib = grid_map.mesh_library
 
 	# Define our movement costs based on keywords in the tile names
-	var terrain_costs = { "mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0 }
+	var terrain_costs = {"mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0}
 
 	for cell in cells:
 		var item_id = grid_map.get_cell_item(cell)
@@ -121,14 +121,12 @@ func calculate_path_by_cells(start_cell: Vector3i, target_cell: Vector3i) -> Pac
 
 
 # Helper function to turn a 3D grid coordinate (X, Y, Z) into a guaranteed positive integer ID
+# Robust 64-bit coordinate packing (supports +-1048575 on X/Z, +-2047 on Y)
 func _get_id(cell: Vector3i) -> int:
-	# Add an offset of 1000 to ensure we only generate positive IDs,
-	# since GridMap coordinates can be negative!
-	var offset_x = cell.x + 1000
-	var offset_y = cell.y + 1000
-	var offset_z = cell.z + 1000
-
-	return offset_x * 1000000 + offset_y * 1000 + offset_z
+	var px = (cell.x + 0x80000) & 0x1FFFFF
+	var py = (cell.y + 0x800) & 0xFFF
+	var pz = (cell.z + 0x80000) & 0x1FFFFF
+	return px | (py << 21) | (pz << 33)
 
 
 func calculate_turn_cost(current_transform: Transform3D, target_world_pos: Vector3) -> int:
@@ -140,7 +138,7 @@ func calculate_turn_cost(current_transform: Transform3D, target_world_pos: Vecto
 		return 0
 
 	dir = dir.normalized()
-	var current_facing = -current_transform.basis.z
+	var current_facing = - current_transform.basis.z
 	current_facing.y = 0
 
 	if current_facing.length_squared() > 0.01:
@@ -164,7 +162,7 @@ func calculate_path_cost(
 	var total_cost = 0
 
 	# Track the unit's simulated facing direction as it walks the path
-	var current_facing = -initial_transform.basis.z
+	var current_facing = - initial_transform.basis.z
 	current_facing.y = 0
 	if current_facing.length_squared() > 0.01:
 		current_facing = current_facing.normalized()
