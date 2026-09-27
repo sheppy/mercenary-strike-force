@@ -65,11 +65,3 @@ func _ready() -> void:
 
 	else:
 		push_error("No GridMap found in the loaded level!")
-
-	# Build the graph on startup via our manager
-	grid_manager.build_graph(grid_map)
-
-	# Snap unit to its starting grid coordinate cleanly
-	unit.initialize_position(grid_map, Vector3i(0, 0, 0))
-
-	hud.bind_to_unit(unit)
