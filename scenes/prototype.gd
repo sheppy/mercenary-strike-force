@@ -21,7 +21,7 @@ func _ready() -> void:
 		input_controller.grid_map = active_grid
 		grid_manager.build_graph(active_grid)
 		# unit.initialize_position(active_grid, Vector3i(0, 0, 0))
-		var all_units = get_tree().root.find_children("*", "TacticalUnit", true, false)
+		var all_units = get_tree().get_nodes_in_group("units")
 		print("Server registered ", all_units.size(), " units.")
 
 		var player_units: Array[TacticalUnit] = []
