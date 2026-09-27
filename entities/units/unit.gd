@@ -37,6 +37,13 @@ func initialize_position(grid_map: GridMap, start_cell: Vector3i) -> void:
 	global_position = cell_center_global + OFFSET
 
 
+func spend_ap(amount: int) -> bool:
+	if current_ap >= amount:
+		current_ap -= amount
+		return true
+	return false
+
+
 func reset_ap() -> void:
 	current_ap = max_ap
 	print("Unit AP Reset to: ", current_ap)

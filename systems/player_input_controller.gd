@@ -84,7 +84,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 			if turn_cost > 0 and active_unit.current_ap >= turn_cost:
 				current_state = InputState.ANIMATING
-				active_unit.current_ap -= turn_cost
+				active_unit.spend_ap(turn_cost)
 				print("Turned for ", turn_cost, " AP. Remaining: ", active_unit.current_ap)
 				await active_unit.rotate_towards(target_world)
 				current_state = InputState.IDLE
