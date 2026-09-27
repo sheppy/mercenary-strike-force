@@ -22,15 +22,6 @@ func _process(delta: float) -> void:
 	if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT):
 		input_dir.x += 1 # Right on screen
 
-	# if Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP):
-	# 	input_dir.z -= 1
-	# if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN):
-	# 	input_dir.z += 1
-	# if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT):
-	# 	input_dir.x -= 1
-	# if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT):
-	# 	input_dir.x += 1
-
 	if input_dir != Vector3.ZERO:
 		input_dir = input_dir.normalized()
 
