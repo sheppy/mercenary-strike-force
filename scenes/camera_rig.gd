@@ -13,13 +13,13 @@ func _process(delta: float) -> void:
 	var input_dir = Vector3.ZERO
 
 	# Zero-setup WASD & Arrow Key checks
-	if Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP):
+	if Input.is_action_pressed("camera_pan_up"):
 		input_dir.y += 1 # Up on screen
-	if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN):
+	if Input.is_action_pressed("camera_pan_down"):
 		input_dir.y -= 1 # Down on screen
-	if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT):
+	if Input.is_action_pressed("camera_pan_left"):
 		input_dir.x -= 1 # Left on screen
-	if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT):
+	if Input.is_action_pressed("camera_pan_right"):
 		input_dir.x += 1 # Right on screen
 
 	if input_dir != Vector3.ZERO:

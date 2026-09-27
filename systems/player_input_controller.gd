@@ -53,11 +53,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	# Spacebar to test ending turn (using physical keycode for reliability)
-	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_SPACE:
+	if event.is_action_pressed("ui_end_turn"):
 		TurnManager.end_player_turn()
 
 	# Press TAB to cycle units
-	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_TAB:
+	if event.is_action_pressed("ui_next_unit"):
 		if team_units.size() > 1:
 			var current_idx = team_units.find(active_unit)
 			var next_idx = (current_idx + 1) % team_units.size()
