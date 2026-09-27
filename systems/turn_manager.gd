@@ -33,5 +33,6 @@ func start_player_turn() -> void:
 	# Automatically find any TacticalUnit in the scene and reset its AP
 	var units = get_tree().get_nodes_in_group("units")
 	for unit in units:
+		# TODO: Limit to current team otherwise everyone gets AP refreshed
 		if unit.has_method("reset_ap"):
 			unit.reset_ap()
