@@ -54,22 +54,29 @@ func move_along_path(
 			print("Movement interrupted!")
 			break
 
-		# Keep the raw path point for perfect grid math (Y = 0)
+		var raw_source = path[i - 1]
 		var raw_target = path[i]
 		var grid_next = grid_map.local_to_map(raw_target)
 		# Add the offset ONLY for the physical tween (Y = 0.5)
 		var target_pos = raw_target + OFFSET
 
+		var current_facing = -global_transform.basis.z
+		current_facing.y = 0
+		if current_facing.length_squared() > 0.01:
+			current_facing = current_facing.normalized()
+		else:
+			current_facing = Vector3(0, 0, -1)
+
 		var total_step_cost = grid_manager.calculate_step_cost(
-			global_transform.origin,
-			target_pos,
-			global_transform.basis.z,
+			raw_source,
+			raw_target,
+			current_facing,
 			grid_map,
 		)
 
 		# 2. Stop if we can't afford the next step
 		if current_ap < total_step_cost:
-			print("Out of AP! Stopping early.")
+			print("Out of AP! Stopping early. Need: ", total_step_cost, " Have: ", current_ap)
 			break
 
 		# 3. Deduct AP and execute the step

@@ -251,6 +251,10 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 		add_child(dot)
 		path_dots.append(dot)
 
+		var move_dir = (next_pos - current_pos)
+		move_dir.y = 0
+		if move_dir.length_squared() > 0.01:
+			current_facing = move_dir.normalized()
 		current_pos = next_pos
 
 # func _update_path_visuals(target_cell: Vector3i, cost: int) -> void:

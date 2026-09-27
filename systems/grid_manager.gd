@@ -1,9 +1,20 @@
 class_name GridManager extends Node
 
 # Define our movement costs based on keywords in the tile names
-const TERRAIN_COSTS = { "mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0 }
+const TERRAIN_COSTS = { "mud": 2.0, "water": 3.0, "road": 0.5, "floor-square": 1.0 }
 
 var astar = AStar3D.new()
+
+
+func _get_terrain_cost(grid_map: GridMap, cell: Vector3i) -> float:
+	var item_id = grid_map.get_cell_item(cell)
+	if item_id < 0:
+		return -1.0
+	var item_name = grid_map.mesh_library.get_item_name(item_id).to_lower()
+	for key in TERRAIN_COSTS.keys():
+		if key in item_name:
+			return float(TERRAIN_COSTS[key])
+	return -1.0
 
 
 func build_graph(grid_map: GridMap) -> void:
@@ -12,15 +23,8 @@ func build_graph(grid_map: GridMap) -> void:
 	var mesh_lib = grid_map.mesh_library
 
 	for cell in cells:
-		var item_id = grid_map.get_cell_item(cell)
-		var item_name = mesh_lib.get_item_name(item_id).to_lower()
-
 		# Determine the base cost of this tile
-		var point_weight = -1.0
-		for key in TERRAIN_COSTS.keys():
-			if key in item_name:
-				point_weight = TERRAIN_COSTS[key]
-				break
+		var point_weight = _get_terrain_cost(grid_map, cell)
 
 		# If the tile didn't match any terrain keywords, skip it (it's a wall or gap)
 		if point_weight < 0:
@@ -174,6 +178,10 @@ func calculate_path_cost(
 	for i in range(1, path.size()):
 		var next_pos = path[i]
 		total_cost += calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
+		var move_dir = (next_pos - current_pos)
+		move_dir.y = 0
+		if move_dir.length_squared() > 0.01:
+			current_facing = move_dir.normalized()
 		current_pos = next_pos
 
 	return total_cost
@@ -192,18 +200,19 @@ func calculate_step_cost(
 		move_dir = move_dir.normalized()
 		var angle = current_facing.angle_to(move_dir)
 		total_cost += int(round(angle / (PI / 4.0)))
-		current_facing = move_dir # Update facing for the next step
 
 	# 2. Add Step Cost (4 for straight, 6 for diagonal)
-	var grid_current = grid_map.local_to_map(from_pos)
-	var grid_next = grid_map.local_to_map(to_pos)
+	# Query cells with Y flattened so unit heights (+0.5/1.0 Y) never push into cell y=1
+	var grid_current = grid_map.local_to_map(Vector3(from_pos.x, 0.0, from_pos.z))
+	var grid_next = grid_map.local_to_map(Vector3(to_pos.x, 0.0, to_pos.z))
 	var dx = abs(grid_next.x - grid_current.x)
 	var dz = abs(grid_next.z - grid_current.z)
 
-	# TODO: Use TERRAIN_COSTS
-	if dx == 1 and dz == 1:
-		total_cost += 6
-	else:
-		total_cost += 4
+	var terrain_cost = _get_terrain_cost(grid_map, grid_next)
+	if terrain_cost <= 0.0:
+		terrain_cost = 1.0
+
+	var base_step = 6.0 if (dx == 1 and dz == 1) else 4.0
+	total_cost += int(round(base_step * terrain_cost))
 
 	return total_cost
