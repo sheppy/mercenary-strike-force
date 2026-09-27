@@ -84,9 +84,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			)
 
 			if turn_cost > 0 and active_unit.current_ap >= turn_cost:
+				current_state = InputState.ANIMATING
 				active_unit.current_ap -= turn_cost
 				print("Turned for ", turn_cost, " AP. Remaining: ", active_unit.current_ap)
-				active_unit.rotate_towards(target_world)
+				await active_unit.rotate_towards(target_world)
+				current_state = InputState.IDLE
 				_clear_preview()
 				return
 
@@ -215,7 +217,7 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 	var current_pos = path_to_draw[0]
 
 	# Track facing for accurate turn simulation
-	var current_facing = -active_unit.global_transform.basis.z
+	var current_facing = - active_unit.global_transform.basis.z
 	current_facing.y = 0
 	if current_facing.length_squared() > 0.01:
 		current_facing = current_facing.normalized()
