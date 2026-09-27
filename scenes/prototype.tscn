@@ -23,6 +23,10 @@ size = 10.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Unit" parent="." unique_id=616342420 instance=ExtResource("6_whm2p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Unit2" parent="." unique_id=1218588750 instance=ExtResource("6_whm2p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
 
 [node name="GridManager" type="Node" parent="." unique_id=1098670251]
 script = ExtResource("5_e38b3")
@@ -41,6 +45,6 @@ cursor = NodePath("../Cursor")
 script = ExtResource("9_xw5o4")
 metadata/_custom_type_script = "uid://cpsrrbj66pait"
 
-[node name="Enemy" parent="." unique_id=1218588750 instance=ExtResource("6_whm2p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, 0, 2.135)
+[node name="Enemy" parent="." unique_id=949370928 instance=ExtResource("6_whm2p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, 1, 2.135)
 team_id = 1

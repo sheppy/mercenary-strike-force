@@ -1,10 +1,13 @@
 extends Node
 
+signal active_unit_changed(new_unit: TacticalUnit)
+
 @export var camera: Camera3D
 @export var grid_manager: GridManager
 @export var active_unit: TacticalUnit
 @export var cursor: Node3D
 
+var team_units: Array[TacticalUnit] = [] # Array to hold all selectable units
 var grid_map: GridMap
 
 enum InputState {
@@ -53,6 +56,20 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Spacebar to test ending turn (using physical keycode for reliability)
 	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_SPACE:
 		TurnManager.end_player_turn()
+
+	# Press TAB to cycle units
+	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_TAB:
+		if team_units.size() > 1:
+			var current_idx = team_units.find(active_unit)
+			var next_idx = (current_idx + 1) % team_units.size()
+
+			active_unit = team_units[next_idx]
+			_clear_preview()
+
+			# Tell the rest of the game (like the HUD) that we swapped characters
+			active_unit_changed.emit(active_unit)
+			print("Switched to unit: ", active_unit.name)
+		return
 
 	# Right Click to Turn
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:

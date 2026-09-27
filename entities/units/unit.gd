@@ -26,7 +26,15 @@ func _ready() -> void:
 
 func initialize_position(grid_map: GridMap, start_cell: Vector3i) -> void:
 	current_grid_pos = start_cell
-	global_position = grid_map.map_to_local(start_cell) + OFFSET
+
+	# 1. Get the exact mathematical center of the cell in the grid's local space
+	var cell_center_local = grid_map.map_to_local(start_cell)
+
+	# 2. Convert it to world space so the unit aligns perfectly even if the GridMap was moved
+	var cell_center_global = grid_map.to_global(cell_center_local)
+
+	# 3. Snap the unit to the dead center, offsetting Y so the capsule sits on the floor
+	global_position = cell_center_global + OFFSET
 
 
 func reset_ap() -> void:

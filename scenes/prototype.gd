@@ -24,22 +24,37 @@ func _ready() -> void:
 		input_controller.grid_map = active_grid
 		grid_manager.build_graph(active_grid)
 		# unit.initialize_position(active_grid, Vector3i(0, 0, 0))
+		var all_units = get_tree().root.find_children("*", "TacticalUnit", true, false)
+		print("Server registered ", all_units.size(), " units.")
 
-		# Find ALL units in the level and register them
-		var all_units = find_children("*", "TacticalUnit")
+		var player_units: Array[TacticalUnit] = []
+
 		for u in all_units:
-			print("Initialising unit", u)
 			# Initialize them on the grid (assuming they are placed visually in the editor)
 			var start_cell = active_grid.local_to_map(u.global_position)
+			start_cell.y = 0
 			u.initialize_position(active_grid, start_cell)
 
 			# Register them with the Vision Manager
 			vision_manager.register_unit(u)
 
-			# For now, just assign the first Team 0 unit as the active player unit
-			if u.team_id == 0 and input_controller.active_unit == null:
-				input_controller.active_unit = u
-				hud.bind_to_unit(u)
+			# If they belong to the player, add them to our roster
+			if u.team_id == 0:
+				player_units.append(u)
+
+		# Hand the roster to the Input Controller
+		input_controller.team_units = player_units
+
+		if player_units.size() > 0:
+			# Select the first unit by default
+			input_controller.active_unit = player_units[0]
+			hud.bind_to_unit(player_units[0])
+
+		# Re-bind the HUD dynamically whenever the player presses TAB
+		input_controller.active_unit_changed.connect(
+			func(new_unit):
+				hud.bind_to_unit(new_unit),
+		)
 
 		vision_manager.initialize_all_vision()
 
