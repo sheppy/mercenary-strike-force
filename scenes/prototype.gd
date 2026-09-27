@@ -6,6 +6,7 @@ extends Node3D
 @onready var input_controller = $PlayerInputController
 @onready var unit: TacticalUnit = $Unit
 @onready var hud = $HUD
+@onready var vision_manager: VisionManager = $VisionManager
 
 @onready var camera: Camera3D = $Camera3D
 @export var camera_speed: float = 15.0
@@ -22,7 +23,26 @@ func _ready() -> void:
 		# Inject it into the systems
 		input_controller.grid_map = active_grid
 		grid_manager.build_graph(active_grid)
-		unit.initialize_position(active_grid, Vector3i(0, 0, 0))
+		# unit.initialize_position(active_grid, Vector3i(0, 0, 0))
+
+		# Find ALL units in the level and register them
+		var all_units = find_children("*", "TacticalUnit")
+		for u in all_units:
+			print("Initialising unit", u)
+			# Initialize them on the grid (assuming they are placed visually in the editor)
+			var start_cell = active_grid.local_to_map(u.global_position)
+			u.initialize_position(active_grid, start_cell)
+
+			# Register them with the Vision Manager
+			vision_manager.register_unit(u)
+
+			# For now, just assign the first Team 0 unit as the active player unit
+			if u.team_id == 0 and input_controller.active_unit == null:
+				input_controller.active_unit = u
+				hud.bind_to_unit(u)
+
+		vision_manager.initialize_all_vision()
+
 	else:
 		push_error("No GridMap found in the loaded level!")
 

@@ -7,11 +7,7 @@
 [ext_resource type="Script" uid="uid://r7uaqstlrnm" path="res://systems/player_input_controller.gd" id="6_jmxw3"]
 [ext_resource type="PackedScene" uid="uid://dig54jrjydvwr" path="res://entities/units/unit.tscn" id="6_whm2p"]
 [ext_resource type="PackedScene" uid="uid://dua5gbrh76sev" path="res://ui/hud.tscn" id="7_whm2p"]
-[ext_resource type="PackedScene" uid="uid://cksmekdfwyr2s" path="res://assets/kenney_prototype-kit/Models/GLB format/animal-bison.glb" id="8_tx354"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i2lhn"]
-radius = 0.2680664
-height = 0.76379395
+[ext_resource type="Script" uid="uid://cpsrrbj66pait" path="res://systems/vision_manager.gd" id="9_xw5o4"]
 
 [node name="Prototype" type="Node3D" unique_id=391508451]
 script = ExtResource("1_20kwy")
@@ -41,11 +37,10 @@ cursor = NodePath("../Cursor")
 
 [node name="HUD" parent="." unique_id=978030008 instance=ExtResource("7_whm2p")]
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1670939246 groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.074504, 0.5, 2.351409)
+[node name="VisionManager" type="Node" parent="." unique_id=1868794727]
+script = ExtResource("9_xw5o4")
+metadata/_custom_type_script = "uid://cpsrrbj66pait"
 
-[node name="animal-bison2" parent="CharacterBody3D" unique_id=1733357404 instance=ExtResource("8_tx354")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=701791847]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34710693, 0)
-shape = SubResource("CapsuleShape3D_i2lhn")
+[node name="Enemy" parent="." unique_id=1218588750 instance=ExtResource("6_whm2p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, 0, 2.135)
+team_id = 1
