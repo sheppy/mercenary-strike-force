@@ -4,6 +4,23 @@ class_name GridManager extends Node
 const TERRAIN_COSTS = { "mud": 2.0, "water": 3.0, "road": 0.5, "floor-square": 1.0 }
 
 var astar = AStar3D.new()
+var occupied_cells: Dictionary[Vector3i, TacticalUnit] = { }
+
+
+func register_unit(unit: TacticalUnit) -> void:
+	set_cell_occupied(unit.current_grid_pos, unit)
+	unit.step_taken.connect(_on_unit_step_taken)
+	# Automatically clean up if the unit dies or is removed from the scene
+	unit.tree_exiting.connect(
+		func():
+			clear_cell_occupied(unit.current_grid_pos),
+	)
+
+
+func _on_unit_step_taken(unit: TacticalUnit, from_cell: Vector3i, to_cell: Vector3i) -> void:
+	if from_cell != to_cell:
+		clear_cell_occupied(from_cell)
+		set_cell_occupied(to_cell, unit)
 
 
 func _get_terrain_cost(grid_map: GridMap, cell: Vector3i) -> float:
@@ -116,12 +133,22 @@ func calculate_path_by_cells(start_cell: Vector3i, target_cell: Vector3i) -> Pac
 	var start_id = _get_id(start_cell)
 	var target_id = _get_id(target_cell)
 
-	if astar.has_point(start_id) and astar.has_point(target_id):
-		# Optional: slice(1) removes the starting tile you are already standing on,
-		# so the path array only contains the destination steps!
-		return astar.get_point_path(start_id, target_id)
+	if not astar.has_point(start_id) or not astar.has_point(target_id):
+		return PackedVector3Array()
 
-	return PackedVector3Array()
+	# Optional: slice(1) removes the starting tile you are already standing on,
+	# so the path array only contains the destination steps!
+
+	# Temporarily enable the starting tile so the unit can path OUT of its own tile
+	var was_disabled = astar.is_point_disabled(start_id)
+	if was_disabled:
+		astar.set_point_disabled(start_id, false)
+	var path = astar.get_point_path(start_id, target_id)
+	# Restore disabled state so other units still cannot enter it
+	if was_disabled:
+		astar.set_point_disabled(start_id, true)
+	return path
+
 
 
 # Helper function to turn a 3D grid coordinate (X, Y, Z) into a guaranteed positive integer ID
@@ -216,3 +243,17 @@ func calculate_step_cost(
 	total_cost += int(round(base_step * terrain_cost))
 
 	return total_cost
+
+
+func set_cell_occupied(cell: Vector3i, unit: TacticalUnit) -> void:
+	occupied_cells[cell] = unit
+	var point_id = _get_id(cell)
+	if astar.has_point(point_id):
+		astar.set_point_disabled(point_id, true)
+
+
+func clear_cell_occupied(cell: Vector3i) -> void:
+	occupied_cells.erase(cell)
+	var point_id = _get_id(cell)
+	if astar.has_point(point_id):
+		astar.set_point_disabled(point_id, false)

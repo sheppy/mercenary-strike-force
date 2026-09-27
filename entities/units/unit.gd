@@ -1,6 +1,6 @@
 class_name TacticalUnit extends CharacterBody3D
 
-signal step_taken(unit: TacticalUnit, current_grid_pos: Vector3i)
+signal step_taken(unit: TacticalUnit, from_cell: Vector3i, to_cell: Vector3i)
 signal ap_changed(new_ap)
 
 const OFFSET: Vector3 = Vector3(0, 0.5, 0)
@@ -105,11 +105,13 @@ func move_along_path(
 			move_tween.tween_property(self, "global_position", target_pos, 0.2)
 			await move_tween.finished
 
+
 		# Safely update our grid tracking using the pure grid cell coordinate
+		var from_cell = current_grid_pos
 		current_grid_pos = grid_next
 
 		# Broadcast that we took a step so the game can check for interrupts (FOV/Overwatch)
-		step_taken.emit(self, current_grid_pos)
+		step_taken.emit(self, from_cell, current_grid_pos)
 
 
 func rotate_towards(target_world_pos: Vector3) -> void:
@@ -131,4 +133,4 @@ func rotate_towards(target_world_pos: Vector3) -> void:
 	await tween.finished
 
 	# Tell the server to recalculate sightlines.
-	step_taken.emit(self, current_grid_pos)
+	step_taken.emit(self, current_grid_pos, current_grid_pos)

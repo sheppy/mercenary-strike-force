@@ -26,12 +26,13 @@ func _ready() -> void:
 
 		var player_units: Array[TacticalUnit] = []
 
-		for u in all_units:
+		for u: TacticalUnit in all_units:
 			# Initialize them on the grid (assuming they are placed visually in the editor)
 			var start_cell = active_grid.local_to_map(u.global_position)
 			start_cell.y = 0
 			u.initialize_position(active_grid, start_cell)
 
+			grid_manager.register_unit(u)
 			# Register them with the Vision Manager
 			vision_manager.register_unit(u)
 

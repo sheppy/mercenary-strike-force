@@ -29,7 +29,11 @@ func initialize_all_vision() -> void:
 		_update_team_vision(team)
 
 
-func _on_unit_step_taken(_moving_unit: TacticalUnit, _grid_pos: Vector3i) -> void:
+func _on_unit_step_taken(
+	_moving_unit: TacticalUnit,
+	_from_cell: Vector3i,
+	_to_cell: Vector3i,
+) -> void:
 	# When ANY unit moves, sightlines change for EVERYONE.
 	# We must recalculate all teams so enemies can spot the player (Overwatch logic).
 	for team in team_visibility.keys():
