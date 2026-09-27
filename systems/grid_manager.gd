@@ -173,28 +173,37 @@ func calculate_path_cost(
 
 	for i in range(1, path.size()):
 		var next_pos = path[i]
-
-		# 1. Add Turn Cost
-		var move_dir = (next_pos - current_pos)
-		move_dir.y = 0
-		if move_dir.length_squared() > 0.01:
-			move_dir = move_dir.normalized()
-			var angle = current_facing.angle_to(move_dir)
-			total_cost += int(round(angle / (PI / 4.0)))
-			current_facing = move_dir # Update facing for the next step
-
-		# 2. Add Step Cost (4 for straight, 6 for diagonal)
-		var grid_current = grid_map.local_to_map(current_pos)
-		var grid_next = grid_map.local_to_map(next_pos)
-		var dx = abs(grid_next.x - grid_current.x)
-		var dz = abs(grid_next.z - grid_current.z)
-
-		# TODO: Use TERRAIN_COSTS
-		if dx == 1 and dz == 1:
-			total_cost += 6
-		else:
-			total_cost += 4
-
+		total_cost += calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
 		current_pos = next_pos
+
+	return total_cost
+
+
+func calculate_step_cost(
+	from_pos: Vector3,
+	to_pos: Vector3,
+	current_facing: Vector3,
+	grid_map: GridMap,
+) -> int:
+	var total_cost = 0
+	var move_dir = (to_pos - from_pos)
+	move_dir.y = 0
+	if move_dir.length_squared() > 0.01:
+		move_dir = move_dir.normalized()
+		var angle = current_facing.angle_to(move_dir)
+		total_cost += int(round(angle / (PI / 4.0)))
+		current_facing = move_dir # Update facing for the next step
+
+	# 2. Add Step Cost (4 for straight, 6 for diagonal)
+	var grid_current = grid_map.local_to_map(from_pos)
+	var grid_next = grid_map.local_to_map(to_pos)
+	var dx = abs(grid_next.x - grid_current.x)
+	var dz = abs(grid_next.z - grid_current.z)
+
+	# TODO: Use TERRAIN_COSTS
+	if dx == 1 and dz == 1:
+		total_cost += 6
+	else:
+		total_cost += 4
 
 	return total_cost

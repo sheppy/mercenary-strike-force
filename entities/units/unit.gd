@@ -56,21 +56,16 @@ func move_along_path(
 
 		# Keep the raw path point for perfect grid math (Y = 0)
 		var raw_target = path[i]
-		#Add the offset ONLY for the physical tween (Y = 0.5)
+		var grid_next = grid_map.local_to_map(raw_target)
+		# Add the offset ONLY for the physical tween (Y = 0.5)
 		var target_pos = raw_target + OFFSET
 
-		# Calculate the cost of JUST this next step (Turn Cost + Step Cost)
-		var turn_cost = grid_manager.calculate_turn_cost(global_transform, target_pos)
-
-		# Use our tracked current_grid_pos and the raw_target for flawless tile math
-		var grid_current = current_grid_pos
-		var grid_next = grid_map.local_to_map(raw_target)
-		var is_diagonal = (
-			abs(grid_next.x - grid_current.x) == 1 and abs(grid_next.z - grid_current.z) == 1
+		var total_step_cost = grid_manager.calculate_step_cost(
+			global_transform.origin,
+			target_pos,
+			global_transform.basis.z,
+			grid_map,
 		)
-		var step_cost = 6 if is_diagonal else 4
-
-		var total_step_cost = turn_cost + step_cost
 
 		# 2. Stop if we can't afford the next step
 		if current_ap < total_step_cost:

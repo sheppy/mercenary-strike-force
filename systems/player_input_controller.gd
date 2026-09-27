@@ -226,25 +226,9 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 	for i in range(1, path_to_draw.size()):
 		var next_pos = path_to_draw[i]
 
-		# Simulate Turn Cost
-		var move_dir = (next_pos - current_pos)
-		move_dir.y = 0
-		var turn_cost = 0
-		if move_dir.length_squared() > 0.01:
-			move_dir = move_dir.normalized()
-			turn_cost = int(round(current_facing.angle_to(move_dir) / (PI / 4.0)))
-			current_facing = move_dir
+		var cost = grid_manager.calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
 
-		# Simulate Step Cost
-		var grid_current = grid_map.local_to_map(current_pos)
-		var grid_next = grid_map.local_to_map(next_pos)
-		var step_cost = (
-			6
-			if (abs(grid_next.x - grid_current.x) == 1 and abs(grid_next.z - grid_current.z) == 1)
-			else 4
-		)
-
-		simulated_ap -= (turn_cost + step_cost)
+		simulated_ap -= cost
 
 		# Render the dot
 		var dot = CSGSphere3D.new()
