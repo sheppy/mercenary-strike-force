@@ -7,10 +7,7 @@ extends Node3D
 @onready var unit: TacticalUnit = $Unit
 @onready var hud = $HUD
 @onready var vision_manager: VisionManager = $VisionManager
-
-@onready var camera: Camera3D = $Camera3D
-@export var camera_speed: float = 15.0
-@export var edge_margin: int = 20 # pixels from edge to trigger scroll
+@onready var camera_rig: CameraRig = $CameraRig
 
 
 func _ready() -> void:
@@ -49,11 +46,19 @@ func _ready() -> void:
 			# Select the first unit by default
 			input_controller.active_unit = player_units[0]
 			hud.bind_to_unit(player_units[0])
+			# Snap camera instantly on game load
+			camera_rig.global_position = Vector3(
+				player_units[0].global_position.x,
+				0,
+				player_units[0].global_position.z,
+			)
 
 		# Re-bind the HUD dynamically whenever the player presses TAB
 		input_controller.active_unit_changed.connect(
 			func(new_unit):
-				hud.bind_to_unit(new_unit),
+				hud.bind_to_unit(new_unit)
+				# Pan camera smoothly on TAB
+				camera_rig.pan_to_position(new_unit.global_position),
 		)
 
 		vision_manager.initialize_all_vision()
@@ -68,43 +73,3 @@ func _ready() -> void:
 	unit.initialize_position(grid_map, Vector3i(0, 0, 0))
 
 	hud.bind_to_unit(unit)
-
-
-func _process(delta: float) -> void:
-	var input_dir = Vector3.ZERO
-
-	# 1. Keyboard Controls (WASD or Arrow Keys)
-	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
-		input_dir.x += 1
-	if Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A):
-		input_dir.x -= 1
-	if Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_S):
-		input_dir.z += 1
-	if Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W):
-		input_dir.z -= 1
-
-	# 2. Mouse Edge Panning
-	var mouse_pos = get_viewport().get_mouse_position()
-	var window_size = get_viewport().get_visible_rect().size
-
-	# 	if mouse_pos.x < edge_margin:
-	# 		input_dir.x -= 1
-	# 	elif mouse_pos.x > window_size.x - edge_margin:
-	# 		input_dir.x += 1
-	#
-	# 	if mouse_pos.y < edge_margin:
-	# 		input_dir.z -= 1
-	# 	elif mouse_pos.y > window_size.y - edge_margin:
-	# 		input_dir.z += 1
-
-	# 3. Apply movement relative to the camera's rotation
-	# (so 'Up' always moves "north" on the isometric grid rather than global screen up)
-	if input_dir != Vector3.ZERO:
-		input_dir = input_dir.normalized()
-
-		# Project movement onto the isometric plane
-		var motion = Vector3(input_dir.x, 0, input_dir.z)
-		# Rotate motion by 45 degrees to match your isometric camera yaw
-		motion = motion.rotated(Vector3.UP, deg_to_rad(45))
-
-		camera.global_position += motion * camera_speed * delta
