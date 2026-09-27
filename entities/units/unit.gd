@@ -3,11 +3,12 @@ class_name TacticalUnit extends CharacterBody3D
 signal step_taken(unit: TacticalUnit, current_grid_pos: Vector3i)
 signal ap_changed(new_ap)
 
+const OFFSET: Vector3 = Vector3(0, 0.5, 0)
+
 # 0 = Player 1, 1 = Player 2 / AI, etc.
 @export var team_id: int = 0
 @export var max_ap: int = 60
 
-const OFFSET: Vector3 = Vector3(0, 0.5, 0)
 
 # The setter automatically emits the signal whenever current_ap goes up or down
 var current_ap: int = max_ap:
@@ -15,8 +16,7 @@ var current_ap: int = max_ap:
 		current_ap = value
 		ap_changed.emit(current_ap)
 
-# The unit's actual source of truth for location
-var current_grid_pos: Vector3i
+var current_grid_pos: Vector3i # The unit's actual source of truth for location
 var interrupt_movement: bool = false # Other systems can set this to true to halt the unit
 
 

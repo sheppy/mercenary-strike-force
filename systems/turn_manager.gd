@@ -1,14 +1,15 @@
 extends Node
 
+# Signals act like a PubSub event bus
+signal turn_changed(new_state: TurnState)
+
 enum TurnState {
 	PLAYER_TURN,
 	ENEMY_TURN,
 	RESOLUTION,
 }
-var current_state: TurnState = TurnState.PLAYER_TURN
 
-# Signals act like a PubSub event bus
-signal turn_changed(new_state: TurnState)
+var current_state: TurnState = TurnState.PLAYER_TURN
 
 
 func end_player_turn() -> void:

@@ -2,6 +2,12 @@ extends Node
 
 signal active_unit_changed(new_unit: TacticalUnit)
 
+enum InputState {
+	IDLE,
+	PREVIEW,
+	ANIMATING,
+}
+
 @export var camera: Camera3D
 @export var grid_manager: GridManager
 @export var active_unit: TacticalUnit
@@ -9,14 +15,7 @@ signal active_unit_changed(new_unit: TacticalUnit)
 
 var team_units: Array[TacticalUnit] = [] # Array to hold all selectable units
 var grid_map: GridMap
-
-enum InputState {
-	IDLE,
-	PREVIEW,
-	ANIMATING,
-}
 var current_state: InputState = InputState.IDLE
-
 var preview_cell: Vector3i = Vector3i.MAX
 var cached_path: PackedVector3Array
 var path_dots: Array = []
@@ -217,7 +216,7 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 	var current_pos = path_to_draw[0]
 
 	# Track facing for accurate turn simulation
-	var current_facing = - active_unit.global_transform.basis.z
+	var current_facing = -active_unit.global_transform.basis.z
 	current_facing.y = 0
 	if current_facing.length_squared() > 0.01:
 		current_facing = current_facing.normalized()

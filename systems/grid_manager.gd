@@ -1,9 +1,9 @@
 class_name GridManager extends Node
 
-var astar = AStar3D.new()
-
 # Define our movement costs based on keywords in the tile names
-const TERRAIN_COSTS = {"mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0}
+const TERRAIN_COSTS = { "mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0 }
+
+var astar = AStar3D.new()
 
 
 func build_graph(grid_map: GridMap) -> void:
@@ -138,7 +138,7 @@ func calculate_turn_cost(current_transform: Transform3D, target_world_pos: Vecto
 		return 0
 
 	dir = dir.normalized()
-	var current_facing = - current_transform.basis.z
+	var current_facing = -current_transform.basis.z
 	current_facing.y = 0
 
 	if current_facing.length_squared() > 0.01:
@@ -162,7 +162,7 @@ func calculate_path_cost(
 	var total_cost = 0
 
 	# Track the unit's simulated facing direction as it walks the path
-	var current_facing = - initial_transform.basis.z
+	var current_facing = -initial_transform.basis.z
 	current_facing.y = 0
 	if current_facing.length_squared() > 0.01:
 		current_facing = current_facing.normalized()

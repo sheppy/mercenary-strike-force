@@ -2,10 +2,10 @@ class_name CameraRig extends Node3D
 
 @export var pan_speed: float = 15.0
 
+var active_tween: Tween
+
 # Grab the child camera so we can read its rotation
 @onready var camera: Camera3D = $Camera3D
-
-var active_tween: Tween
 
 
 func _process(delta: float) -> void:
