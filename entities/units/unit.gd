@@ -1,9 +1,11 @@
-class_name TacticalUnit extends Node3D
+class_name TacticalUnit extends CharacterBody3D
 
 signal step_taken(current_grid_pos)
 signal ap_changed(new_ap)
 
 @export var max_ap: int = 60
+@export var vision_range: float = 15.0
+@export var vision_angle: float = 90.0 # 90-degree cone of vision
 
 const OFFSET: Vector3 = Vector3(0, 0.5, 0)
 
@@ -87,7 +89,6 @@ func move_along_path(
 				rot_tween.tween_property(self, "rotation:y", target_rot, 0.1)
 				await rot_tween.finished
 
-
 		# Movement tween
 		if global_position.distance_to(target_pos) > 0.01:
 			var move_tween = get_tree().create_tween()
@@ -99,6 +100,9 @@ func move_along_path(
 
 		# Broadcast that we took a step so the game can check for interrupts (FOV/Overwatch)
 		step_taken.emit(current_grid_pos)
+
+		# Check for enemies after taking a step!
+		update_vision()
 
 
 func rotate_towards(target_world_pos: Vector3) -> void:
@@ -116,3 +120,63 @@ func rotate_towards(target_world_pos: Vector3) -> void:
 
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "rotation:y", target_rot, 0.15)
+
+	await tween.finished
+	update_vision() # Scan the new direction
+
+
+func update_vision() -> void:
+	# 1. Grab all enemies on the map (we will set this group up in a minute)
+	var enemies = get_tree().get_nodes_in_group("enemy")
+
+	for enemy in enemies:
+		if check_line_of_sight(enemy):
+			print("Spotted enemy: ", enemy.name, "!")
+			# Setting this flag to true causes the unit's walk loop to abort!
+			interrupt_movement = true
+
+
+func check_line_of_sight(target_node: Node3D) -> bool:
+	# 1. Distance Check
+	var dist = global_position.distance_to(target_node.global_position)
+	if dist > vision_range:
+		return false
+
+	# 2. Angle Check (FOV Cone)
+	var dir_to_target = (target_node.global_position - global_position).normalized()
+	dir_to_target.y = 0
+
+	# Godot's local forward is the -Z axis
+	var forward = -global_transform.basis.z
+	forward.y = 0
+	if forward.length_squared() > 0.01:
+		forward = forward.normalized()
+	else:
+		forward = Vector3(0, 0, -1)
+
+	# angle_to returns radians, so we convert it to degrees to check against our 90-deg setting
+	var angle = rad_to_deg(forward.angle_to(dir_to_target))
+	if angle > vision_angle / 2.0:
+		return false # They are outside our peripheral vision
+
+	# 3. Raycast Check (Obstruction)
+	# We cast from eye level (Y=1.0) to eye level, so short obstacles don't block vision
+	var eye_offset = Vector3(0, 1.0, 0)
+	var space_state = get_world_3d().direct_space_state
+
+	var query = PhysicsRayQueryParameters3D.create(
+		global_position + eye_offset,
+		target_node.global_position + eye_offset,
+	)
+
+	# Exclude ourselves and the target so we only hit environment walls
+	query.exclude = [self.get_rid(), target_node.get_rid()]
+
+	var result = space_state.intersect_ray(query)
+
+	# If the ray hit something (like the GridMap walls), vision is blocked
+	if result:
+		return false
+
+	# If all 3 checks passed, we can see them!
+	return true

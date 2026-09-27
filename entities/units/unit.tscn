@@ -3,8 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://bmibqed8hcbba" path="res://assets/kenney_prototype-kit/Models/GLB format/figurine-large.glb" id="1_3y8hq"]
 [ext_resource type="Script" uid="uid://jh0q2wno6amm" path="res://entities/units/unit.gd" id="1_grigl"]
 
-[node name="Node3D" type="Node3D" unique_id=260654446]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i2lhn"]
+radius = 0.27197266
+height = 1.0202637
+
+[node name="Node3D" type="CharacterBody3D" unique_id=1218588750]
 script = ExtResource("1_grigl")
 
 [node name="figurine-large2" parent="." unique_id=1660364405 instance=ExtResource("1_3y8hq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1035358078]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0037841797, 0)
+shape = SubResource("CapsuleShape3D_i2lhn")
