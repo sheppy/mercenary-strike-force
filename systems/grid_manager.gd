@@ -2,14 +2,14 @@ class_name GridManager extends Node
 
 var astar = AStar3D.new()
 
+# Define our movement costs based on keywords in the tile names
+const TERRAIN_COSTS = {"mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0}
+
 
 func build_graph(grid_map: GridMap) -> void:
 	astar.clear()
 	var cells = grid_map.get_used_cells()
 	var mesh_lib = grid_map.mesh_library
-
-	# Define our movement costs based on keywords in the tile names
-	var terrain_costs = {"mud": 2.0, "water": 3.0, "road": 0.5, "floor": 1.0}
 
 	for cell in cells:
 		var item_id = grid_map.get_cell_item(cell)
@@ -17,9 +17,9 @@ func build_graph(grid_map: GridMap) -> void:
 
 		# Determine the base cost of this tile
 		var point_weight = -1.0
-		for key in terrain_costs.keys():
+		for key in TERRAIN_COSTS.keys():
 			if key in item_name:
-				point_weight = terrain_costs[key]
+				point_weight = TERRAIN_COSTS[key]
 				break
 
 		# If the tile didn't match any terrain keywords, skip it (it's a wall or gap)
@@ -189,6 +189,7 @@ func calculate_path_cost(
 		var dx = abs(grid_next.x - grid_current.x)
 		var dz = abs(grid_next.z - grid_current.z)
 
+		# TODO: Use TERRAIN_COSTS
 		if dx == 1 and dz == 1:
 			total_cost += 6
 		else:
