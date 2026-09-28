@@ -51,6 +51,7 @@ func reset_ap() -> void:
 
 func move_along_path(
 	grid_map: GridMap,
+	# TODO: Remove grid_manager reference
 	grid_manager: GridManager,
 	path: PackedVector3Array,
 ) -> void:

@@ -129,6 +129,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					current_state = InputState.ANIMATING
 					_clear_preview(false)
 
+					# TODO: Dont send grid_manager to unit
 					# 2. Hand it to the unit. The unit will walk as far as it can afford, then stop.
 					await active_unit.move_along_path(grid_map, grid_manager, final_path)
 
