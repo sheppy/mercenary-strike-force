@@ -49,49 +49,20 @@ func reset_ap() -> void:
 	print("Unit AP Reset to: ", current_ap)
 
 
-func move_along_path(
-	grid_map: GridMap,
-	# TODO: Remove grid_manager reference
-	grid_manager: GridManager,
-	path: PackedVector3Array,
-) -> void:
+func move_along_steps(steps: Array[MovementStep]) -> void:
 	interrupt_movement = false
 
-	for i in range(1, path.size()):
+	for step: MovementStep in steps:
 		if interrupt_movement:
 			print("Movement interrupted!")
 			break
 
-		var raw_source := path[i - 1]
-		var raw_target := path[i]
-		var grid_next := grid_map.local_to_map(raw_target)
-		# Add the offset ONLY for the physical tween (Y = 0.5)
-		var target_pos := raw_target + OFFSET
-
-		var current_facing := -global_transform.basis.z
-		current_facing.y = 0
-		if current_facing.length_squared() > 0.01:
-			current_facing = current_facing.normalized()
-		else:
-			current_facing = Vector3(0, 0, -1)
-
-		var total_step_cost := grid_manager.calculate_step_cost(
-			raw_source,
-			raw_target,
-			current_facing,
-			grid_map,
-		)
-
-		# 2. Stop if we can't afford the next step
-		if current_ap < total_step_cost:
-			print("Out of AP! Stopping early. Need: ", total_step_cost, " Have: ", current_ap)
+		if not spend_ap(step.ap_cost):
+			print("Out of AP! Stopping early. Need: ", step.ap_cost, " Have: ", current_ap)
 			break
 
-		# 3. Deduct AP and execute the step
-		current_ap -= total_step_cost
-
-		# Rotation tween
-		var target_look_pos := Vector3(target_pos.x, global_position.y, target_pos.z)
+		# 1. Rotate
+		var target_look_pos := Vector3(step.world_pos.x, global_position.y, step.world_pos.z)
 		if global_position.distance_to(target_look_pos) > 0.01:
 			var original_rot := rotation.y
 			look_at(target_look_pos, Vector3.UP)
@@ -100,25 +71,20 @@ func move_along_path(
 
 			var diff := wrapf(target_rot - original_rot, -PI, PI)
 			target_rot = original_rot + diff
-
-			# Tween the rotation and wait for it to finish
 			if abs(diff) > 0.01:
 				var rot_tween := get_tree().create_tween()
 				rot_tween.tween_property(self, "rotation:y", target_rot, 0.1)
 				await rot_tween.finished
 
-		# Movement tween
-		if global_position.distance_to(target_pos) > 0.01:
+		# 2. Move
+		if global_position.distance_to(step.world_pos) > 0.01:
 			var move_tween := get_tree().create_tween()
-			move_tween.tween_property(self, "global_position", target_pos, 0.2)
+			move_tween.tween_property(self, "global_position", step.world_pos, 0.2)
 			await move_tween.finished
 
-
-		# Safely update our grid tracking using the pure grid cell coordinate
+		# 3. Update grid tracking & notify systems
 		var from_cell := current_grid_pos
-		current_grid_pos = grid_next
-
-		# Broadcast that we took a step so the game can check for interrupts (FOV/Overwatch)
+		current_grid_pos = step.grid_cell
 		step_taken.emit(self, from_cell, current_grid_pos)
 
 

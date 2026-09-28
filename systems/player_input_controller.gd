@@ -18,6 +18,7 @@ var grid_map: GridMap
 var current_state: InputState = InputState.IDLE
 var preview_cell: Vector3i = Vector3i.MAX
 var cached_path: PackedVector3Array
+var cached_steps: Array[MovementStep] = []
 var path_dots: Array = []
 
 
@@ -102,85 +103,42 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		match current_state:
 			InputState.IDLE:
-				var path := grid_manager.calculate_path_by_cells(
-					active_unit.current_grid_pos,
-					target_cell,
-				)
-				# var cost = path.size()
-				var cost := grid_manager.calculate_path_cost(
-					grid_map,
-					path,
-					active_unit.global_transform,
-				)
-
-				# Check if it's a valid move before previewing
-				# if cost > 0 and active_unit.current_ap >= cost:
-				cached_path = path
-				preview_cell = target_cell
-				current_state = InputState.PREVIEW
-				_update_path_visuals(target_cell)
-				print("Preview: Costs ", cost, " AP")
+				_preview_path_to(target_cell)
 
 			InputState.PREVIEW:
 				if target_cell == preview_cell:
-					# 1. Grab a copy of the path
-					var final_path := cached_path.duplicate()
+					var final_steps: Array[MovementStep] = cached_steps.duplicate()
 
 					current_state = InputState.ANIMATING
 					_clear_preview(false)
 
-					# TODO: Dont send grid_manager to unit
-					# 2. Hand it to the unit. The unit will walk as far as it can afford, then stop.
-					await active_unit.move_along_path(grid_map, grid_manager, final_path)
+					await active_unit.move_along_steps(final_steps)
 
 					current_state = InputState.IDLE
-				# 				if target_cell == preview_cell:
-				# 					var cost = grid_manager.calculate_path_cost(
-				# 						grid_map,
-				# 						cached_path,
-				# 						active_unit.global_transform,
-				# 					)
-				#
-				# 					# Second click on same tile: execute cached path
-				# 					# var path = cached_path.slice(0, active_unit.current_ap + 1)
-				# 					# active_unit.current_ap -= path.size() - 1
-				# 					active_unit.current_ap -= cost
-				#
-				# 					# 1. Grab a copy of the path so clearing the preview doesn't delete it!
-				# 					var final_path = cached_path.duplicate()
-				#
-				# 					# 2. Lock input to ANIMATING
-				# 					current_state = InputState.ANIMATING
-				# 					_clear_preview(false) # Clear dots, but don't reset state to IDLE yet
-				#
-				# 					# 3. Wait for the unit to finish its entire walk cycle
-				# 					print("Moving. AP remaining: ", active_unit.current_ap)
-				# 					await active_unit.move_along_path(grid_map, final_path)
-				#
-				# 					# 4. Walk finished, unlock input
-				# 					current_state = InputState.IDLE
-
 				else:
-					# Clicked elsewhere: calculate new preview and cache it
-					var path := grid_manager.calculate_path_by_cells(
-						active_unit.current_grid_pos,
-						target_cell,
-					)
-					# var cost = path.size()
-					var cost := grid_manager.calculate_path_cost(
-						grid_map,
-						path,
-						active_unit.global_transform,
-					)
+					_preview_path_to(target_cell)
 
-					# if cost > 0 and active_unit.current_ap >= cost:
-					cached_path = path
-					preview_cell = target_cell
-					current_state = InputState.PREVIEW
-					_update_path_visuals(target_cell)
-					print("Preview: Costs ", cost, " AP")
-					# else:
-					# _clear_preview()
+
+func _preview_path_to(target_cell: Vector3i) -> void:
+	var path := grid_manager.calculate_path_by_cells(active_unit.current_grid_pos, target_cell)
+	var current_facing := -active_unit.global_transform.basis.z
+	current_facing.y = 0
+	if current_facing.length_squared() > 0.01:
+		current_facing = current_facing.normalized()
+	else:
+		current_facing = Vector3(0, 0, -1)
+
+	var steps := grid_manager.get_path_steps(path, current_facing, grid_map)
+	var cost := 0
+	for step in steps:
+		cost += step.ap_cost
+
+	cached_path = path
+	cached_steps = steps
+	preview_cell = target_cell
+	current_state = InputState.PREVIEW
+	_update_path_visuals()
+	print("Preview: Costs ", cost, " AP")
 
 
 func _get_mouse_grid_cell() -> Vector3i:
@@ -200,106 +158,48 @@ func _get_mouse_grid_cell() -> Vector3i:
 	return Vector3i.MAX
 
 
-func _update_path_visuals(target_cell: Vector3i) -> void:
+func _update_path_visuals() -> void:
 	for dot in path_dots:
 		dot.queue_free()
 	path_dots.clear()
 
-	var path_to_draw := (
-		cached_path
-		if current_state == InputState.PREVIEW
-		else grid_manager.calculate_path_by_cells(active_unit.current_grid_pos, target_cell)
-	)
-	if path_to_draw.size() <= 1:
+	if cached_steps.is_empty():
 		return
 
 	var simulated_ap := active_unit.current_ap
-	var current_pos := path_to_draw[0]
 
-	# Track facing for accurate turn simulation
-	var current_facing := -active_unit.global_transform.basis.z
-	current_facing.y = 0
-	if current_facing.length_squared() > 0.01:
-		current_facing = current_facing.normalized()
-	else:
-		current_facing = Vector3(0, 0, -1)
-
-	for i in range(1, path_to_draw.size()):
-		var next_pos := path_to_draw[i]
-
-		var cost := grid_manager.calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
-
-		simulated_ap -= cost
+	for step: MovementStep in cached_steps:
+		simulated_ap -= step.ap_cost
 
 		# Render the dot
-		var dot = CSGSphere3D.new()
+		var dot := CSGSphere3D.new()
 		dot.radius = 0.15
-		var mat = StandardMaterial3D.new()
+		var mat := StandardMaterial3D.new()
 
 		if simulated_ap >= 0:
 			mat.albedo_color = (
 				Color(0, 1, 0)
 				if current_state == InputState.PREVIEW
 				else Color(0, 0.5, 1)
-			) # Green / Blue
+			)
 		else:
 			mat.albedo_color = Color(1, 0, 0) # Red for unreachable
 
 		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		dot.material = mat
-		dot.position = next_pos + Vector3(0, 0.2, 0)
+		# step.world_pos is target_world (Y=1.0). Dot hovers right above floor at Y=0.7:
+		dot.position = step.world_pos - TacticalUnit.OFFSET + Vector3(0, 0.2, 0)
 
 		add_child(dot)
 		path_dots.append(dot)
-
-		var move_dir := (next_pos - current_pos)
-		move_dir.y = 0
-		if move_dir.length_squared() > 0.01:
-			current_facing = move_dir.normalized()
-		current_pos = next_pos
-
-# func _update_path_visuals(target_cell: Vector3i, cost: int) -> void:
-# 	for dot in path_dots:
-# 		dot.queue_free()
-# 	path_dots.clear()
-#
-# 	# If in PREVIEW, use cached path. If IDLE, calculate on the fly for hover visuals.
-# 	var path_to_draw = (
-# 		cached_path
-# 		# if current_state == InputState.PREVIEW
-# 		# else grid_manager.calculate_path_by_cells(active_unit.current_grid_pos, target_cell)
-# 	)
-#
-# 	for point in path_to_draw:
-# 		var dot = CSGSphere3D.new()
-# 		dot.radius = 0.15
-# 		var mat = StandardMaterial3D.new()
-#
-# 		# Make the dots a different color (e.g., green) when locked in PREVIEW mode
-# 		mat.albedo_color = (
-# 			Color(0, 1, 0)
-# 			if current_state == InputState.PREVIEW
-# 			else Color(0, 0.5, 1)
-# 		)
-#
-# 		if path_dots.size() > cost:
-# 			mat.albedo_color = Color(1, 0, 0)
-#
-# 		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-# 		dot.material = mat
-# 		dot.position = point + Vector3(0, 0.1, 0)
-#
-# 		# Add to the controller node instead of main
-# 		add_child(dot)
-# 		path_dots.append(dot)
 
 
 func _clear_preview(reset_to_idle: bool = true) -> void:
 	if reset_to_idle:
 		current_state = InputState.IDLE
 	preview_cell = Vector3i.MAX
-	# Assign a brand new array instead of calling .clear() on the existing memory reference
 	cached_path = PackedVector3Array()
+	cached_steps.clear()
 	for dot in path_dots:
 		dot.queue_free()
 	path_dots.clear()

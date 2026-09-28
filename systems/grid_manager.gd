@@ -34,6 +34,35 @@ func _get_terrain_cost(grid_map: GridMap, cell: Vector3i) -> float:
 	return -1.0
 
 
+func get_path_steps(
+	path: PackedVector3Array,
+	initial_facing: Vector3,
+	grid_map: GridMap,
+) -> Array[MovementStep]:
+	var steps: Array[MovementStep] = []
+	if path.size() <= 1:
+		return steps
+
+	var current_pos := path[0]
+	var current_facing := initial_facing
+
+	for i in range(1, path.size()):
+		var next_pos := path[i]
+		var cost := calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
+		var grid_cell := grid_map.local_to_map(Vector3(next_pos.x, 0.0, next_pos.z))
+		var target_world := next_pos + TacticalUnit.OFFSET
+
+		steps.append(MovementStep.new(target_world, grid_cell, cost))
+
+		var move_dir := (next_pos - current_pos)
+		move_dir.y = 0
+		if move_dir.length_squared() > 0.01:
+			current_facing = move_dir.normalized()
+		current_pos = next_pos
+
+	return steps
+
+
 func build_graph(grid_map: GridMap) -> void:
 	astar.clear()
 	var cells := grid_map.get_used_cells()
@@ -149,7 +178,6 @@ func calculate_path_by_cells(start_cell: Vector3i, target_cell: Vector3i) -> Pac
 	return path
 
 
-
 # Helper function to turn a 3D grid coordinate (X, Y, Z) into a guaranteed positive integer ID
 # Robust 64-bit coordinate packing (supports +-1048575 on X/Z, +-2047 on Y)
 func _get_id(cell: Vector3i) -> int:
@@ -186,12 +214,6 @@ func calculate_path_cost(
 	path: PackedVector3Array,
 	initial_transform: Transform3D,
 ) -> int:
-	if path.size() <= 1:
-		return 0
-
-	var total_cost := 0
-
-	# Track the unit's simulated facing direction as it walks the path
 	var current_facing := -initial_transform.basis.z
 	current_facing.y = 0
 	if current_facing.length_squared() > 0.01:
@@ -199,16 +221,10 @@ func calculate_path_cost(
 	else:
 		current_facing = Vector3(0, 0, -1)
 
-	var current_pos := path[0]
-
-	for i in range(1, path.size()):
-		var next_pos := path[i]
-		total_cost += calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
-		var move_dir := (next_pos - current_pos)
-		move_dir.y = 0
-		if move_dir.length_squared() > 0.01:
-			current_facing = move_dir.normalized()
-		current_pos = next_pos
+	var steps := get_path_steps(path, current_facing, grid_map)
+	var total_cost := 0
+	for step in steps:
+		total_cost += step.ap_cost
 
 	return total_cost
 
