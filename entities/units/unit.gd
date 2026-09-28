@@ -28,10 +28,10 @@ func initialize_position(grid_map: GridMap, start_cell: Vector3i) -> void:
 	current_grid_pos = start_cell
 
 	# 1. Get the exact mathematical center of the cell in the grid's local space
-	var cell_center_local = grid_map.map_to_local(start_cell)
+	var cell_center_local := grid_map.map_to_local(start_cell)
 
 	# 2. Convert it to world space so the unit aligns perfectly even if the GridMap was moved
-	var cell_center_global = grid_map.to_global(cell_center_local)
+	var cell_center_global := grid_map.to_global(cell_center_local)
 
 	# 3. Snap the unit to the dead center, offsetting Y so the capsule sits on the floor
 	global_position = cell_center_global + OFFSET
@@ -61,20 +61,20 @@ func move_along_path(
 			print("Movement interrupted!")
 			break
 
-		var raw_source = path[i - 1]
-		var raw_target = path[i]
-		var grid_next = grid_map.local_to_map(raw_target)
+		var raw_source := path[i - 1]
+		var raw_target := path[i]
+		var grid_next := grid_map.local_to_map(raw_target)
 		# Add the offset ONLY for the physical tween (Y = 0.5)
-		var target_pos = raw_target + OFFSET
+		var target_pos := raw_target + OFFSET
 
-		var current_facing = -global_transform.basis.z
+		var current_facing := -global_transform.basis.z
 		current_facing.y = 0
 		if current_facing.length_squared() > 0.01:
 			current_facing = current_facing.normalized()
 		else:
 			current_facing = Vector3(0, 0, -1)
 
-		var total_step_cost = grid_manager.calculate_step_cost(
+		var total_step_cost := grid_manager.calculate_step_cost(
 			raw_source,
 			raw_target,
 			current_facing,
@@ -90,31 +90,31 @@ func move_along_path(
 		current_ap -= total_step_cost
 
 		# Rotation tween
-		var target_look_pos = Vector3(target_pos.x, global_position.y, target_pos.z)
+		var target_look_pos := Vector3(target_pos.x, global_position.y, target_pos.z)
 		if global_position.distance_to(target_look_pos) > 0.01:
-			var original_rot = rotation.y
+			var original_rot := rotation.y
 			look_at(target_look_pos, Vector3.UP)
-			var target_rot = rotation.y
+			var target_rot := rotation.y
 			rotation.y = original_rot
 
-			var diff = wrapf(target_rot - original_rot, -PI, PI)
+			var diff := wrapf(target_rot - original_rot, -PI, PI)
 			target_rot = original_rot + diff
 
 			# Tween the rotation and wait for it to finish
 			if abs(diff) > 0.01:
-				var rot_tween = get_tree().create_tween()
+				var rot_tween := get_tree().create_tween()
 				rot_tween.tween_property(self, "rotation:y", target_rot, 0.1)
 				await rot_tween.finished
 
 		# Movement tween
 		if global_position.distance_to(target_pos) > 0.01:
-			var move_tween = get_tree().create_tween()
+			var move_tween := get_tree().create_tween()
 			move_tween.tween_property(self, "global_position", target_pos, 0.2)
 			await move_tween.finished
 
 
 		# Safely update our grid tracking using the pure grid cell coordinate
-		var from_cell = current_grid_pos
+		var from_cell := current_grid_pos
 		current_grid_pos = grid_next
 
 		# Broadcast that we took a step so the game can check for interrupts (FOV/Overwatch)
@@ -122,19 +122,19 @@ func move_along_path(
 
 
 func rotate_towards(target_world_pos: Vector3) -> void:
-	var original_rot = rotation.y
+	var original_rot := rotation.y
 	# Look at the target, keeping the Y axis flat
 	look_at(Vector3(target_world_pos.x, global_position.y, target_world_pos.z), Vector3.UP)
-	var target_rot = rotation.y
+	var target_rot := rotation.y
 
 	# Reset instantly so the tween can do the actual animation
 	rotation.y = original_rot
 
 	# Ensure it turns the shortest distance (no spinning 270 degrees the wrong way)
-	var diff = wrapf(target_rot - original_rot, -PI, PI)
+	var diff := wrapf(target_rot - original_rot, -PI, PI)
 	target_rot = original_rot + diff
 
-	var tween = get_tree().create_tween()
+	var tween := get_tree().create_tween()
 	tween.tween_property(self, "rotation:y", target_rot, 0.15)
 
 	await tween.finished

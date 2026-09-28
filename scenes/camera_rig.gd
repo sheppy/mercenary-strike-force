@@ -10,7 +10,7 @@ var active_tween: Tween
 
 func _process(delta: float) -> void:
 	# Use a Vector2 for input to keep screen X/Y logic clean
-	var input_dir = Vector3.ZERO
+	var input_dir := Vector3.ZERO
 
 	# Zero-setup WASD & Arrow Key checks
 	if Input.is_action_pressed("camera_pan_up"):
@@ -30,15 +30,15 @@ func _process(delta: float) -> void:
 			active_tween.kill()
 
 		# 1. Get the camera's true forward direction and flatten it
-		var forward = -camera.global_transform.basis.z
+		var forward := -camera.global_transform.basis.z
 		forward.y = 0
 		forward = forward.normalized()
 
 		# 2. Use the Cross Product to mathematically generate a perfect 90-degree Right vector
-		var right = forward.cross(Vector3.UP).normalized()
+		var right := forward.cross(Vector3.UP).normalized()
 
 		# 3. Combine them
-		var move_vec = (right * input_dir.x) + (forward * input_dir.y)
+		var move_vec := (right * input_dir.x) + (forward * input_dir.y)
 
 		# 4. Move the rig globally along the floor
 		global_position += move_vec.normalized() * pan_speed * delta
@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 
 func pan_to_position(target_world_pos: Vector3) -> void:
 	# We only want the camera pivot to slide along the flat X/Z grid, ignoring the unit's height
-	var flat_target = Vector3(target_world_pos.x, 0, target_world_pos.z)
+	var flat_target := Vector3(target_world_pos.x, 0, target_world_pos.z)
 
 	# Kill any existing tween before starting a new one
 	if active_tween and active_tween.is_running():

@@ -15,20 +15,20 @@ func _ready() -> void:
 	var grid_maps = level.find_children("*", "GridMap")
 
 	if grid_maps.size() > 0:
-		var active_grid = grid_maps[0] as GridMap
+		var active_grid := grid_maps[0] as GridMap
 
 		# Inject it into the systems
 		input_controller.grid_map = active_grid
 		grid_manager.build_graph(active_grid)
 		# unit.initialize_position(active_grid, Vector3i(0, 0, 0))
-		var all_units = get_tree().get_nodes_in_group("units")
+		var all_units := get_tree().get_nodes_in_group("units")
 		print("Server registered ", all_units.size(), " units.")
 
 		var player_units: Array[TacticalUnit] = []
 
 		for u: TacticalUnit in all_units:
 			# Initialize them on the grid (assuming they are placed visually in the editor)
-			var start_cell = active_grid.local_to_map(u.global_position)
+			var start_cell := active_grid.local_to_map(u.global_position)
 			start_cell.y = 0
 			u.initialize_position(active_grid, start_cell)
 
@@ -59,7 +59,7 @@ func _ready() -> void:
 			func(new_unit):
 				hud.bind_to_unit(new_unit)
 				# Pan camera smoothly on TAB
-				camera_rig.pan_to_position(new_unit.global_position),
+				camera_rig.pan_to_position(new_unit.global_position)
 		)
 
 		vision_manager.initialize_all_vision()

@@ -31,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 			_clear_preview()
 		return
 
-	var mouse_cell = _get_mouse_grid_cell()
+	var mouse_cell := _get_mouse_grid_cell()
 	if mouse_cell != Vector3i.MAX:
 		cursor.global_position = grid_map.map_to_local(mouse_cell) + Vector3(0, 0.01, 0)
 		cursor.visible = true
@@ -76,8 +76,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		# Make sure we didn't click into the void or on ourselves
 		if target_cell != Vector3i.MAX and target_cell != active_unit.current_grid_pos:
-			var target_world = grid_map.map_to_local(target_cell)
-			var turn_cost = grid_manager.calculate_turn_cost(
+			var target_world := grid_map.map_to_local(target_cell)
+			var turn_cost := grid_manager.calculate_turn_cost(
 				active_unit.global_transform,
 				target_world,
 			)
@@ -93,7 +93,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# Left click to move
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var target_cell = _get_mouse_grid_cell()
+		var target_cell := _get_mouse_grid_cell()
 
 		# Clicked off the map
 		if target_cell == Vector3i.MAX:
@@ -102,12 +102,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		match current_state:
 			InputState.IDLE:
-				var path = grid_manager.calculate_path_by_cells(
+				var path := grid_manager.calculate_path_by_cells(
 					active_unit.current_grid_pos,
 					target_cell,
 				)
 				# var cost = path.size()
-				var cost = grid_manager.calculate_path_cost(
+				var cost := grid_manager.calculate_path_cost(
 					grid_map,
 					path,
 					active_unit.global_transform,
@@ -124,7 +124,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			InputState.PREVIEW:
 				if target_cell == preview_cell:
 					# 1. Grab a copy of the path
-					var final_path = cached_path.duplicate()
+					var final_path := cached_path.duplicate()
 
 					current_state = InputState.ANIMATING
 					_clear_preview(false)
@@ -161,12 +161,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 				else:
 					# Clicked elsewhere: calculate new preview and cache it
-					var path = grid_manager.calculate_path_by_cells(
+					var path := grid_manager.calculate_path_by_cells(
 						active_unit.current_grid_pos,
 						target_cell,
 					)
 					# var cost = path.size()
-					var cost = grid_manager.calculate_path_cost(
+					var cost := grid_manager.calculate_path_cost(
 						grid_map,
 						path,
 						active_unit.global_transform,
@@ -183,16 +183,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _get_mouse_grid_cell() -> Vector3i:
-	var mouse_pos = get_viewport().get_mouse_position()
-	var ray_origin = camera.project_ray_origin(mouse_pos)
-	var ray_normal = camera.project_ray_normal(mouse_pos)
-	var ray_end = ray_origin + ray_normal * 1000.0
+	var mouse_pos := get_viewport().get_mouse_position()
+	var ray_origin := camera.project_ray_origin(mouse_pos)
+	var ray_normal := camera.project_ray_normal(mouse_pos)
+	var ray_end := ray_origin + ray_normal * 1000.0
 
 	# Call get_world_3d() on the camera instead of self
-	var space_state = camera.get_world_3d().direct_space_state
+	var space_state := camera.get_world_3d().direct_space_state
 
-	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-	var result = space_state.intersect_ray(query)
+	var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+	var result := space_state.intersect_ray(query)
 
 	if result:
 		return grid_map.local_to_map(result.position)
@@ -204,7 +204,7 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 		dot.queue_free()
 	path_dots.clear()
 
-	var path_to_draw = (
+	var path_to_draw := (
 		cached_path
 		if current_state == InputState.PREVIEW
 		else grid_manager.calculate_path_by_cells(active_unit.current_grid_pos, target_cell)
@@ -212,11 +212,11 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 	if path_to_draw.size() <= 1:
 		return
 
-	var simulated_ap = active_unit.current_ap
-	var current_pos = path_to_draw[0]
+	var simulated_ap := active_unit.current_ap
+	var current_pos := path_to_draw[0]
 
 	# Track facing for accurate turn simulation
-	var current_facing = -active_unit.global_transform.basis.z
+	var current_facing := -active_unit.global_transform.basis.z
 	current_facing.y = 0
 	if current_facing.length_squared() > 0.01:
 		current_facing = current_facing.normalized()
@@ -224,9 +224,9 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 		current_facing = Vector3(0, 0, -1)
 
 	for i in range(1, path_to_draw.size()):
-		var next_pos = path_to_draw[i]
+		var next_pos := path_to_draw[i]
 
-		var cost = grid_manager.calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
+		var cost := grid_manager.calculate_step_cost(current_pos, next_pos, current_facing, grid_map)
 
 		simulated_ap -= cost
 
@@ -251,7 +251,7 @@ func _update_path_visuals(target_cell: Vector3i) -> void:
 		add_child(dot)
 		path_dots.append(dot)
 
-		var move_dir = (next_pos - current_pos)
+		var move_dir := (next_pos - current_pos)
 		move_dir.y = 0
 		if move_dir.length_squared() > 0.01:
 			current_facing = move_dir.normalized()

@@ -41,24 +41,24 @@ func _on_unit_step_taken(
 
 
 func _update_team_vision(team_id: int) -> void:
-	var newly_spotted_enemies = []
+	var newly_spotted_enemies: Array[TacticalUnit] = []
 
 	# Get all units belonging to this team
-	var friendly_units = active_units.filter(
+	var friendly_units := active_units.filter(
 		func(u):
 			return u.team_id == team_id,
 	)
 	# Get all units NOT belonging to this team
-	var enemy_units = active_units.filter(
+	var enemy_units := active_units.filter(
 		func(u):
 			return u.team_id != team_id,
 	)
 
-	for enemy in enemy_units:
-		var is_visible = false
+	for enemy: TacticalUnit in enemy_units:
+		var is_visible := false
 
 		# Check if ANY friendly unit can see this enemy
-		for friendly in friendly_units:
+		for friendly: TacticalUnit in friendly_units:
 			if _check_line_of_sight(friendly, enemy):
 				is_visible = true
 				break
@@ -76,24 +76,24 @@ func _update_team_vision(team_id: int) -> void:
 	if newly_spotted_enemies.size() > 0:
 		print("Team ", team_id, " spotted an enemy! Interrupting movement.")
 		# For multiplayer, the server would send an RPC here. For now, directly halt the active unit.
-		var active_friendly = friendly_units.filter(
+		var active_friendly := friendly_units.filter(
 			func(u):
 				return u.interrupt_movement == false,
 		)
-		for unit in active_friendly:
+		for unit: TacticalUnit in active_friendly:
 			unit.interrupt_movement = true
 
 
 func _check_line_of_sight(viewer: TacticalUnit, target: TacticalUnit) -> bool:
 	# 1. Distance
-	var dist = viewer.global_position.distance_to(target.global_position)
+	var dist := viewer.global_position.distance_to(target.global_position)
 	if dist > vision_range:
 		return false
 
 	# 2. Angle
-	var dir_to_target = (target.global_position - viewer.global_position).normalized()
+	var dir_to_target := (target.global_position - viewer.global_position).normalized()
 	dir_to_target.y = 0
-	var forward = -viewer.global_transform.basis.z
+	var forward := -viewer.global_transform.basis.z
 	forward.y = 0
 
 	if forward.length_squared() > 0.01:
@@ -101,20 +101,20 @@ func _check_line_of_sight(viewer: TacticalUnit, target: TacticalUnit) -> bool:
 	else:
 		forward = Vector3(0, 0, -1)
 
-	var angle = rad_to_deg(forward.angle_to(dir_to_target))
+	var angle := rad_to_deg(forward.angle_to(dir_to_target))
 	if angle > vision_angle / 2.0:
 		return false
 
 	# 3. Raycast (Obstruction)
-	var eye_offset = Vector3(0, 1.0, 0)
-	var space_state = viewer.get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(
+	var eye_offset := Vector3(0, 1.0, 0)
+	var space_state := viewer.get_world_3d().direct_space_state
+	var query := PhysicsRayQueryParameters3D.create(
 		viewer.global_position + eye_offset,
 		target.global_position + eye_offset,
 	)
 
 	query.exclude = [viewer.get_rid(), target.get_rid()]
-	var result = space_state.intersect_ray(query)
+	var result := space_state.intersect_ray(query)
 
 	if result:
 		return false
