@@ -5,14 +5,70 @@
 [node name="HUD" type="CanvasLayer" unique_id=978030008]
 script = ExtResource("1_rbyyf")
 
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=882206948]
+offset_left = 20.0
+offset_top = 597.0
+offset_right = 1132.0
+offset_bottom = 628.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=939979497]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Button" type="Button" parent="HBoxContainer/MarginContainer" unique_id=2034332088]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Unit details"
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1320777692]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer2" unique_id=1544689570]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="PrevUnitBtn" type="Button" parent="HBoxContainer/MarginContainer2/HBoxContainer" unique_id=824945097]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Prev Unit"
+
+[node name="NextUnitBtn" type="Button" parent="HBoxContainer/MarginContainer2/HBoxContainer" unique_id=1613072784]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Next Unit"
+
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" unique_id=525345890]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="EndTurnBtn" type="Button" parent="HBoxContainer/MarginContainer3" unique_id=229026869]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "End Turn"
+
 [node name="Label" type="Label" parent="." unique_id=331882756]
-offset_right = 40.0
+offset_right = 48.0
 offset_bottom = 23.0
 text = "TU: 60"
 
-[node name="Button" type="Button" parent="." unique_id=2034332088]
-offset_left = 1073.0
-offset_top = 616.0
-offset_right = 1151.0
-offset_bottom = 647.0
-text = "End Turn"
+[connection signal="pressed" from="HBoxContainer/MarginContainer3/EndTurnBtn" to="." method="_on_end_turn_btn_pressed"]

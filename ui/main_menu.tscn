@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://dcc872ltype3h"]
+
+[ext_resource type="Texture2D" uid="uid://bb1to0pwkhuyh" path="res://assets/img/background.png" id="1_0dkrt"]
+[ext_resource type="Texture2D" uid="uid://dy41s1htbe33v" path="res://assets/img/logo.png" id="2_wk0pr"]
+[ext_resource type="StyleBox" uid="uid://6ot53jwpl3b5" path="res://ui/main_menu_btn_style.tres" id="3_wk0pr"]
+[ext_resource type="StyleBox" uid="uid://yehg1dlx2bou" path="res://ui/main_menu_btn_hover_style.tres" id="4_rmr83"]
+
+[node name="MainMenu" type="Control" unique_id=1237759400]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=783990573]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture = ExtResource("1_0dkrt")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=662476173]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2106286760]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=1687948299]
+custom_maximum_size = Vector2(1000, 150)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_wk0pr")
+stretch_mode = 4
+
+[node name="NewGameBtn" type="Button" parent="MarginContainer/VBoxContainer" unique_id=46679861]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = ExtResource("3_wk0pr")
+theme_override_styles/hover = ExtResource("4_rmr83")
+text = "New Game"
+
+[node name="SettingsBtn" type="Button" parent="MarginContainer/VBoxContainer" unique_id=721608328]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = ExtResource("3_wk0pr")
+theme_override_styles/hover = ExtResource("4_rmr83")
+text = "Settings"
+
+[node name="QuitBtn" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1476513063]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = ExtResource("3_wk0pr")
+theme_override_styles/hover = ExtResource("4_rmr83")
+text = "Quit"

@@ -1,14 +1,8 @@
 extends CanvasLayer
 
 @onready var tu_label: Label = $Label
-@onready var end_button: Button = $Button
 
 var current_bound_unit: TacticalUnit
-
-
-func _ready() -> void:
-	# Connect the button click to our function
-	end_button.pressed.connect(_on_end_turn_pressed)
 
 
 func bind_to_unit(unit: TacticalUnit) -> void:
@@ -30,5 +24,5 @@ func _on_unit_ap_changed(new_ap: int) -> void:
 	tu_label.text = "TUs: " + str(new_ap)
 
 
-func _on_end_turn_pressed() -> void:
+func _on_end_turn_btn_pressed() -> void:
 	TurnManager.end_player_turn()
